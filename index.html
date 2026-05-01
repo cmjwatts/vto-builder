@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>V/TO Builder | Ninety</title>
+  <meta name="description" content="Draft your EOS Vision/Traction Organizer in about 45 minutes. Built by Ninety for companies running on EOS.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #262626;
+      --ice: #F7F8FB;
+      --white: #ffffff;
+      --gray: #58595B;
+      --slate: #BFC4CE;
+      --stone: #DDDFE7;
+      --mist: #F3F3F4;
+      --ninety: hsla(195, 57%, 43%, 1);
+      --ninety-heavy: hsla(195, 57%, 39%, 1);
+      --ninety-heaviest: hsla(195, 57%, 35%, 1);
+      --ninety-shader: hsla(195, 57%, 43%, 0.10);
+      --ninety-shader-light: hsla(195, 57%, 43%, 0.04);
+      --error: #B23A3A;
+      --shadow-sm: 0 1px 2px rgba(38, 38, 38, 0.06);
+      --shadow-md: 0 2px 8px rgba(38, 38, 38, 0.08);
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--ice);
+      color: var(--black);
+      font-family: 'Nunito Sans', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4 { font-family: 'Poppins', system-ui, sans-serif; line-height: 1.3; margin: 0 0 12px; }
+    h1 { font-size: 32px; font-weight: 700; }
+    h2 { font-size: 24px; font-weight: 600; }
+    h3 { font-size: 18px; font-weight: 600; }
+    h4 { font-size: 16px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.04em; }
+    p { margin: 0 0 12px; }
+    a { color: var(--ninety); text-decoration: none; }
+    a:hover { color: var(--ninety-heavy); text-decoration: underline; }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--stone);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar-inner {
+      max-width: 880px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--black);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .brand-mark { color: var(--ninety); }
+    .brand-divider { color: var(--slate); font-weight: 400; }
+    .brand-product { font-size: 14px; font-weight: 500; color: var(--gray); }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--gray);
+    }
+    .progress-bar {
+      width: 140px;
+      height: 6px;
+      background: var(--stone);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--ninety);
+      transition: width 0.3s ease;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px 96px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--stone);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    @media (max-width: 600px) {
+      .card { padding: 24px 20px; }
+      h1 { font-size: 26px; }
+    }
+
+    .section-meta {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ninety);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    .section-definition {
+      color: var(--gray);
+      margin-bottom: 24px;
+      font-size: 15px;
+    }
+    .section-block {
+      background: var(--ninety-shader-light);
+      border-left: 3px solid var(--ninety);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 20px 0 24px;
+      font-size: 14px;
+    }
+    .section-block strong { color: var(--ninety-heaviest); }
+    .section-block-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ninety-heaviest);
+      margin-bottom: 6px;
+    }
+    .section-tip {
+      font-size: 13px;
+      color: var(--gray);
+      font-style: italic;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--stone);
+    }
+
+    label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    label .optional { color: var(--slate); font-weight: 400; font-size: 12px; margin-left: 6px; }
+    .field { margin-bottom: 20px; }
+    .field-help { font-size: 13px; color: var(--gray); margin-bottom: 8px; }
+
+    input[type="text"], input[type="url"], input[type="number"], textarea {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--black);
+      background: var(--white);
+      border: 1px solid var(--stone);
+      border-radius: var(--radius);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--ninety);
+      box-shadow: 0 0 0 3px var(--ninety-shader);
+    }
+    textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+
+    .list-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+    .list-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: start;
+    }
+    .list-item-row { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .list-item-num {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      background: var(--ninety-shader);
+      color: var(--ninety-heaviest);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .list-item-fields {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      flex: 1;
+    }
+    .list-item-fields.two-col { grid-template-columns: minmax(180px, 1fr) 2fr; }
+    @media (max-width: 600px) {
+      .list-item-fields.two-col { grid-template-columns: 1fr; }
+    }
+    .list-row { display: flex; gap: 8px; align-items: center; }
+    .list-row .list-item-num { margin-top: 0; }
+    .list-row input { flex: 1; }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--stone);
+      color: var(--gray);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      margin-top: 4px;
+    }
+    .btn-icon:hover { background: var(--mist); color: var(--black); }
+    .btn-icon[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--ninety);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--ninety-heavy); }
+    .btn-primary:active { background: var(--ninety-heaviest); }
+    .btn-primary[disabled] { background: var(--slate); cursor: not-allowed; }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--stone);
+    }
+    .btn-secondary:hover { background: var(--mist); border-color: var(--slate); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray);
+      border-color: transparent;
+      padding: 10px 12px;
+    }
+    .btn-ghost:hover { color: var(--black); background: var(--mist); }
+    .btn-add {
+      background: var(--white);
+      color: var(--ninety);
+      border: 1px dashed var(--ninety);
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    .btn-add:hover { background: var(--ninety-shader-light); }
+    .btn-add[disabled] { opacity: 0.4; cursor: not-allowed; border-style: solid; }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--stone);
+    }
+    .nav-left, .nav-right { display: flex; gap: 12px; }
+
+    .suggest-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, var(--ninety-shader-light), transparent);
+      border: 1px solid var(--ninety-shader);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+    .suggest-bar-text { flex: 1; min-width: 200px; font-size: 13px; color: var(--gray); }
+    .btn-suggest {
+      background: var(--white);
+      color: var(--ninety-heaviest);
+      border: 1px solid var(--ninety);
+      padding: 8px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-suggest:hover { background: var(--ninety-shader-light); }
+    .btn-suggest[disabled] { opacity: 0.5; cursor: not-allowed; }
+    .btn-suggest .spin {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--ninety-shader);
+      border-top-color: var(--ninety);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .suggest-error {
+      font-size: 13px;
+      color: var(--error);
+      margin-top: 8px;
+    }
+
+    .context-chip {
+      background: var(--mist);
+      border: 1px solid var(--stone);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .context-chip-toggle {
+      width: 100%;
+      padding: 10px 16px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--gray);
+      font-weight: 600;
+    }
+    .context-chip-toggle:hover { background: var(--stone); }
+    .context-chip-body {
+      padding: 0 16px 14px;
+      font-size: 13px;
+      color: var(--gray);
+      display: none;
+    }
+    .context-chip[open] .context-chip-body { display: block; }
+    .context-chip-row { padding: 6px 0; border-top: 1px dashed var(--stone); }
+    .context-chip-row:first-child { border-top: 0; }
+    .context-chip-label { font-weight: 700; color: var(--black); margin-right: 6px; }
+
+    .vto-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 24px;
+    }
+
+    /* ---- Final V/TO display (mirrors Ninety's Vision tool layout) ---- */
+    .vto-display {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 8px 0 16px;
+    }
+    .vto-row {
+      display: grid;
+      gap: 16px;
+    }
+    .vto-row.cols-2 { grid-template-columns: 1.4fr 1fr; }
+    .vto-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 900px) {
+      .vto-row.cols-2, .vto-row.cols-3 { grid-template-columns: 1fr; }
+    }
+    .vto-card-stack { display: flex; flex-direction: column; gap: 16px; }
+    .vto-card {
+      background: var(--white);
+      border: 1px solid var(--stone);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      font-size: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .vto-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--mist);
+    }
+    .vto-card-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--black);
+    }
+    .vto-card-count {
+      color: var(--gray);
+      font-size: 14px;
+      font-weight: 500;
+      margin-left: 6px;
+    }
+    .vto-card-edit {
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      color: var(--slate);
+      font-size: 16px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+    .vto-card-edit:hover { color: var(--ninety); background: var(--ninety-shader-light); }
+    .vto-kv-row {
+      display: grid;
+      grid-template-columns: minmax(120px, max-content) 1fr;
+      gap: 16px;
+      padding: 8px 0;
+      align-items: start;
+    }
+    .vto-kv-row + .vto-kv-row { border-top: 1px solid var(--mist); }
+    .vto-kv-key { color: var(--black); font-weight: 500; }
+    .vto-kv-val { color: var(--gray); }
+    .vto-section-label {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--black);
+      margin: 14px 0 4px;
+    }
+    .vto-section-label:first-child { margin-top: 0; }
+    .vto-card-text { color: var(--gray); margin: 0 0 6px; line-height: 1.5; }
+    .vto-list { list-style: none; padding: 0; margin: 0; }
+    .vto-list li {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 8px;
+      align-items: start;
+      padding: 6px 0;
+      border-top: 1px solid var(--mist);
+      color: var(--gray);
+    }
+    .vto-list li:first-child { border-top: 0; }
+    .vto-list-num { color: var(--gray); font-weight: 600; font-size: 13px; }
+    .vto-list-bullet { color: var(--slate); }
+    .vto-list-checkbox {
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--slate);
+      border-radius: 3px;
+      margin-top: 4px;
+    }
+    .vto-empty { color: var(--slate); font-style: italic; font-size: 13px; }
+    .vto-meta {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 12px;
+      padding: 4px 0 8px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--mist);
+      margin-bottom: 8px;
+    }
+    .vto-meta-label { font-weight: 700; color: var(--black); }
+    .vto-meta-val { color: var(--gray); }
+    .vto-rocks-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 8px 0;
+      border-top: 1px solid var(--mist);
+      align-items: start;
+    }
+    .vto-rocks-row:first-child { border-top: 0; }
+    .vto-rocks-rock { color: var(--gray); }
+    .vto-rocks-owner {
+      color: var(--ninety-heaviest);
+      font-weight: 600;
+      font-size: 13px;
+      background: var(--ninety-shader-light);
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--black);
+      color: var(--white);
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 50;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    footer {
+      max-width: 760px;
+      margin: 24px auto 48px;
+      padding: 0 24px;
+      text-align: center;
+      color: var(--gray);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    footer a { color: var(--gray); }
+
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+    @media (max-width: 600px) { .welcome-grid { grid-template-columns: 1fr; } }
+    .welcome-pill {
+      background: var(--mist);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--gray);
+    }
+    .welcome-pill strong { color: var(--black); display: block; font-size: 14px; margin-bottom: 2px; }
+
+    .review-summary {
+      background: var(--ninety-shader-light);
+      border: 1px solid var(--ninety-shader);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--gray);
+    }
+    .review-summary strong { color: var(--black); }
+
+    @media print {
+      .topbar, .nav, .vto-actions, .suggest-bar, .context-chip, footer, .review-summary, .vto-card-edit { display: none !important; }
+      body { background: white; }
+      .card { border: 0; box-shadow: none; padding: 0; }
+      .vto-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
+      .vto-row.cols-2, .vto-row.cols-3 { display: block; }
+      .vto-row.cols-2 > *, .vto-row.cols-3 > * { margin-bottom: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">90</span>
+        <span class="brand-divider">|</span>
+        <span class="brand-product">V/TO Builder</span>
+      </div>
+      <div class="progress" id="progress" hidden>
+        <span id="progress-label">Step 1 of 9</span>
+        <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <main id="app"><div class="card" id="step-container">Loading…</div></main>
+
+  <footer>
+    <p>Built by <a href="https://www.ninety.io" target="_blank" rel="noopener">Ninety</a> Pro Serve. Your answers are saved in your browser only — we don't store them on our servers.</p>
+    <p>EOS®, V/TO™, Core Focus™, Three Uniques™, 10-Year Target™, and 3-Year Picture™ are trademarks of EOS Worldwide, LLC. Ninety is the platform for companies running on EOS, built under license from EOS Worldwide.</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    'use strict';
+
+    // ---------- Section definitions ----------
+    // Each section: { id, title, definition, why, example, tip, render(), collect(), validate() }
+    // Field types are handled per-section to keep markup concise and on-brand.
+    const SECTIONS = [
+      {
+        id: 'welcome',
+        title: 'Welcome',
+        kind: 'welcome',
+      },
+      {
+        id: 'about',
+        title: 'About Your Company',
+        kind: 'form',
+        eosLabel: 'Step 1 — Setup',
+        definition: 'A quick snapshot of your company. We\'ll use this to tailor prompts and draft suggestions throughout the rest of the V/TO™.',
+        why: 'The clearer you are about who you are today, the sharper your V/TO™ will be tomorrow. This step takes 3–5 minutes — and you can come back and refine it any time.',
+        fields: [
+          { type: 'text',     key: 'companyName', label: 'Company name', required: true, placeholder: 'Acme Co.' },
+          { type: 'text',     key: 'website',     label: 'Website',     placeholder: 'https://acme.example' },
+          { type: 'textarea', key: 'about',       label: 'In 1–3 sentences, what do you do and who do you do it for?', placeholder: 'We help mid-sized law firms…' },
+          { type: 'textarea', key: 'strengths',   label: 'Top 2–3 things you do really well today', placeholder: 'Responsiveness, deep industry expertise…' },
+          { type: 'textarea', key: 'workOns',     label: 'Top 2–3 things you most want to work on', placeholder: 'Sales pipeline consistency, hiring…' },
+        ],
+        tip: 'Don\'t overthink this. A few clear sentences work better than a polished mission statement — you\'ll refine your story across the next 8 sections.',
+      },
+      {
+        id: 'core-values',
+        title: 'Core Values',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Vision side',
+        definition: 'A small set of guiding behaviors your ideal team members already live by. Most teams land on 5–7.',
+        why: 'Core Values are how you hire, fire, review, reward, and recognize. They\'re behaviors — not aspirations. The right list makes it easier to keep the right people and harder for the wrong ones to stay.',
+        example: '"Make life better." "Be curious." "Get it done." Each paired with a short descriptor explaining what it looks like in practice.',
+        fields: [
+          { type: 'list', key: 'items', min: 3, max: 7, item: { name: 'value', extra: 'descriptor' }, addLabel: 'Add a Core Value', placeholders: { name: 'e.g. Get smart stuff done', extra: 'What does this look like in your day-to-day?' } },
+        ],
+        tip: 'A useful test: think of your top performers. What do they all have in common that the people who didn\'t work out lacked? Those traits often surface your real Core Values.',
+      },
+      {
+        id: 'core-focus',
+        title: 'Core Focus™',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Vision side',
+        definition: 'Two short statements that anchor everything you do — your Purpose/Cause/Passion and your Niche.',
+        why: 'Core Focus™ keeps you from chasing every shiny opportunity. When something doesn\'t fit, you say no faster.',
+        example: 'Purpose/Cause/Passion: "Make life better." Niche: "We provide IT support to law firms in the Mid-Atlantic."',
+        fields: [
+          { type: 'text', key: 'purpose', label: 'Our Purpose / Cause / Passion', placeholder: 'Make life better.', help: 'Aim for 3–7 words. Big, bold, simple.' },
+          { type: 'text', key: 'niche',   label: 'Our Niche',                     placeholder: 'We provide IT support to law firms in the Mid-Atlantic.', help: 'One clear sentence: who you serve, what you do.' },
+        ],
+        tip: 'Your Purpose should never expire. If it\'s tied to a specific product or moment in time, broaden it.',
+      },
+      {
+        id: 'ten-year-target',
+        title: '10-Year Target™',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Vision side',
+        definition: 'One bold long-term goal — challenging, exciting, measurable, and clearly aligned with your Core Focus™.',
+        why: 'A great 10-Year Target™ rallies the whole company. It should feel a bit out of reach today but believable if you get the next 10 years right.',
+        example: '"$50M in revenue by 2035, serving 500 law firms across North America."',
+        fields: [
+          { type: 'textarea', key: 'target',     label: 'Our 10-Year Target', placeholder: 'A bold, measurable goal that takes ~10 years to reach.' },
+          { type: 'text',     key: 'targetYear', label: 'Target year',         placeholder: 'e.g. 2035' },
+        ],
+        tip: 'If your team can\'t recite the target from memory after a few weeks, it\'s probably too long. Keep it tight enough to remember.',
+      },
+      {
+        id: 'marketing-strategy',
+        title: 'Marketing Strategy',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Vision side',
+        definition: 'Four pieces that, together, define how you win business: Target Market, Three Uniques™, Proven Process, and Guarantee.',
+        why: 'Most teams know what they sell. Far fewer can clearly say who they\'re for, what makes them different, how they deliver, and what they promise. Nailing these four kills bad-fit deals before they consume time.',
+        fields: [
+          { type: 'textarea', key: 'targetMarket', label: 'Target Market / "The List"', placeholder: 'Geographic + demographic + psychographic.', help: 'Where they are, who they are, and what they value. One paragraph is plenty.' },
+          { type: 'list',     key: 'threeUniques', label: 'Three Uniques™', min: 3, max: 3, item: { name: 'name', extra: 'descriptor' }, addLabel: 'Add a unique', placeholders: { name: 'Short label (e.g. "Fast")', extra: 'A specific way you stand apart' }, help: 'Exactly three. Pair a short label with a specific differentiator — e.g. "Fast" + "Guaranteed 2-Hour Arrival Window."' },
+          { type: 'text',     key: 'provenProcessName',  label: 'Proven Process — name', placeholder: 'e.g. The Acme Way' },
+          { type: 'list',     key: 'provenProcessSteps', label: 'Proven Process — steps', min: 3, max: 7, addLabel: 'Add a step', placeholders: { name: 'A named step in your process' } },
+          { type: 'text',     key: 'guarantee', label: 'Guarantee', placeholder: 'A bold promise that takes the risk off the buyer.' },
+        ],
+        tip: 'Your Three Uniques™ should be three things, not a list of features. If you can\'t say each in under 8 words, it\'s probably not unique enough yet.',
+      },
+      {
+        id: 'three-year-picture',
+        title: '3-Year Picture™',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Vision side',
+        definition: 'A snapshot of what your company looks like 3 years from now: revenue, profit, key measurables, and a short list of "what does it look like" bullets.',
+        why: 'Big picture goals are easy to ignore. Specific 3-year goals — with numbers — give your team something to plan and hire toward.',
+        fields: [
+          { type: 'text', key: 'targetDate', label: 'Future date', placeholder: 'e.g. December 31, 2028' },
+          { type: 'text', key: 'revenue',    label: 'Revenue',     placeholder: 'e.g. $25M' },
+          { type: 'text', key: 'profit',     label: 'Profit',      placeholder: 'e.g. $4M (16%)' },
+          { type: 'list', key: 'measurables', label: 'Measurables (up to 3 KPIs)', min: 1, max: 3, addLabel: 'Add a measurable', placeholders: { name: 'e.g. 1,200 active client accounts' } },
+          { type: 'list', key: 'lookLike',    label: 'What does it look like?', min: 3, max: 10, addLabel: 'Add a bullet', placeholders: { name: 'e.g. Recognized as the leading IT firm for Mid-Atlantic law firms' }, help: '5–10 short bullets. Concrete and specific — what would visiting your company in 3 years feel like?' },
+        ],
+        tip: 'Get specific about people, products, and recognition — not just financials. "Number of A-players" and "named one of the best places to work" land harder than revenue alone.',
+      },
+      {
+        id: 'one-year-plan',
+        title: '1-Year Plan',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Traction side',
+        definition: 'The 12 months ahead: revenue, profit, measurables, and 3–7 specific company goals.',
+        why: 'Your 1-Year Plan is the step that turns vision into traction. Pick fewer goals than you think you can do — focus beats ambition over 12 months.',
+        fields: [
+          { type: 'text', key: 'targetDate', label: 'Future date', placeholder: 'e.g. December 31, 2026' },
+          { type: 'text', key: 'revenue',    label: 'Revenue',     placeholder: 'e.g. $9.5M' },
+          { type: 'text', key: 'profit',     label: 'Profit',      placeholder: 'e.g. $1.2M (12%)' },
+          { type: 'list', key: 'measurables', label: 'Measurables (up to 3 KPIs)', min: 1, max: 3, addLabel: 'Add a measurable', placeholders: { name: 'e.g. 350 active client accounts' } },
+          { type: 'list', key: 'goals',       label: 'Goals for the year (3–7)',  min: 3, max: 7, addLabel: 'Add a goal', placeholders: { name: 'A specific, achievable goal' } },
+        ],
+        tip: 'Aim for goals you\'d feel proud of hitting — and would notice missing. If a goal could quietly slip without anyone caring, it shouldn\'t be on the list.',
+      },
+      {
+        id: 'rocks',
+        title: 'Rocks (this quarter)',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Traction side',
+        definition: 'The 3–7 most important priorities for the next 90 days, each owned by one person.',
+        why: 'Rocks are how 1-Year goals actually get done — broken into 90-day chunks with a clear owner. Discipline at the quarter level is what builds traction over the year.',
+        example: 'Rock: "Launch new client onboarding process." Owner: "Priya."',
+        fields: [
+          { type: 'list', key: 'items', min: 3, max: 7, item: { name: 'rock', extra: 'owner' }, addLabel: 'Add a Rock', placeholders: { name: 'A 90-day priority', extra: 'Owner (one person)' } },
+        ],
+        tip: 'One Rock, one owner — even if a team is involved. Shared ownership is shared accountability, which usually means none.',
+      },
+      {
+        id: 'issues-list',
+        title: 'Issues List',
+        kind: 'form',
+        eosLabel: 'V/TO™ — Traction side',
+        definition: 'A parking lot for big-picture issues, ideas, and obstacles that surface as you work — to address in upcoming quarterly or annual planning sessions.',
+        why: 'Most teams generate more ideas than they can execute. Capturing issues here keeps the V/TO™ focused while making sure nothing important gets lost.',
+        fields: [
+          { type: 'list', key: 'items', min: 0, max: 20, addLabel: 'Add an issue', placeholders: { name: 'A long-term issue, idea, or obstacle' } },
+        ],
+        tip: 'It\'s OK to leave this empty. You can always come back and add to it.',
+      },
+      {
+        id: 'review',
+        title: 'Your V/TO™',
+        kind: 'review',
+      },
+    ];
+
+    // Section indices for navigation. Welcome and review bookend the form steps.
+    const formSections = SECTIONS.filter(s => s.kind === 'form');
+    const totalFormSteps = formSections.length;
+
+    // ---------- State ----------
+    const STATE_KEY = 'vto-builder-v1';
+    const SUGGEST_BUDGET_PER_SECTION = 5;
+    const SUGGEST_BUDGET_TOTAL = 30;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STATE_KEY);
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        return Object.assign(defaultState(), parsed);
+      } catch (e) {
+        return defaultState();
+      }
+    }
+    function defaultState() {
+      return {
+        currentIndex: 0,
+        answers: {},
+        suggestUsage: { total: 0, perSection: {} },
+        startedAt: null,
+      };
+    }
+    function saveState() {
+      try {
+        localStorage.setItem(STATE_KEY, JSON.stringify(state));
+      } catch (e) { /* ignore quota */ }
+    }
+    function resetState() {
+      localStorage.removeItem(STATE_KEY);
+      state = defaultState();
+      render();
+    }
+
+    let state = loadState();
+
+    // ---------- Helpers ----------
+    function get(sectionId, key) {
+      const s = state.answers[sectionId] || {};
+      return s[key];
+    }
+    function set(sectionId, key, value) {
+      if (!state.answers[sectionId]) state.answers[sectionId] = {};
+      state.answers[sectionId][key] = value;
+      saveState();
+    }
+    function escapeHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+    function trim(s) { return (s || '').trim(); }
+
+    // ---------- Rendering ----------
+    function render() {
+      const section = SECTIONS[state.currentIndex];
+      const container = document.getElementById('step-container');
+      updateProgress();
+      if (section.kind === 'welcome') return renderWelcome(container);
+      if (section.kind === 'review')  return renderReview(container);
+      return renderForm(container, section);
+    }
+
+    function updateProgress() {
+      const section = SECTIONS[state.currentIndex];
+      const progress = document.getElementById('progress');
+      const fill = document.getElementById('progress-fill');
+      const label = document.getElementById('progress-label');
+      if (section.kind === 'welcome') { progress.hidden = true; return; }
+      progress.hidden = false;
+      const formIndex = formSections.findIndex(s => s.id === section.id);
+      if (section.kind === 'review') {
+        label.textContent = 'Review';
+        fill.style.width = '100%';
+      } else {
+        label.textContent = `Step ${formIndex + 1} of ${totalFormSteps}`;
+        fill.style.width = ((formIndex + 1) / (totalFormSteps + 1)) * 100 + '%';
+      }
+    }
+
+    function renderWelcome(container) {
+      const hasProgress = Object.keys(state.answers).length > 0;
+      container.innerHTML = `
+        <div class="section-meta">EOS V/TO™ Builder</div>
+        <h1>Draft your V/TO in about 45 minutes.</h1>
+        <p style="font-size: 17px; color: var(--gray);">
+          A V/TO™ — Vision/Traction Organizer™ — is the foundational tool every company running on EOS uses
+          to align on where it's going and how it's going to get there. We'll walk you through the 9 sections,
+          one at a time, with examples and tips along the way.
+        </p>
+
+        <div class="welcome-grid">
+          <div class="welcome-pill"><strong>9 sections</strong>Vision side + Traction side</div>
+          <div class="welcome-pill"><strong>~45 minutes</strong>Or split it across a few sittings</div>
+          <div class="welcome-pill"><strong>Saved in your browser</strong>Nothing stored on our servers</div>
+          <div class="welcome-pill"><strong>Optional AI drafts</strong>Get unstuck with one click</div>
+        </div>
+
+        <div class="section-block">
+          <div class="section-block-label">A note on privacy</div>
+          Your answers are saved only in this browser's local storage. When you click <em>✨ Suggest a draft</em>,
+          we send the section's context to Anthropic's Claude API to generate a suggestion, and discard it
+          afterwards. We don't store anything on our side.
+        </div>
+
+        <div class="nav">
+          <div class="nav-left">
+            ${hasProgress ? '<button class="btn btn-ghost" id="btn-reset">Start over</button>' : ''}
+          </div>
+          <div class="nav-right">
+            <button class="btn btn-primary" id="btn-start">${hasProgress ? 'Resume' : 'Start the V/TO Builder'} →</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('btn-start').addEventListener('click', () => {
+        if (!state.startedAt) state.startedAt = new Date().toISOString();
+        // Resume to last incomplete form step, or the first one
+        if (state.currentIndex === 0) state.currentIndex = 1;
+        saveState();
+        render();
+      });
+      const reset = document.getElementById('btn-reset');
+      if (reset) reset.addEventListener('click', () => {
+        if (confirm('Start over? This clears all your answers in this browser.')) resetState();
+      });
+    }
+
+    function renderForm(container, section) {
+      const showContext = section.id !== 'about';
+      const html = `
+        ${showContext ? renderContextChip() : ''}
+        <div class="section-meta">${escapeHtml(section.eosLabel || '')}</div>
+        <h2>${escapeHtml(section.title)}</h2>
+        <p class="section-definition">${escapeHtml(section.definition || '')}</p>
+
+        ${section.why ? `
+          <div class="section-block">
+            <div class="section-block-label">Why this matters</div>
+            ${escapeHtml(section.why)}
+          </div>` : ''}
+
+        ${section.example ? `
+          <div class="section-block" style="background: var(--mist); border-left-color: var(--slate);">
+            <div class="section-block-label" style="color: var(--gray);">Example</div>
+            ${escapeHtml(section.example)}
+          </div>` : ''}
+
+        ${renderSuggestBar(section)}
+
+        <form id="step-form" autocomplete="off" novalidate>
+          ${section.fields.map(f => renderField(section.id, f)).join('')}
+        </form>
+
+        ${section.tip ? `<div class="section-tip">💡 ${escapeHtml(section.tip)}</div>` : ''}
+
+        <div class="nav">
+          <div class="nav-left">
+            <button class="btn btn-ghost" id="btn-back">← Back</button>
+          </div>
+          <div class="nav-right">
+            <button class="btn btn-secondary" id="btn-save">Save & continue later</button>
+            <button class="btn btn-primary" id="btn-next">Next →</button>
+          </div>
+        </div>
+      `;
+      container.innerHTML = html;
+      bindFormHandlers(section);
+    }
+
+    function renderContextChip() {
+      const a = state.answers.about || {};
+      if (!a.companyName && !a.about && !a.strengths && !a.workOns) return '';
+      return `
+        <details class="context-chip" id="context-chip">
+          <summary class="context-chip-toggle">
+            <span>Your context — ${escapeHtml(a.companyName || 'Your company')}</span>
+            <span style="color: var(--slate);">▾</span>
+          </summary>
+          <div class="context-chip-body">
+            ${a.about     ? `<div class="context-chip-row"><span class="context-chip-label">About:</span> ${escapeHtml(a.about)}</div>` : ''}
+            ${a.strengths ? `<div class="context-chip-row"><span class="context-chip-label">Strengths:</span> ${escapeHtml(a.strengths)}</div>` : ''}
+            ${a.workOns   ? `<div class="context-chip-row"><span class="context-chip-label">Working on:</span> ${escapeHtml(a.workOns)}</div>` : ''}
+          </div>
+        </details>
+      `;
+    }
+
+    function renderSuggestBar(section) {
+      // No suggestions on the About step — there's no context to draft from yet.
+      if (section.id === 'about') return '';
+      const used = state.suggestUsage.perSection[section.id] || 0;
+      const remaining = SUGGEST_BUDGET_PER_SECTION - used;
+      const totalLeft = SUGGEST_BUDGET_TOTAL - state.suggestUsage.total;
+      const disabled = remaining <= 0 || totalLeft <= 0;
+      return `
+        <div class="suggest-bar">
+          <div class="suggest-bar-text">
+            Need a starting point? I can draft this section based on what you've shared so far. You can edit, accept, or try again.
+          </div>
+          <button type="button" class="btn-suggest" id="btn-suggest" ${disabled ? 'disabled title="Suggestion budget for this section is used up — keep refining what you have."' : ''}>
+            <span id="suggest-icon">✨</span>
+            <span id="suggest-label">${used > 0 ? 'Try another draft' : 'Suggest a draft'}</span>
+          </button>
+        </div>
+        <div id="suggest-error" class="suggest-error" hidden></div>
+      `;
+    }
+
+    function renderField(sectionId, field) {
+      const value = get(sectionId, field.key);
+      switch (field.type) {
+        case 'text':
+          return `
+            <div class="field">
+              <label>${escapeHtml(field.label)}${field.required ? '' : ' <span class="optional">(optional)</span>'}</label>
+              ${field.help ? `<div class="field-help">${escapeHtml(field.help)}</div>` : ''}
+              <input type="text" data-key="${field.key}" placeholder="${escapeHtml(field.placeholder || '')}" value="${escapeHtml(value || '')}">
+            </div>`;
+        case 'textarea':
+          return `
+            <div class="field">
+              <label>${escapeHtml(field.label)}</label>
+              ${field.help ? `<div class="field-help">${escapeHtml(field.help)}</div>` : ''}
+              <textarea data-key="${field.key}" placeholder="${escapeHtml(field.placeholder || '')}">${escapeHtml(value || '')}</textarea>
+            </div>`;
+        case 'list':
+          return renderListField(sectionId, field, value);
+      }
+      return '';
+    }
+
+    function renderListField(sectionId, field, value) {
+      const items = Array.isArray(value) ? value : [];
+      const isPair = field.item && field.item.extra;
+      // Always show at least one row for a clean starting state.
+      if (items.length === 0) items.push(isPair ? { name: '', extra: '' } : '');
+      const rows = items.map((it, i) => {
+        const num = i + 1;
+        if (isPair) {
+          const nameVal = (typeof it === 'object' && it) ? (it[field.item.name] || '') : '';
+          const extraVal = (typeof it === 'object' && it) ? (it[field.item.extra] || '') : '';
+          return `
+            <div class="list-item" data-idx="${i}">
+              <div class="list-item-row" style="flex-direction: row; align-items: start;">
+                <span class="list-item-num">${num}</span>
+                <div class="list-item-fields two-col" style="margin-left: 8px;">
+                  <input type="text" data-key="${field.key}" data-sub="${field.item.name}" data-idx="${i}" placeholder="${escapeHtml((field.placeholders || {}).name || '')}" value="${escapeHtml(nameVal)}">
+                  <input type="text" data-key="${field.key}" data-sub="${field.item.extra}" data-idx="${i}" placeholder="${escapeHtml((field.placeholders || {}).extra || '')}" value="${escapeHtml(extraVal)}">
+                </div>
+              </div>
+              <button type="button" class="btn-icon" data-action="remove-list-item" data-key="${field.key}" data-idx="${i}" title="Remove">✕</button>
+            </div>`;
+        }
+        const v = typeof it === 'string' ? it : (it && it.name) || '';
+        return `
+          <div class="list-row" data-idx="${i}">
+            <span class="list-item-num">${num}</span>
+            <input type="text" data-key="${field.key}" data-idx="${i}" placeholder="${escapeHtml((field.placeholders || {}).name || '')}" value="${escapeHtml(v)}">
+            <button type="button" class="btn-icon" data-action="remove-list-item" data-key="${field.key}" data-idx="${i}" title="Remove">✕</button>
+          </div>`;
+      }).join('');
+      const atMax = items.length >= (field.max || 99);
+      return `
+        <div class="field" data-list-key="${field.key}">
+          ${field.label ? `<label>${escapeHtml(field.label)}</label>` : ''}
+          ${field.help ? `<div class="field-help">${escapeHtml(field.help)}</div>` : ''}
+          <div class="list-items">${rows}</div>
+          <button type="button" class="btn-add" data-action="add-list-item" data-key="${field.key}" ${atMax ? 'disabled' : ''}>+ ${escapeHtml(field.addLabel || 'Add')}</button>
+        </div>`;
+    }
+
+    function bindFormHandlers(section) {
+      const form = document.getElementById('step-form');
+      const isPair = (key) => {
+        const f = section.fields.find(x => x.key === key);
+        return f && f.item && f.item.extra;
+      };
+      const fieldByKey = (key) => section.fields.find(f => f.key === key);
+
+      form.addEventListener('input', (e) => {
+        const t = e.target;
+        if (!t.dataset.key) return;
+        const key = t.dataset.key;
+        const idx = t.dataset.idx;
+        const sub = t.dataset.sub;
+        const f = fieldByKey(key);
+        if (f && f.type === 'list') {
+          const arr = (get(section.id, key) || []).slice();
+          while (arr.length <= Number(idx)) arr.push(isPair(key) ? {} : '');
+          if (isPair(key)) {
+            if (typeof arr[idx] !== 'object' || !arr[idx]) arr[idx] = {};
+            arr[idx][sub] = t.value;
+          } else {
+            arr[idx] = t.value;
+          }
+          set(section.id, key, arr);
+        } else {
+          set(section.id, key, t.value);
+        }
+      });
+
+      form.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const key = btn.dataset.key;
+        const f = fieldByKey(key);
+        if (action === 'add-list-item') {
+          const arr = (get(section.id, key) || []).slice();
+          if (arr.length >= (f.max || 99)) return;
+          arr.push(isPair(key) ? {} : '');
+          set(section.id, key, arr);
+          render();
+        }
+        if (action === 'remove-list-item') {
+          const idx = Number(btn.dataset.idx);
+          const arr = (get(section.id, key) || []).slice();
+          arr.splice(idx, 1);
+          set(section.id, key, arr);
+          render();
+        }
+      });
+
+      document.getElementById('btn-back').addEventListener('click', () => {
+        state.currentIndex = Math.max(0, state.currentIndex - 1);
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      document.getElementById('btn-next').addEventListener('click', () => {
+        state.currentIndex = Math.min(SECTIONS.length - 1, state.currentIndex + 1);
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      document.getElementById('btn-save').addEventListener('click', () => {
+        saveState();
+        toast('Saved. Come back any time on this device.');
+      });
+
+      const suggest = document.getElementById('btn-suggest');
+      if (suggest) suggest.addEventListener('click', () => onSuggestDraft(section));
+    }
+
+    // ---------- Suggest a draft ----------
+    async function onSuggestDraft(section) {
+      const btn = document.getElementById('btn-suggest');
+      const errEl = document.getElementById('suggest-error');
+      const iconEl = document.getElementById('suggest-icon');
+      const labelEl = document.getElementById('suggest-label');
+      btn.disabled = true;
+      errEl.hidden = true;
+      iconEl.outerHTML = '<span class="spin" id="suggest-icon"></span>';
+      labelEl.textContent = 'Drafting…';
+
+      try {
+        const res = await fetch('/api/draft', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sectionId: section.id,
+            context: state.answers.about || {},
+            currentAnswers: state.answers[section.id] || {},
+            priorAnswers: summarizePrior(section.id),
+          }),
+        });
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`HTTP ${res.status}: ${txt.slice(0, 120)}`);
+        }
+        const data = await res.json();
+        if (!data || !data.draft) throw new Error('No draft returned.');
+
+        // Apply draft into state for this section.
+        applyDraft(section, data.draft);
+
+        // Track usage.
+        state.suggestUsage.total += 1;
+        state.suggestUsage.perSection[section.id] = (state.suggestUsage.perSection[section.id] || 0) + 1;
+        saveState();
+
+        render();
+        toast('Draft inserted — edit anything that doesn\'t feel like you.');
+      } catch (e) {
+        const span = document.getElementById('suggest-icon');
+        if (span) span.outerHTML = '<span id="suggest-icon">✨</span>';
+        const lab = document.getElementById('suggest-label');
+        if (lab) lab.textContent = 'Suggest a draft';
+        const b = document.getElementById('btn-suggest');
+        if (b) b.disabled = false;
+        if (errEl) {
+          errEl.hidden = false;
+          errEl.textContent = 'Suggestion unavailable — keep typing, you\'ve got this.';
+        }
+        // eslint-disable-next-line no-console
+        console.error('Draft request failed:', e);
+      }
+    }
+
+    // For continuity, send a 1–2 line summary of relevant prior sections.
+    function summarizePrior(currentId) {
+      const order = ['core-values', 'core-focus', 'ten-year-target', 'marketing-strategy', 'three-year-picture', 'one-year-plan', 'rocks'];
+      const idx = order.indexOf(currentId);
+      if (idx <= 0) return {};
+      const out = {};
+      for (let i = 0; i < idx; i++) {
+        const id = order[i];
+        const a = state.answers[id];
+        if (a) out[id] = a;
+      }
+      return out;
+    }
+
+    // Map LLM JSON back into state.answers[section.id].
+    function applyDraft(section, draft) {
+      for (const f of section.fields) {
+        if (f.type === 'list') {
+          // Drafts return either an array of strings or an array of objects shaped like field.item.
+          if (Array.isArray(draft[f.key])) {
+            set(section.id, f.key, draft[f.key].slice(0, f.max || 99));
+          }
+        } else if (typeof draft[f.key] === 'string') {
+          set(section.id, f.key, draft[f.key]);
+        }
+      }
+    }
+
+    // ---------- Review / Final V/TO ----------
+    function renderReview(container) {
+      const vto = buildVTO(state.answers);
+      container.innerHTML = `
+        <div class="section-meta">EOS V/TO™ — Final draft</div>
+        <h2>Your V/TO is ready.</h2>
+        <p style="color: var(--gray);">
+          Review the draft below — click the pencil icon on any card to jump back and refine that section.
+          When you're happy, copy the V/TO and paste each card into the matching field in Ninety's Vision tool.
+        </p>
+
+        <div class="review-summary">
+          <strong>How to use this in Ninety:</strong> The card layout below mirrors Ninety's Vision tool. Open Ninety, navigate to <em>Vision</em>, and paste each block into the field with the same name.
+        </div>
+
+        <div class="vto-actions">
+          <button class="btn btn-primary" id="btn-copy">📋 Copy entire V/TO</button>
+          <button class="btn btn-secondary" id="btn-download-md">⬇ Download .md</button>
+          <button class="btn btn-secondary" id="btn-download-txt">⬇ Download .txt</button>
+          <button class="btn btn-secondary" id="btn-print">🖨 Print</button>
+        </div>
+
+        ${buildVTOHTML(state.answers)}
+
+        <div class="nav">
+          <div class="nav-left">
+            <button class="btn btn-ghost" id="btn-back">← Back</button>
+          </div>
+          <div class="nav-right">
+            <button class="btn btn-ghost" id="btn-reset">Start over</button>
+          </div>
+        </div>
+      `;
+
+      // Edit-pencil handlers — jump back to the matching step.
+      container.querySelectorAll('[data-edit]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const sectionId = btn.dataset.edit;
+          const idx = SECTIONS.findIndex(s => s.id === sectionId);
+          if (idx >= 0) {
+            state.currentIndex = idx;
+            saveState();
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+
+      document.getElementById('btn-back').addEventListener('click', () => {
+        state.currentIndex = SECTIONS.length - 2;
+        saveState(); render();
+      });
+      document.getElementById('btn-copy').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(vto);
+          toast('V/TO copied to clipboard.');
+        } catch (e) {
+          toast('Copy failed — select and copy manually.');
+        }
+      });
+      document.getElementById('btn-download-md').addEventListener('click', () => downloadFile(vto, fileName('md'), 'text/markdown'));
+      document.getElementById('btn-download-txt').addEventListener('click', () => downloadFile(vto, fileName('txt'), 'text/plain'));
+      document.getElementById('btn-print').addEventListener('click', () => window.print());
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        if (confirm('Start over? This clears all your answers in this browser.')) resetState();
+      });
+    }
+
+    // ---------- Card-based V/TO renderer ----------
+    // Mirrors Ninety's Vision tool layout. Section order matches the workbook
+    // and Ninety's product: Core Values → Core Focus → 10-Year Target → Marketing
+    // Strategy → 3-Year Picture (top, two columns), then 1-Year Plan → 90 Days →
+    // Long-Term Issues (bottom, three columns).
+    function buildVTOHTML(a) {
+      const cv     = a['core-values'] || {};
+      const cf     = a['core-focus'] || {};
+      const tyt    = a['ten-year-target'] || {};
+      const ms     = a['marketing-strategy'] || {};
+      const tyrp   = a['three-year-picture'] || {};
+      const oyp    = a['one-year-plan'] || {};
+      const rocks  = a['rocks'] || {};
+      const issues = a['issues-list'] || {};
+      const empty = '<div class="vto-empty">— Not yet drafted —</div>';
+
+      const card = (sectionId, title, body, extraTitle = '') => `
+        <div class="vto-card">
+          <div class="vto-card-header">
+            <h3 class="vto-card-title">${escapeHtml(title)}${extraTitle}</h3>
+            <button class="vto-card-edit" data-edit="${sectionId}" aria-label="Edit ${escapeHtml(title)}" title="Edit this section">✎</button>
+          </div>
+          ${body}
+        </div>
+      `;
+
+      // ---- Core Values ----
+      const cvItems = (cv.items || []).filter(x => x && (x.value || x.descriptor));
+      const coreValuesBody = cvItems.length === 0 ? empty : cvItems.map(it => `
+        <div class="vto-kv-row">
+          <div class="vto-kv-key">${escapeHtml(trim(it.value)) || '—'}</div>
+          <div class="vto-kv-val">${escapeHtml(trim(it.descriptor))}</div>
+        </div>
+      `).join('');
+
+      // ---- Core Focus ----
+      const coreFocusBody = `
+        <div class="vto-section-label">Purpose / Cause / Passion</div>
+        ${trim(cf.purpose) ? `<div class="vto-card-text">${escapeHtml(trim(cf.purpose))}</div>` : empty}
+        <div class="vto-section-label">Niche</div>
+        ${trim(cf.niche) ? `<div class="vto-card-text">${escapeHtml(trim(cf.niche))}</div>` : empty}
+      `;
+
+      // ---- 10 Year Target ----
+      const tytTarget = trim(tyt.target);
+      const tytYear = trim(tyt.targetYear);
+      const tytBody = tytTarget
+        ? `<div class="vto-card-text">${escapeHtml(tytTarget)}${tytYear ? ' <span style="color: var(--slate);">(by ' + escapeHtml(tytYear) + ')</span>' : ''}</div>`
+        : empty;
+
+      // ---- Marketing Strategy ----
+      const uniques = (ms.threeUniques || []).filter(x => x && (typeof x === 'string' ? x.trim() : (x.name || x.descriptor)));
+      const uniquesBody = uniques.length === 0 ? empty : uniques.map(u => {
+        if (typeof u === 'string') {
+          return `<div class="vto-kv-row"><div class="vto-kv-key">•</div><div class="vto-kv-val">${escapeHtml(trim(u))}</div></div>`;
+        }
+        return `<div class="vto-kv-row"><div class="vto-kv-key">${escapeHtml(trim(u.name)) || '—'}</div><div class="vto-kv-val">${escapeHtml(trim(u.descriptor))}</div></div>`;
+      }).join('');
+
+      const provenSteps = (ms.provenProcessSteps || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      const provenName = trim(ms.provenProcessName);
+      const provenBody = (provenName || provenSteps.length)
+        ? `${provenName ? `<div class="vto-card-text">${escapeHtml(provenName)}</div>` : ''}${provenSteps.length ? `<ul class="vto-list">${provenSteps.map((s, i) => `<li><span class="vto-list-num">${i + 1}.</span><span>${escapeHtml(trim(typeof s === 'string' ? s : s.name))}</span></li>`).join('')}</ul>` : ''}`
+        : empty;
+
+      const marketingBody = `
+        <div class="vto-section-label">Target Market</div>
+        ${trim(ms.targetMarket) ? `<div class="vto-card-text">${escapeHtml(trim(ms.targetMarket))}</div>` : empty}
+        <div class="vto-section-label">Three Uniques</div>
+        ${uniquesBody}
+        <div class="vto-section-label">Proven Process</div>
+        ${provenBody}
+        <div class="vto-section-label">Guarantee</div>
+        ${trim(ms.guarantee) ? `<div class="vto-card-text">${escapeHtml(trim(ms.guarantee))}</div>` : empty}
+      `;
+
+      // ---- 3 Year Picture ----
+      const tyrpDate = trim(tyrp.targetDate);
+      const tyrpRev = trim(tyrp.revenue);
+      const tyrpProfit = trim(tyrp.profit);
+      const tyrpM = (tyrp.measurables || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      const tyrpL = (tyrp.lookLike || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+
+      const threeYearBody = `
+        <div class="vto-meta"><div class="vto-meta-label">Future Date:</div><div class="vto-meta-val">${escapeHtml(tyrpDate) || '<span class="vto-empty">—</span>'}</div></div>
+        <div class="vto-section-label">Revenue</div>
+        ${tyrpRev ? `<div class="vto-card-text">${escapeHtml(tyrpRev)}</div>` : empty}
+        <div class="vto-section-label">Profit</div>
+        ${tyrpProfit ? `<div class="vto-card-text">${escapeHtml(tyrpProfit)}</div>` : empty}
+        <div class="vto-section-label">Measurables</div>
+        ${tyrpM.length === 0 ? empty : `<ul class="vto-list">${tyrpM.map(m => `<li><span class="vto-list-bullet">•</span><span>${escapeHtml(trim(typeof m === 'string' ? m : m.name))}</span></li>`).join('')}</ul>`}
+        <div class="vto-section-label">What Does It Look Like?</div>
+        ${tyrpL.length === 0 ? empty : `<ul class="vto-list">${tyrpL.map(b => `<li><span class="vto-list-checkbox" aria-hidden="true"></span><span>${escapeHtml(trim(typeof b === 'string' ? b : b.name))}</span></li>`).join('')}</ul>`}
+      `;
+
+      // ---- 1 Year Plan ----
+      const oypDate = trim(oyp.targetDate);
+      const oypM = (oyp.measurables || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      const oypGoals = (oyp.goals || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      const oneYearBody = `
+        <div class="vto-meta"><div class="vto-meta-label">Future Date:</div><div class="vto-meta-val">${escapeHtml(oypDate) || '<span class="vto-empty">—</span>'}</div></div>
+        <div class="vto-section-label">Revenue</div>
+        ${trim(oyp.revenue) ? `<div class="vto-card-text">${escapeHtml(trim(oyp.revenue))}</div>` : empty}
+        <div class="vto-section-label">Profit</div>
+        ${trim(oyp.profit) ? `<div class="vto-card-text">${escapeHtml(trim(oyp.profit))}</div>` : empty}
+        <div class="vto-section-label">Measurables</div>
+        ${oypM.length === 0 ? empty : `<ul class="vto-list">${oypM.map(m => `<li><span class="vto-list-bullet">•</span><span>${escapeHtml(trim(typeof m === 'string' ? m : m.name))}</span></li>`).join('')}</ul>`}
+        <div class="vto-section-label">Goals for the Year</div>
+        ${oypGoals.length === 0 ? empty : `<ul class="vto-list">${oypGoals.map(g => `<li><span class="vto-list-checkbox" aria-hidden="true"></span><span>${escapeHtml(trim(typeof g === 'string' ? g : g.name))}</span></li>`).join('')}</ul>`}
+      `;
+
+      // ---- 90 Days (Rocks) ----
+      const rs = (rocks.items || []).filter(x => x && (x.rock || x.owner));
+      const rocksBody = rs.length === 0 ? empty : `
+        <div class="vto-section-label">Company Rocks</div>
+        ${rs.map(r => `
+          <div class="vto-rocks-row">
+            <div class="vto-rocks-rock">${escapeHtml(trim(r.rock)) || '<span class="vto-empty">(rock)</span>'}</div>
+            ${trim(r.owner) ? `<div class="vto-rocks-owner">${escapeHtml(trim(r.owner))}</div>` : ''}
+          </div>
+        `).join('')}
+      `;
+
+      // ---- Long-Term Issues ----
+      const il = (issues.items || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      const issuesCount = il.length ? `<span class="vto-card-count">${il.length}</span>` : '';
+      const issuesBody = il.length === 0 ? empty : `
+        <ul class="vto-list">
+          ${il.map((it, i) => `<li><span class="vto-list-num">${i + 1}.</span><span>${escapeHtml(trim(typeof it === 'string' ? it : it.name))}</span></li>`).join('')}
+        </ul>
+      `;
+
+      return `
+        <div class="vto-display">
+          <div class="vto-row cols-2">
+            <div class="vto-card-stack">
+              ${card('core-values', 'Core Values', coreValuesBody)}
+              ${card('core-focus', 'Core Focus™', coreFocusBody)}
+              ${card('ten-year-target', '10 Year Target™', tytBody)}
+              ${card('marketing-strategy', 'Marketing Strategy', marketingBody)}
+            </div>
+            <div class="vto-card-stack">
+              ${card('three-year-picture', '3 Year Picture', threeYearBody)}
+            </div>
+          </div>
+          <div class="vto-row cols-3">
+            ${card('one-year-plan', '1 Year Plan', oneYearBody)}
+            ${card('rocks', '90 Days', rocksBody)}
+            ${card('issues-list', 'Long-Term Issues', issuesBody, issuesCount)}
+          </div>
+        </div>
+      `;
+    }
+
+    function fileName(ext) {
+      const c = (state.answers.about && state.answers.about.companyName) || 'company';
+      const safe = c.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+      const date = new Date().toISOString().slice(0, 10);
+      return `${safe || 'company'}-vto-${date}.${ext}`;
+    }
+
+    function downloadFile(text, name, mime) {
+      const blob = new Blob([text], { type: mime + ';charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // ---------- Final V/TO assembly ----------
+    function buildVTO(a) {
+      const about = a.about || {};
+      const cv    = a['core-values'] || {};
+      const cf    = a['core-focus'] || {};
+      const tyt   = a['ten-year-target'] || {};
+      const ms    = a['marketing-strategy'] || {};
+      const tyrp  = a['three-year-picture'] || {};
+      const oyp   = a['one-year-plan'] || {};
+      const rocks = a['rocks'] || {};
+      const issues = a['issues-list'] || {};
+      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      const company = about.companyName || '[Company name]';
+
+      const lines = [];
+      const div = '═'.repeat(60);
+      lines.push(div);
+      lines.push(`VISION/TRACTION ORGANIZER — ${company}`);
+      lines.push(`Drafted ${date}`);
+      lines.push(div);
+      lines.push('');
+
+      lines.push('VISION');
+      lines.push('');
+      lines.push('CORE VALUES');
+      const cvItems = (cv.items || []).filter(x => x && (x.value || x.descriptor));
+      if (cvItems.length === 0) lines.push('  (not yet drafted)');
+      cvItems.forEach((it, i) => {
+        const v = trim(it.value);
+        const d = trim(it.descriptor);
+        lines.push(`  ${i + 1}. ${v}${d ? ' — ' + d : ''}`);
+      });
+      lines.push('');
+
+      lines.push('CORE FOCUS');
+      lines.push(`  Purpose / Cause / Passion: ${trim(cf.purpose) || '(not yet drafted)'}`);
+      lines.push(`  Our Niche:                 ${trim(cf.niche)   || '(not yet drafted)'}`);
+      lines.push('');
+
+      lines.push('10-YEAR TARGET');
+      const tyt_target = trim(tyt.target);
+      const tyt_year = trim(tyt.targetYear);
+      if (tyt_target || tyt_year) {
+        lines.push(`  ${tyt_target}${tyt_year ? '  (by ' + tyt_year + ')' : ''}`);
+      } else {
+        lines.push('  (not yet drafted)');
+      }
+      lines.push('');
+
+      lines.push('MARKETING STRATEGY');
+      lines.push('  Target Market / "The List":');
+      lines.push(`    ${trim(ms.targetMarket) || '(not yet drafted)'}`);
+      lines.push('  Three Uniques:');
+      const uniques = (ms.threeUniques || []).filter(x => x && (typeof x === 'string' ? x.trim() : (x.name || x.descriptor)));
+      if (uniques.length === 0) lines.push('    (not yet drafted)');
+      uniques.forEach((u, i) => {
+        if (typeof u === 'string') {
+          lines.push(`    ${i + 1}. ${trim(u)}`);
+        } else {
+          const n = trim(u.name);
+          const d = trim(u.descriptor);
+          lines.push(`    ${i + 1}. ${n}${d ? ' — ' + d : ''}`);
+        }
+      });
+      lines.push(`  Proven Process: ${trim(ms.provenProcessName) || '(unnamed)'}`);
+      const steps = (ms.provenProcessSteps || []).filter(Boolean);
+      if (steps.length) {
+        steps.forEach((s, i) => lines.push(`    ${i + 1}. ${trim(typeof s === 'string' ? s : s.name)}`));
+      } else {
+        lines.push('    (steps not yet drafted)');
+      }
+      lines.push(`  Guarantee: ${trim(ms.guarantee) || '(not yet drafted)'}`);
+      lines.push('');
+
+      lines.push(`3-YEAR PICTURE${trim(tyrp.targetDate) ? '  (by ' + trim(tyrp.targetDate) + ')' : ''}`);
+      lines.push(`  Revenue:     ${trim(tyrp.revenue) || '—'}`);
+      lines.push(`  Profit:      ${trim(tyrp.profit) || '—'}`);
+      lines.push('  Measurables:');
+      const tyrpM = (tyrp.measurables || []).filter(Boolean);
+      if (tyrpM.length === 0) lines.push('    —');
+      tyrpM.forEach((m, i) => lines.push(`    ${i + 1}. ${trim(typeof m === 'string' ? m : m.name)}`));
+      lines.push('  What does it look like?');
+      const tyrpL = (tyrp.lookLike || []).filter(Boolean);
+      if (tyrpL.length === 0) lines.push('    (not yet drafted)');
+      tyrpL.forEach(b => lines.push(`    • ${trim(typeof b === 'string' ? b : b.name)}`));
+      lines.push('');
+
+      lines.push(div);
+      lines.push('');
+      lines.push('TRACTION');
+      lines.push('');
+      lines.push(`1-YEAR PLAN${trim(oyp.targetDate) ? '  (by ' + trim(oyp.targetDate) + ')' : ''}`);
+      lines.push(`  Revenue:     ${trim(oyp.revenue) || '—'}`);
+      lines.push(`  Profit:      ${trim(oyp.profit) || '—'}`);
+      lines.push('  Measurables:');
+      const oypM = (oyp.measurables || []).filter(Boolean);
+      if (oypM.length === 0) lines.push('    —');
+      oypM.forEach((m, i) => lines.push(`    ${i + 1}. ${trim(typeof m === 'string' ? m : m.name)}`));
+      lines.push('  Goals for the year:');
+      const goals = (oyp.goals || []).filter(Boolean);
+      if (goals.length === 0) lines.push('    (not yet drafted)');
+      goals.forEach((g, i) => lines.push(`    ${i + 1}. ${trim(typeof g === 'string' ? g : g.name)}`));
+      lines.push('');
+
+      lines.push('ROCKS (this quarter)');
+      const rs = (rocks.items || []).filter(x => x && (x.rock || x.owner));
+      if (rs.length === 0) lines.push('  (not yet drafted)');
+      rs.forEach((r, i) => {
+        lines.push(`  ${i + 1}. ${trim(r.rock) || '(rock)'}${r.owner ? ' — Owner: ' + trim(r.owner) : ''}`);
+      });
+      lines.push('');
+
+      lines.push('ISSUES LIST');
+      const il = (issues.items || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      if (il.length === 0) lines.push('  (none captured)');
+      il.forEach(i => lines.push(`  • ${trim(typeof i === 'string' ? i : i.name)}`));
+      lines.push('');
+
+      lines.push(div);
+      lines.push('Drafted with the Ninety V/TO Builder. EOS®, V/TO™, Core Focus™, Three Uniques™, 10-Year Target™, and 3-Year Picture™ are trademarks of EOS Worldwide, LLC. Ninety is the platform for companies running on EOS, built under license from EOS Worldwide.');
+      lines.push(div);
+      return lines.join('\n');
+    }
+
+    // ---------- Boot ----------
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>

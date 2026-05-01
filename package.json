@@ -1,0 +1,16 @@
+{
+  "name": "vto-builder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-service web app for prospects and clients to draft an EOS V/TO. Built by Ninety Pro Serve.",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step — static frontend.'"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.1"
+  }
+}
