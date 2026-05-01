@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>V/TO Builder | Ninety</title>
-  <meta name="description" content="Draft your EOS Vision/Traction Organizer in about 45 minutes. Built by Ninety for companies running on EOS.">
+  <meta name="description" content="Draft your EOS Vision/Traction Organizer at your own pace. Built by Ninety for companies running on EOS.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -373,102 +373,221 @@
       margin: 16px 0 24px;
     }
 
-    /* ---- Final V/TO display (mirrors Ninety's Vision tool layout) ---- */
+    /* ---- Final V/TO display: landscape, two stacked "pages" ---- */
+    body.review main { max-width: 1280px; }
+
     .vto-display {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 28px;
       margin: 8px 0 16px;
     }
-    .vto-row {
-      display: grid;
-      gap: 16px;
+    .vto-doc-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--black);
+      text-align: center;
+      margin: 4px 0 2px;
     }
-    .vto-row.cols-2 { grid-template-columns: 1.4fr 1fr; }
-    .vto-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    @media (max-width: 900px) {
-      .vto-row.cols-2, .vto-row.cols-3 { grid-template-columns: 1fr; }
+    .vto-doc-meta {
+      text-align: center;
+      color: var(--gray);
+      font-size: 13px;
+      margin-bottom: 8px;
     }
-    .vto-card-stack { display: flex; flex-direction: column; gap: 16px; }
-    .vto-card {
+    .vto-page {
       background: var(--white);
       border: 1px solid var(--stone);
       border-radius: var(--radius-lg);
-      padding: 18px 22px;
+      padding: 22px 26px 26px;
+      box-shadow: 0 4px 14px rgba(38, 38, 38, 0.06);
+    }
+    .vto-page-header {
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--ninety-heaviest);
+      text-transform: uppercase;
+      padding-bottom: 10px;
+      margin: 0 0 18px;
+      border-bottom: 2px solid var(--ninety);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .vto-page-header-sub {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gray);
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+    .vto-row { display: grid; gap: 18px; }
+    .vto-row.cols-2 { grid-template-columns: 1.6fr 1fr; }
+    .vto-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 980px) {
+      .vto-row.cols-2, .vto-row.cols-3 { grid-template-columns: 1fr; }
+    }
+    .vto-card-stack { display: flex; flex-direction: column; gap: 18px; }
+    .vto-card {
+      background: var(--white);
+      border: 1px solid var(--stone);
+      border-radius: var(--radius);
+      padding: 16px 20px 14px;
       font-size: 14px;
-      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
     }
     .vto-card-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding-bottom: 10px;
-      margin-bottom: 12px;
+      align-items: baseline;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
       border-bottom: 1px solid var(--mist);
     }
     .vto-card-title {
       font-family: 'Poppins', sans-serif;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 600;
       margin: 0;
       color: var(--black);
     }
     .vto-card-count {
       color: var(--gray);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       margin-left: 6px;
     }
-    .vto-card-edit {
+    .vto-card-step-link {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 11px;
+      color: var(--slate);
+      cursor: pointer;
+      text-decoration: none;
+      align-self: flex-end;
       background: transparent;
       border: 0;
-      cursor: pointer;
-      color: var(--slate);
-      font-size: 16px;
-      padding: 4px 8px;
+      font-family: inherit;
+      letter-spacing: 0.02em;
+    }
+    .vto-card-step-link:hover { color: var(--ninety); text-decoration: underline; }
+
+    /* Inline edit primitive — text and lists rely on it. */
+    .vto-edit {
+      cursor: text;
       border-radius: 4px;
-      transition: all 0.15s;
-      line-height: 1;
+      padding: 3px 6px;
+      margin: -3px -6px;
+      min-height: 1.5em;
+      outline: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+      transition: background 0.12s, box-shadow 0.12s;
+      color: var(--gray);
+      line-height: 1.5;
     }
-    .vto-card-edit:hover { color: var(--ninety); background: var(--ninety-shader-light); }
-    .vto-kv-row {
-      display: grid;
-      grid-template-columns: minmax(120px, max-content) 1fr;
-      gap: 16px;
-      padding: 8px 0;
-      align-items: start;
+    .vto-edit:hover { background: var(--ninety-shader-light); }
+    .vto-edit:focus {
+      background: var(--ninety-shader-light);
+      box-shadow: inset 0 0 0 1px var(--ninety);
     }
-    .vto-kv-row + .vto-kv-row { border-top: 1px solid var(--mist); }
-    .vto-kv-key { color: var(--black); font-weight: 500; }
-    .vto-kv-val { color: var(--gray); }
+    .vto-edit.is-empty::before {
+      content: attr(data-placeholder);
+      color: var(--slate);
+      font-style: italic;
+      pointer-events: none;
+    }
+
     .vto-section-label {
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--black);
       margin: 14px 0 4px;
+      letter-spacing: 0.02em;
     }
     .vto-section-label:first-child { margin-top: 0; }
-    .vto-card-text { color: var(--gray); margin: 0 0 6px; line-height: 1.5; }
-    .vto-list { list-style: none; padding: 0; margin: 0; }
-    .vto-list li {
+
+    /* Two-column key/value rows (Core Values, Three Uniques, Rocks) */
+    .vto-kv-row {
       display: grid;
-      grid-template-columns: 24px 1fr;
-      gap: 8px;
+      grid-template-columns: minmax(110px, 0.42fr) 1fr 24px;
+      gap: 12px;
+      padding: 7px 0;
+      border-top: 1px solid var(--mist);
       align-items: start;
+    }
+    .vto-kv-row:first-child { border-top: 0; }
+    .vto-kv-row .vto-edit:first-child { color: var(--black); font-weight: 500; }
+    .vto-kv-row.is-rocks { grid-template-columns: 1fr 110px 24px; }
+    .vto-kv-row.is-rocks .vto-edit:first-child { font-weight: 400; color: var(--gray); }
+    .vto-kv-row.is-rocks .vto-edit:nth-child(2) { color: var(--ninety-heaviest); font-weight: 600; font-size: 13px; }
+
+    /* Single-column lists (measurables, look-like, goals, issues, proven steps) */
+    .vto-list-row {
+      display: grid;
+      grid-template-columns: 24px 1fr 24px;
+      gap: 8px;
       padding: 6px 0;
       border-top: 1px solid var(--mist);
-      color: var(--gray);
+      align-items: start;
     }
-    .vto-list li:first-child { border-top: 0; }
-    .vto-list-num { color: var(--gray); font-weight: 600; font-size: 13px; }
-    .vto-list-bullet { color: var(--slate); }
-    .vto-list-checkbox {
+    .vto-list-row:first-child { border-top: 0; }
+    .vto-list-marker {
+      color: var(--gray);
+      font-weight: 600;
+      font-size: 13px;
+      padding-top: 4px;
+    }
+    .vto-list-marker.is-checkbox {
       width: 14px;
       height: 14px;
       border: 1px solid var(--slate);
       border-radius: 3px;
-      margin-top: 4px;
+      margin-top: 7px;
     }
+    .vto-list-marker.is-bullet { color: var(--slate); padding-top: 2px; }
+
+    /* Add/remove controls — subtle, surface on row hover/focus */
+    .vto-row-remove {
+      background: transparent;
+      border: 0;
+      color: var(--slate);
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.15s, color 0.15s, background 0.15s;
+      align-self: start;
+      margin-top: 2px;
+    }
+    .vto-kv-row:hover .vto-row-remove,
+    .vto-kv-row:focus-within .vto-row-remove,
+    .vto-list-row:hover .vto-row-remove,
+    .vto-list-row:focus-within .vto-row-remove { opacity: 1; }
+    .vto-row-remove:hover { color: var(--error); background: var(--mist); }
+    .vto-row-add {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px dashed var(--stone);
+      color: var(--gray);
+      padding: 5px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      margin-top: 8px;
+      transition: all 0.15s;
+    }
+    .vto-row-add:hover { color: var(--ninety); border-color: var(--ninety); background: var(--ninety-shader-light); }
+    .vto-row-add[disabled] { opacity: 0.4; cursor: not-allowed; }
+
     .vto-empty { color: var(--slate); font-style: italic; font-size: 13px; }
     .vto-meta {
       display: grid;
@@ -477,29 +596,11 @@
       padding: 4px 0 8px;
       font-size: 14px;
       border-bottom: 1px solid var(--mist);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      align-items: baseline;
     }
     .vto-meta-label { font-weight: 700; color: var(--black); }
     .vto-meta-val { color: var(--gray); }
-    .vto-rocks-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      padding: 8px 0;
-      border-top: 1px solid var(--mist);
-      align-items: start;
-    }
-    .vto-rocks-row:first-child { border-top: 0; }
-    .vto-rocks-rock { color: var(--gray); }
-    .vto-rocks-owner {
-      color: var(--ninety-heaviest);
-      font-weight: 600;
-      font-size: 13px;
-      background: var(--ninety-shader-light);
-      padding: 3px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
 
     .toast {
       position: fixed;
@@ -559,12 +660,26 @@
     .review-summary strong { color: var(--black); }
 
     @media print {
-      .topbar, .nav, .vto-actions, .suggest-bar, .context-chip, footer, .review-summary, .vto-card-edit { display: none !important; }
-      body { background: white; }
+      @page { size: landscape; margin: 0.4in; }
+      body, body.review main { background: white; max-width: none; padding: 0; }
+      .topbar, .nav, .vto-actions, .suggest-bar, .context-chip, footer,
+      .review-summary, .vto-card-step-link, .vto-row-remove, .vto-row-add { display: none !important; }
       .card { border: 0; box-shadow: none; padding: 0; }
-      .vto-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none; }
-      .vto-row.cols-2, .vto-row.cols-3 { display: block; }
-      .vto-row.cols-2 > *, .vto-row.cols-3 > * { margin-bottom: 12px; }
+      h2, .section-meta, p.review-intro { display: none; }
+      .vto-doc-title { font-size: 22px; margin-bottom: 4px; }
+      .vto-doc-meta { margin-bottom: 12px; }
+      .vto-page {
+        page-break-after: always;
+        box-shadow: none;
+        border: 1px solid #999;
+        padding: 14px 18px;
+        margin: 0 0 8px;
+      }
+      .vto-page:last-of-type { page-break-after: auto; }
+      .vto-page-header { color: #000; border-bottom-color: #000; }
+      .vto-card { break-inside: avoid; page-break-inside: avoid; border-color: #999; }
+      .vto-edit { cursor: default; background: transparent !important; box-shadow: none !important; pointer-events: none; }
+      .vto-edit.is-empty::before { content: '—'; }
     }
   </style>
 </head>
@@ -809,6 +924,9 @@
     function render() {
       const section = SECTIONS[state.currentIndex];
       const container = document.getElementById('step-container');
+      // Wide-layout body class — the review screen needs a landscape canvas;
+      // welcome and form steps stay narrow.
+      document.body.classList.toggle('review', section.kind === 'review');
       updateProgress();
       if (section.kind === 'welcome') return renderWelcome(container);
       if (section.kind === 'review')  return renderReview(container);
@@ -836,7 +954,7 @@
       const hasProgress = Object.keys(state.answers).length > 0;
       container.innerHTML = `
         <div class="section-meta">EOS V/TO™ Builder</div>
-        <h1>Draft your V/TO in about 45 minutes.</h1>
+        <h1>Draft your V/TO at your own pace.</h1>
         <p style="font-size: 17px; color: var(--gray);">
           A V/TO™ — Vision/Traction Organizer™ — is the foundational tool every company running on EOS uses
           to align on where it's going and how it's going to get there. We'll walk you through the 9 sections,
@@ -845,7 +963,7 @@
 
         <div class="welcome-grid">
           <div class="welcome-pill"><strong>9 sections</strong>Vision side + Traction side</div>
-          <div class="welcome-pill"><strong>~45 minutes</strong>Or split it across a few sittings</div>
+          <div class="welcome-pill"><strong>Save and resume</strong>Pick up where you left off</div>
           <div class="welcome-pill"><strong>Saved in your browser</strong>Nothing stored on our servers</div>
           <div class="welcome-pill"><strong>Optional AI drafts</strong>Get unstuck with one click</div>
         </div>
@@ -1180,32 +1298,49 @@
     }
 
     // ---------- Review / Final V/TO ----------
+    // Inline-editable layout that mirrors the EOS V/TO PDF: a centered title
+    // with two stacked "pages" (Vision and Traction). Edit any value directly
+    // by clicking; changes save to localStorage on each keystroke.
+
+    let pendingFocusSelector = null;
+
+    // Configures list editing per section.key — `kind: 'pair'` means each item
+    // is an object with two fields (sub-keys); `string` means each item is a
+    // bare string. `max` enforces an upper bound when adding rows.
+    const REVIEW_LIST_CONFIG = {
+      'core-values':         { items:              { kind: 'pair',   subs: ['value', 'descriptor'], max: 7 } },
+      'marketing-strategy':  {
+        threeUniques:        { kind: 'pair', subs: ['name', 'descriptor'], max: 3 },
+        provenProcessSteps:  { kind: 'string', max: 7 },
+      },
+      'three-year-picture':  { measurables: { kind: 'string', max: 3 }, lookLike: { kind: 'string', max: 12 } },
+      'one-year-plan':       { measurables: { kind: 'string', max: 3 }, goals:    { kind: 'string', max: 7 } },
+      'rocks':               { items: { kind: 'pair', subs: ['rock', 'owner'], max: 7 } },
+      'issues-list':         { items: { kind: 'string', max: 30 } },
+    };
+
     function renderReview(container) {
-      const vto = buildVTO(state.answers);
       container.innerHTML = `
-        <div class="section-meta">EOS V/TO™ — Final draft</div>
-        <h2>Your V/TO is ready.</h2>
-        <p style="color: var(--gray);">
-          Review the draft below — click the pencil icon on any card to jump back and refine that section.
-          When you're happy, copy the V/TO and paste each card into the matching field in Ninety's Vision tool.
+        <div class="section-meta">EOS V/TO™ — Editable draft</div>
+        <h2>Your V/TO is ready to refine.</h2>
+        <p class="review-intro" style="color: var(--gray);">
+          Click anywhere on the page to edit. Add or remove items with the small controls that
+          appear when you hover. When you're happy, print to PDF, copy the V/TO, or paste each
+          card into the matching field in Ninety's Vision tool.
         </p>
 
-        <div class="review-summary">
-          <strong>How to use this in Ninety:</strong> The card layout below mirrors Ninety's Vision tool. Open Ninety, navigate to <em>Vision</em>, and paste each block into the field with the same name.
-        </div>
-
         <div class="vto-actions">
-          <button class="btn btn-primary" id="btn-copy">📋 Copy entire V/TO</button>
+          <button class="btn btn-primary" id="btn-print">🖨 Print to PDF</button>
+          <button class="btn btn-secondary" id="btn-copy">📋 Copy entire V/TO</button>
           <button class="btn btn-secondary" id="btn-download-md">⬇ Download .md</button>
           <button class="btn btn-secondary" id="btn-download-txt">⬇ Download .txt</button>
-          <button class="btn btn-secondary" id="btn-print">🖨 Print</button>
         </div>
 
         ${buildVTOHTML(state.answers)}
 
         <div class="nav">
           <div class="nav-left">
-            <button class="btn btn-ghost" id="btn-back">← Back</button>
+            <button class="btn btn-ghost" id="btn-back">← Back to last step</button>
           </div>
           <div class="nav-right">
             <button class="btn btn-ghost" id="btn-reset">Start over</button>
@@ -1213,11 +1348,52 @@
         </div>
       `;
 
-      // Edit-pencil handlers — jump back to the matching step.
-      container.querySelectorAll('[data-edit]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const sectionId = btn.dataset.edit;
+      applyPlaceholders(container);
+
+      // ---- Inline edit: keep state in sync with each keystroke. ----
+      container.addEventListener('input', (e) => {
+        const el = e.target.closest('.vto-edit');
+        if (!el) return;
+        const sectionId = el.dataset.section;
+        const key = el.dataset.key;
+        const text = el.textContent.replace(/ /g, ' ');
+        const idx = el.dataset.listIdx;
+        const sub = el.dataset.listSub;
+
+        if (idx === undefined) {
+          set(sectionId, key, text);
+        } else {
+          const arr = ((state.answers[sectionId] || {})[key] || []).slice();
+          while (arr.length <= Number(idx)) arr.push(sub ? {} : '');
+          if (sub) {
+            if (typeof arr[idx] !== 'object' || !arr[idx]) arr[idx] = {};
+            arr[idx][sub] = text;
+          } else {
+            arr[idx] = text;
+          }
+          set(sectionId, key, arr);
+        }
+        // Toggle empty placeholder on this element only — avoids re-render flicker.
+        el.classList.toggle('is-empty', el.textContent.trim() === '');
+      });
+
+      // ---- Plain-text paste: strip formatting from clipboard. ----
+      container.addEventListener('paste', (e) => {
+        if (!e.target.closest('.vto-edit')) return;
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+        document.execCommand('insertText', false, text);
+      });
+
+      // ---- Add / remove rows + open-step links ----
+      container.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const sectionId = btn.dataset.section;
+        const key = btn.dataset.key;
+
+        if (action === 'open-step') {
           const idx = SECTIONS.findIndex(s => s.id === sectionId);
           if (idx >= 0) {
             state.currentIndex = idx;
@@ -1225,7 +1401,35 @@
             render();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }
-        });
+          return;
+        }
+
+        const cfg = (REVIEW_LIST_CONFIG[sectionId] || {})[key];
+        if (!cfg) return;
+
+        if (action === 'add-item') {
+          const arr = ((state.answers[sectionId] || {})[key] || []).slice();
+          if (cfg.max && arr.length >= cfg.max) return;
+          if (cfg.kind === 'pair') {
+            const blank = {};
+            cfg.subs.forEach(s => blank[s] = '');
+            arr.push(blank);
+          } else {
+            arr.push('');
+          }
+          set(sectionId, key, arr);
+          const newIdx = arr.length - 1;
+          const sub = cfg.kind === 'pair' ? cfg.subs[0] : '';
+          pendingFocusSelector = `[data-section="${sectionId}"][data-key="${key}"][data-list-idx="${newIdx}"]${sub ? `[data-list-sub="${sub}"]` : ''}`;
+          render();
+        }
+        if (action === 'remove-item') {
+          const idx = Number(btn.dataset.idx);
+          const arr = ((state.answers[sectionId] || {})[key] || []).slice();
+          arr.splice(idx, 1);
+          set(sectionId, key, arr);
+          render();
+        }
       });
 
       document.getElementById('btn-back').addEventListener('click', () => {
@@ -1234,26 +1438,82 @@
       });
       document.getElementById('btn-copy').addEventListener('click', async () => {
         try {
-          await navigator.clipboard.writeText(vto);
+          await navigator.clipboard.writeText(buildVTO(state.answers));
           toast('V/TO copied to clipboard.');
         } catch (e) {
           toast('Copy failed — select and copy manually.');
         }
       });
-      document.getElementById('btn-download-md').addEventListener('click', () => downloadFile(vto, fileName('md'), 'text/markdown'));
-      document.getElementById('btn-download-txt').addEventListener('click', () => downloadFile(vto, fileName('txt'), 'text/plain'));
+      document.getElementById('btn-download-md').addEventListener('click', () => downloadFile(buildVTO(state.answers), fileName('md'), 'text/markdown'));
+      document.getElementById('btn-download-txt').addEventListener('click', () => downloadFile(buildVTO(state.answers), fileName('txt'), 'text/plain'));
       document.getElementById('btn-print').addEventListener('click', () => window.print());
       document.getElementById('btn-reset').addEventListener('click', () => {
         if (confirm('Start over? This clears all your answers in this browser.')) resetState();
       });
+
+      // Focus newly-added rows from add-item.
+      if (pendingFocusSelector) {
+        const el = container.querySelector(pendingFocusSelector);
+        if (el) {
+          el.focus();
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          range.collapse(false);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+        pendingFocusSelector = null;
+      }
     }
 
-    // ---------- Card-based V/TO renderer ----------
-    // Mirrors Ninety's Vision tool layout. Section order matches the workbook
-    // and Ninety's product: Core Values → Core Focus → 10-Year Target → Marketing
-    // Strategy → 3-Year Picture (top, two columns), then 1-Year Plan → 90 Days →
-    // Long-Term Issues (bottom, three columns).
+    // Empty-placeholder visibility — contenteditable :empty is finicky, so we
+    // toggle a class once on render and live in the input handler.
+    function applyPlaceholders(root) {
+      root.querySelectorAll('.vto-edit').forEach(el => {
+        el.classList.toggle('is-empty', el.textContent.trim() === '');
+      });
+    }
+
+    // Inline-edit primitives. `editText` is a single field; `editList*` builds
+    // a row for a list item. The `.vto-edit` class hooks into the edit handler.
+    function editText(sectionId, key, value, placeholder) {
+      return `<div class="vto-edit"
+                   contenteditable="true"
+                   spellcheck="true"
+                   data-section="${sectionId}"
+                   data-key="${key}"
+                   data-placeholder="${escapeHtml(placeholder || '')}">${escapeHtml(value || '')}</div>`;
+    }
+    function editListString(sectionId, key, idx, value, placeholder) {
+      return `<div class="vto-edit"
+                   contenteditable="true"
+                   spellcheck="true"
+                   data-section="${sectionId}"
+                   data-key="${key}"
+                   data-list-idx="${idx}"
+                   data-placeholder="${escapeHtml(placeholder || '')}">${escapeHtml(value || '')}</div>`;
+    }
+    function editListPair(sectionId, key, idx, sub, value, placeholder) {
+      return `<div class="vto-edit"
+                   contenteditable="true"
+                   spellcheck="true"
+                   data-section="${sectionId}"
+                   data-key="${key}"
+                   data-list-idx="${idx}"
+                   data-list-sub="${sub}"
+                   data-placeholder="${escapeHtml(placeholder || '')}">${escapeHtml(value || '')}</div>`;
+    }
+    function removeBtn(sectionId, key, idx) {
+      return `<button class="vto-row-remove" data-action="remove-item" data-section="${sectionId}" data-key="${key}" data-idx="${idx}" title="Remove" aria-label="Remove row">×</button>`;
+    }
+    function addBtn(sectionId, key, label, atMax) {
+      return `<button class="vto-row-add" data-action="add-item" data-section="${sectionId}" data-key="${key}" ${atMax ? 'disabled' : ''}>+ ${escapeHtml(label)}</button>`;
+    }
+
+    // ---------- Card-based, two-page V/TO renderer ----------
     function buildVTOHTML(a) {
+      const about  = a.about || {};
       const cv     = a['core-values'] || {};
       const cf     = a['core-focus'] || {};
       const tyt    = a['ten-year-target'] || {};
@@ -1262,141 +1522,191 @@
       const oyp    = a['one-year-plan'] || {};
       const rocks  = a['rocks'] || {};
       const issues = a['issues-list'] || {};
-      const empty = '<div class="vto-empty">— Not yet drafted —</div>';
 
-      const card = (sectionId, title, body, extraTitle = '') => `
+      const company = trim(about.companyName) || 'Your Company';
+      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      const card = (sectionId, title, body, countBadge = '') => `
         <div class="vto-card">
           <div class="vto-card-header">
-            <h3 class="vto-card-title">${escapeHtml(title)}${extraTitle}</h3>
-            <button class="vto-card-edit" data-edit="${sectionId}" aria-label="Edit ${escapeHtml(title)}" title="Edit this section">✎</button>
+            <h3 class="vto-card-title">${escapeHtml(title)}${countBadge}</h3>
           </div>
           ${body}
+          <button class="vto-card-step-link" data-action="open-step" data-section="${sectionId}" title="Open this section's step view">↗ Open in step view</button>
         </div>
       `;
 
-      // ---- Core Values ----
-      const cvItems = (cv.items || []).filter(x => x && (x.value || x.descriptor));
-      const coreValuesBody = cvItems.length === 0 ? empty : cvItems.map(it => `
+      // ---- Core Values: pair list ----
+      const cvItems = (cv.items && cv.items.length) ? cv.items : [{ value: '', descriptor: '' }];
+      const cvBody = cvItems.map((it, i) => `
         <div class="vto-kv-row">
-          <div class="vto-kv-key">${escapeHtml(trim(it.value)) || '—'}</div>
-          <div class="vto-kv-val">${escapeHtml(trim(it.descriptor))}</div>
+          ${editListPair('core-values', 'items', i, 'value', it && it.value, 'e.g. Get smart stuff done')}
+          ${editListPair('core-values', 'items', i, 'descriptor', it && it.descriptor, 'What does this look like in practice?')}
+          ${removeBtn('core-values', 'items', i)}
         </div>
-      `).join('');
+      `).join('') + addBtn('core-values', 'items', 'Add Core Value', cvItems.length >= 7);
 
       // ---- Core Focus ----
-      const coreFocusBody = `
+      const cfBody = `
         <div class="vto-section-label">Purpose / Cause / Passion</div>
-        ${trim(cf.purpose) ? `<div class="vto-card-text">${escapeHtml(trim(cf.purpose))}</div>` : empty}
+        ${editText('core-focus', 'purpose', cf.purpose, '3–7 words: why your company exists')}
         <div class="vto-section-label">Niche</div>
-        ${trim(cf.niche) ? `<div class="vto-card-text">${escapeHtml(trim(cf.niche))}</div>` : empty}
+        ${editText('core-focus', 'niche', cf.niche, 'One sentence: who you serve and what you do')}
       `;
 
       // ---- 10 Year Target ----
-      const tytTarget = trim(tyt.target);
-      const tytYear = trim(tyt.targetYear);
-      const tytBody = tytTarget
-        ? `<div class="vto-card-text">${escapeHtml(tytTarget)}${tytYear ? ' <span style="color: var(--slate);">(by ' + escapeHtml(tytYear) + ')</span>' : ''}</div>`
-        : empty;
+      const tytBody = `
+        ${editText('ten-year-target', 'target', tyt.target, 'A bold, measurable goal ~10 years out')}
+        <div class="vto-section-label" style="margin-top: 10px;">Target Year</div>
+        ${editText('ten-year-target', 'targetYear', tyt.targetYear, 'e.g. 2035')}
+      `;
 
       // ---- Marketing Strategy ----
-      const uniques = (ms.threeUniques || []).filter(x => x && (typeof x === 'string' ? x.trim() : (x.name || x.descriptor)));
-      const uniquesBody = uniques.length === 0 ? empty : uniques.map(u => {
-        if (typeof u === 'string') {
-          return `<div class="vto-kv-row"><div class="vto-kv-key">•</div><div class="vto-kv-val">${escapeHtml(trim(u))}</div></div>`;
-        }
-        return `<div class="vto-kv-row"><div class="vto-kv-key">${escapeHtml(trim(u.name)) || '—'}</div><div class="vto-kv-val">${escapeHtml(trim(u.descriptor))}</div></div>`;
-      }).join('');
+      const uniques = (ms.threeUniques && ms.threeUniques.length) ? ms.threeUniques : [{ name: '', descriptor: '' }];
+      const uniquesNorm = uniques.map(u => typeof u === 'string' ? { name: '', descriptor: u } : (u || {}));
+      const uniquesRows = uniquesNorm.map((u, i) => `
+        <div class="vto-kv-row">
+          ${editListPair('marketing-strategy', 'threeUniques', i, 'name', u.name, 'Short label (e.g. "Fast")')}
+          ${editListPair('marketing-strategy', 'threeUniques', i, 'descriptor', u.descriptor, 'A specific way you stand apart')}
+          ${removeBtn('marketing-strategy', 'threeUniques', i)}
+        </div>
+      `).join('') + addBtn('marketing-strategy', 'threeUniques', 'Add Unique', uniquesNorm.length >= 3);
 
-      const provenSteps = (ms.provenProcessSteps || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
-      const provenName = trim(ms.provenProcessName);
-      const provenBody = (provenName || provenSteps.length)
-        ? `${provenName ? `<div class="vto-card-text">${escapeHtml(provenName)}</div>` : ''}${provenSteps.length ? `<ul class="vto-list">${provenSteps.map((s, i) => `<li><span class="vto-list-num">${i + 1}.</span><span>${escapeHtml(trim(typeof s === 'string' ? s : s.name))}</span></li>`).join('')}</ul>` : ''}`
-        : empty;
+      const provenSteps = (ms.provenProcessSteps && ms.provenProcessSteps.length) ? ms.provenProcessSteps : [''];
+      const provenStepsRows = provenSteps.map((s, i) => `
+        <div class="vto-list-row">
+          <span class="vto-list-marker">${i + 1}.</span>
+          ${editListString('marketing-strategy', 'provenProcessSteps', i, typeof s === 'string' ? s : (s && s.name), 'Named step in your process')}
+          ${removeBtn('marketing-strategy', 'provenProcessSteps', i)}
+        </div>
+      `).join('') + addBtn('marketing-strategy', 'provenProcessSteps', 'Add Step', provenSteps.length >= 7);
 
       const marketingBody = `
-        <div class="vto-section-label">Target Market</div>
-        ${trim(ms.targetMarket) ? `<div class="vto-card-text">${escapeHtml(trim(ms.targetMarket))}</div>` : empty}
+        <div class="vto-section-label">Target Market / "The List"</div>
+        ${editText('marketing-strategy', 'targetMarket', ms.targetMarket, 'Geographic + demographic + psychographic')}
         <div class="vto-section-label">Three Uniques</div>
-        ${uniquesBody}
+        ${uniquesRows}
         <div class="vto-section-label">Proven Process</div>
-        ${provenBody}
+        ${editText('marketing-strategy', 'provenProcessName', ms.provenProcessName, 'Process name (e.g. "The Acme Way")')}
+        ${provenStepsRows}
         <div class="vto-section-label">Guarantee</div>
-        ${trim(ms.guarantee) ? `<div class="vto-card-text">${escapeHtml(trim(ms.guarantee))}</div>` : empty}
+        ${editText('marketing-strategy', 'guarantee', ms.guarantee, 'A bold promise that takes risk off the buyer')}
       `;
 
       // ---- 3 Year Picture ----
-      const tyrpDate = trim(tyrp.targetDate);
-      const tyrpRev = trim(tyrp.revenue);
-      const tyrpProfit = trim(tyrp.profit);
-      const tyrpM = (tyrp.measurables || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
-      const tyrpL = (tyrp.lookLike || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
-
+      const tyrpM = (tyrp.measurables && tyrp.measurables.length) ? tyrp.measurables : [''];
+      const tyrpL = (tyrp.lookLike && tyrp.lookLike.length) ? tyrp.lookLike : [''];
+      const tyrpMRows = tyrpM.map((m, i) => `
+        <div class="vto-list-row">
+          <span class="vto-list-marker is-bullet">•</span>
+          ${editListString('three-year-picture', 'measurables', i, typeof m === 'string' ? m : (m && m.name), 'KPI + target')}
+          ${removeBtn('three-year-picture', 'measurables', i)}
+        </div>
+      `).join('') + addBtn('three-year-picture', 'measurables', 'Add Measurable', tyrpM.length >= 3);
+      const tyrpLRows = tyrpL.map((b, i) => `
+        <div class="vto-list-row">
+          <span class="vto-list-marker is-checkbox" aria-hidden="true"></span>
+          ${editListString('three-year-picture', 'lookLike', i, typeof b === 'string' ? b : (b && b.name), 'A concrete, specific picture of success')}
+          ${removeBtn('three-year-picture', 'lookLike', i)}
+        </div>
+      `).join('') + addBtn('three-year-picture', 'lookLike', 'Add bullet', tyrpL.length >= 12);
       const threeYearBody = `
-        <div class="vto-meta"><div class="vto-meta-label">Future Date:</div><div class="vto-meta-val">${escapeHtml(tyrpDate) || '<span class="vto-empty">—</span>'}</div></div>
+        <div class="vto-meta">
+          <div class="vto-meta-label">Future Date:</div>
+          ${editText('three-year-picture', 'targetDate', tyrp.targetDate, 'e.g. December 31, 2028')}
+        </div>
         <div class="vto-section-label">Revenue</div>
-        ${tyrpRev ? `<div class="vto-card-text">${escapeHtml(tyrpRev)}</div>` : empty}
+        ${editText('three-year-picture', 'revenue', tyrp.revenue, 'e.g. $25M')}
         <div class="vto-section-label">Profit</div>
-        ${tyrpProfit ? `<div class="vto-card-text">${escapeHtml(tyrpProfit)}</div>` : empty}
+        ${editText('three-year-picture', 'profit', tyrp.profit, 'e.g. $4M (16%)')}
         <div class="vto-section-label">Measurables</div>
-        ${tyrpM.length === 0 ? empty : `<ul class="vto-list">${tyrpM.map(m => `<li><span class="vto-list-bullet">•</span><span>${escapeHtml(trim(typeof m === 'string' ? m : m.name))}</span></li>`).join('')}</ul>`}
+        ${tyrpMRows}
         <div class="vto-section-label">What Does It Look Like?</div>
-        ${tyrpL.length === 0 ? empty : `<ul class="vto-list">${tyrpL.map(b => `<li><span class="vto-list-checkbox" aria-hidden="true"></span><span>${escapeHtml(trim(typeof b === 'string' ? b : b.name))}</span></li>`).join('')}</ul>`}
+        ${tyrpLRows}
       `;
 
       // ---- 1 Year Plan ----
-      const oypDate = trim(oyp.targetDate);
-      const oypM = (oyp.measurables || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
-      const oypGoals = (oyp.goals || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
+      const oypM = (oyp.measurables && oyp.measurables.length) ? oyp.measurables : [''];
+      const oypGoals = (oyp.goals && oyp.goals.length) ? oyp.goals : [''];
+      const oypMRows = oypM.map((m, i) => `
+        <div class="vto-list-row">
+          <span class="vto-list-marker is-bullet">•</span>
+          ${editListString('one-year-plan', 'measurables', i, typeof m === 'string' ? m : (m && m.name), 'KPI + target')}
+          ${removeBtn('one-year-plan', 'measurables', i)}
+        </div>
+      `).join('') + addBtn('one-year-plan', 'measurables', 'Add Measurable', oypM.length >= 3);
+      const oypGoalsRows = oypGoals.map((g, i) => `
+        <div class="vto-list-row">
+          <span class="vto-list-marker is-checkbox" aria-hidden="true"></span>
+          ${editListString('one-year-plan', 'goals', i, typeof g === 'string' ? g : (g && g.name), 'A specific 1-year goal')}
+          ${removeBtn('one-year-plan', 'goals', i)}
+        </div>
+      `).join('') + addBtn('one-year-plan', 'goals', 'Add Goal', oypGoals.length >= 7);
       const oneYearBody = `
-        <div class="vto-meta"><div class="vto-meta-label">Future Date:</div><div class="vto-meta-val">${escapeHtml(oypDate) || '<span class="vto-empty">—</span>'}</div></div>
+        <div class="vto-meta">
+          <div class="vto-meta-label">Future Date:</div>
+          ${editText('one-year-plan', 'targetDate', oyp.targetDate, 'e.g. December 31, 2026')}
+        </div>
         <div class="vto-section-label">Revenue</div>
-        ${trim(oyp.revenue) ? `<div class="vto-card-text">${escapeHtml(trim(oyp.revenue))}</div>` : empty}
+        ${editText('one-year-plan', 'revenue', oyp.revenue, 'e.g. $9.5M')}
         <div class="vto-section-label">Profit</div>
-        ${trim(oyp.profit) ? `<div class="vto-card-text">${escapeHtml(trim(oyp.profit))}</div>` : empty}
+        ${editText('one-year-plan', 'profit', oyp.profit, 'e.g. $1.2M (12%)')}
         <div class="vto-section-label">Measurables</div>
-        ${oypM.length === 0 ? empty : `<ul class="vto-list">${oypM.map(m => `<li><span class="vto-list-bullet">•</span><span>${escapeHtml(trim(typeof m === 'string' ? m : m.name))}</span></li>`).join('')}</ul>`}
+        ${oypMRows}
         <div class="vto-section-label">Goals for the Year</div>
-        ${oypGoals.length === 0 ? empty : `<ul class="vto-list">${oypGoals.map(g => `<li><span class="vto-list-checkbox" aria-hidden="true"></span><span>${escapeHtml(trim(typeof g === 'string' ? g : g.name))}</span></li>`).join('')}</ul>`}
+        ${oypGoalsRows}
       `;
 
       // ---- 90 Days (Rocks) ----
-      const rs = (rocks.items || []).filter(x => x && (x.rock || x.owner));
-      const rocksBody = rs.length === 0 ? empty : `
-        <div class="vto-section-label">Company Rocks</div>
-        ${rs.map(r => `
-          <div class="vto-rocks-row">
-            <div class="vto-rocks-rock">${escapeHtml(trim(r.rock)) || '<span class="vto-empty">(rock)</span>'}</div>
-            ${trim(r.owner) ? `<div class="vto-rocks-owner">${escapeHtml(trim(r.owner))}</div>` : ''}
-          </div>
-        `).join('')}
-      `;
+      const rs = (rocks.items && rocks.items.length) ? rocks.items : [{ rock: '', owner: '' }];
+      const rocksRows = rs.map((r, i) => `
+        <div class="vto-kv-row is-rocks">
+          ${editListPair('rocks', 'items', i, 'rock', r && r.rock, 'A 90-day priority')}
+          ${editListPair('rocks', 'items', i, 'owner', r && r.owner, 'Owner')}
+          ${removeBtn('rocks', 'items', i)}
+        </div>
+      `).join('') + addBtn('rocks', 'items', 'Add Rock', rs.length >= 7);
+      const rocksBody = `<div class="vto-section-label">Company Rocks</div>${rocksRows}`;
 
       // ---- Long-Term Issues ----
-      const il = (issues.items || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
-      const issuesCount = il.length ? `<span class="vto-card-count">${il.length}</span>` : '';
-      const issuesBody = il.length === 0 ? empty : `
-        <ul class="vto-list">
-          ${il.map((it, i) => `<li><span class="vto-list-num">${i + 1}.</span><span>${escapeHtml(trim(typeof it === 'string' ? it : it.name))}</span></li>`).join('')}
-        </ul>
-      `;
+      const il = (issues.items && issues.items.length) ? issues.items : [''];
+      const ilRows = il.map((it, i) => `
+        <div class="vto-list-row">
+          <span class="vto-list-marker">${i + 1}.</span>
+          ${editListString('issues-list', 'items', i, typeof it === 'string' ? it : (it && it.name), 'A long-term issue, idea, or obstacle')}
+          ${removeBtn('issues-list', 'items', i)}
+        </div>
+      `).join('') + addBtn('issues-list', 'items', 'Add Issue', il.length >= 30);
+      const issuesCount = (issues.items || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name)).length;
+      const issuesCountBadge = issuesCount ? ` <span class="vto-card-count">${issuesCount}</span>` : '';
 
       return `
         <div class="vto-display">
-          <div class="vto-row cols-2">
-            <div class="vto-card-stack">
-              ${card('core-values', 'Core Values', coreValuesBody)}
-              ${card('core-focus', 'Core Focus™', coreFocusBody)}
-              ${card('ten-year-target', '10 Year Target™', tytBody)}
-              ${card('marketing-strategy', 'Marketing Strategy', marketingBody)}
-            </div>
-            <div class="vto-card-stack">
-              ${card('three-year-picture', '3 Year Picture', threeYearBody)}
+          <div class="vto-doc-title">VISION/TRACTION ORGANIZER™</div>
+          <div class="vto-doc-meta">${escapeHtml(company)} · Drafted ${escapeHtml(date)}</div>
+
+          <div class="vto-page">
+            <div class="vto-page-header">VISION <span class="vto-page-header-sub">— Where the company is going</span></div>
+            <div class="vto-row cols-2">
+              <div class="vto-card-stack">
+                ${card('core-values',         'Core Values',         cvBody)}
+                ${card('core-focus',          'Core Focus™',         cfBody)}
+                ${card('ten-year-target',     '10 Year Target™',     tytBody)}
+                ${card('marketing-strategy',  'Marketing Strategy',  marketingBody)}
+              </div>
+              <div class="vto-card-stack">
+                ${card('three-year-picture',  '3 Year Picture™',     threeYearBody)}
+              </div>
             </div>
           </div>
-          <div class="vto-row cols-3">
-            ${card('one-year-plan', '1 Year Plan', oneYearBody)}
-            ${card('rocks', '90 Days', rocksBody)}
-            ${card('issues-list', 'Long-Term Issues', issuesBody, issuesCount)}
+
+          <div class="vto-page">
+            <div class="vto-page-header">TRACTION <span class="vto-page-header-sub">— How the company gets there</span></div>
+            <div class="vto-row cols-3">
+              ${card('one-year-plan', '1 Year Plan',       oneYearBody)}
+              ${card('rocks',         '90 Days',           rocksBody)}
+              ${card('issues-list',   'Long-Term Issues',  ilRows, issuesCountBadge)}
+            </div>
           </div>
         </div>
       `;
