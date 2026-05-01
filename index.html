@@ -217,8 +217,11 @@
       flex: 1;
     }
     .list-item-fields.two-col { grid-template-columns: minmax(180px, 1fr) 2fr; }
+    .list-item-fields.cols-name-wide { grid-template-columns: 2.5fr minmax(130px, 1fr); }
+    .list-item-fields textarea { min-height: 60px; resize: vertical; }
     @media (max-width: 600px) {
-      .list-item-fields.two-col { grid-template-columns: 1fr; }
+      .list-item-fields.two-col,
+      .list-item-fields.cols-name-wide { grid-template-columns: 1fr; }
     }
     .list-row { display: flex; gap: 8px; align-items: center; }
     .list-row .list-item-num { margin-top: 0; }
@@ -842,7 +845,7 @@
         why: 'Rocks are how 1-Year goals actually get done — broken into 90-day chunks with a clear owner. Discipline at the quarter level is what builds traction over the year.',
         example: 'Rock: "Launch new client onboarding process." Owner: "Priya."',
         fields: [
-          { type: 'list', key: 'items', min: 3, max: 7, item: { name: 'rock', extra: 'owner' }, addLabel: 'Add a Rock', placeholders: { name: 'A 90-day priority', extra: 'Owner (one person)' } },
+          { type: 'list', key: 'items', min: 3, max: 7, item: { name: 'rock', extra: 'owner', nameMultiline: true }, cols: 'name-wide', addLabel: 'Add a Rock', placeholders: { name: 'A 90-day priority — describe what done looks like', extra: 'Owner (one person)' } },
         ],
         tip: 'One Rock, one owner — even if a team is involved. Shared ownership is shared accountability, which usually means none.',
       },
@@ -1115,18 +1118,27 @@
       const isPair = field.item && field.item.extra;
       // Always show at least one row for a clean starting state.
       if (items.length === 0) items.push(isPair ? { name: '', extra: '' } : '');
+      const colsClass = field.cols ? ` cols-${field.cols}` : '';
       const rows = items.map((it, i) => {
         const num = i + 1;
         if (isPair) {
           const nameVal = (typeof it === 'object' && it) ? (it[field.item.name] || '') : '';
           const extraVal = (typeof it === 'object' && it) ? (it[field.item.extra] || '') : '';
+          const namePh = escapeHtml((field.placeholders || {}).name || '');
+          const extraPh = escapeHtml((field.placeholders || {}).extra || '');
+          const nameField = field.item.nameMultiline
+            ? `<textarea rows="2" data-key="${field.key}" data-sub="${field.item.name}" data-idx="${i}" placeholder="${namePh}">${escapeHtml(nameVal)}</textarea>`
+            : `<input type="text" data-key="${field.key}" data-sub="${field.item.name}" data-idx="${i}" placeholder="${namePh}" value="${escapeHtml(nameVal)}">`;
+          const extraField = field.item.extraMultiline
+            ? `<textarea rows="2" data-key="${field.key}" data-sub="${field.item.extra}" data-idx="${i}" placeholder="${extraPh}">${escapeHtml(extraVal)}</textarea>`
+            : `<input type="text" data-key="${field.key}" data-sub="${field.item.extra}" data-idx="${i}" placeholder="${extraPh}" value="${escapeHtml(extraVal)}">`;
           return `
             <div class="list-item" data-idx="${i}">
               <div class="list-item-row" style="flex-direction: row; align-items: start;">
                 <span class="list-item-num">${num}</span>
-                <div class="list-item-fields two-col" style="margin-left: 8px;">
-                  <input type="text" data-key="${field.key}" data-sub="${field.item.name}" data-idx="${i}" placeholder="${escapeHtml((field.placeholders || {}).name || '')}" value="${escapeHtml(nameVal)}">
-                  <input type="text" data-key="${field.key}" data-sub="${field.item.extra}" data-idx="${i}" placeholder="${escapeHtml((field.placeholders || {}).extra || '')}" value="${escapeHtml(extraVal)}">
+                <div class="list-item-fields two-col${colsClass}" style="margin-left: 8px;">
+                  ${nameField}
+                  ${extraField}
                 </div>
               </div>
               <button type="button" class="btn-icon" data-action="remove-list-item" data-key="${field.key}" data-idx="${i}" title="Remove">✕</button>
