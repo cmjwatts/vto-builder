@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>V/TO Builder | Ninety</title>
+  <title>V/TO™ Builder | Ninety Professional Services</title>
   <meta name="description" content="Draft your EOS Vision/Traction Organizer at your own pace. Built by Ninety for companies running on EOS.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,16 +65,26 @@
     }
     .brand {
       font-family: 'Poppins', sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      color: var(--black);
       display: flex;
-      align-items: baseline;
-      gap: 8px;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1.15;
     }
-    .brand-mark { color: var(--ninety); }
-    .brand-divider { color: var(--slate); font-weight: 400; }
-    .brand-product { font-size: 14px; font-weight: 500; color: var(--gray); }
+    .brand-org {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gray);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .brand-product {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--black);
+    }
+    @media (max-width: 600px) {
+      .brand-product { font-size: 16px; }
+    }
 
     .progress {
       display: flex;
@@ -687,9 +697,8 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand">
-        <span class="brand-mark">90</span>
-        <span class="brand-divider">|</span>
-        <span class="brand-product">V/TO Builder</span>
+        <span class="brand-org">Ninety Professional Services</span>
+        <span class="brand-product">V/TO™ Builder</span>
       </div>
       <div class="progress" id="progress" hidden>
         <span id="progress-label">Step 1 of 9</span>
@@ -701,8 +710,8 @@
   <main id="app"><div class="card" id="step-container">Loading…</div></main>
 
   <footer>
-    <p>Built by <a href="https://www.ninety.io" target="_blank" rel="noopener">Ninety</a> Pro Serve. Your answers are saved in your browser only — we don't store them on our servers.</p>
-    <p>EOS®, V/TO™, Core Focus™, Three Uniques™, 10-Year Target™, and 3-Year Picture™ are trademarks of EOS Worldwide, LLC. Ninety is the platform for companies running on EOS, built under license from EOS Worldwide.</p>
+    <p><strong>Not connected to your Ninety.io account.</strong> Your answers are saved in this browser only — we don't store them on our servers.</p>
+    <p>Built by Ninety Professional Services. EOS®, V/TO™, Core Focus™, Three Uniques™, 10-Year Target™, and 3-Year Picture™ are trademarks of EOS Worldwide, LLC. Ninety is the platform for companies running on EOS, built under license from EOS Worldwide.</p>
   </footer>
 
   <div class="toast" id="toast"></div>
