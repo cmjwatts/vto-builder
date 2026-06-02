@@ -1,1880 +1,388 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>V/TO™ Builder | Ninety Professional Services</title>
-  <meta name="description" content="Draft your EOS Vision/Traction Organizer at your own pace. Built by Ninety for companies running on EOS.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --black: #262626;
-      --ice: #F7F8FB;
-      --white: #ffffff;
-      --gray: #58595B;
-      --slate: #BFC4CE;
-      --stone: #DDDFE7;
-      --mist: #F3F3F4;
-      --ninety: hsla(195, 57%, 43%, 1);
-      --ninety-heavy: hsla(195, 57%, 39%, 1);
-      --ninety-heaviest: hsla(195, 57%, 35%, 1);
-      --ninety-shader: hsla(195, 57%, 43%, 0.10);
-      --ninety-shader-light: hsla(195, 57%, 43%, 0.04);
-      --error: #B23A3A;
-      --shadow-sm: 0 1px 2px rgba(38, 38, 38, 0.06);
-      --shadow-md: 0 2px 8px rgba(38, 38, 38, 0.08);
-      --radius: 8px;
-      --radius-lg: 12px;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      background: var(--ice);
-      color: var(--black);
-      font-family: 'Nunito Sans', system-ui, -apple-system, sans-serif;
-      font-size: 16px;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-    h1, h2, h3, h4 { font-family: 'Poppins', system-ui, sans-serif; line-height: 1.3; margin: 0 0 12px; }
-    h1 { font-size: 32px; font-weight: 700; }
-    h2 { font-size: 24px; font-weight: 600; }
-    h3 { font-size: 18px; font-weight: 600; }
-    h4 { font-size: 16px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.04em; }
-    p { margin: 0 0 12px; }
-    a { color: var(--ninety); text-decoration: none; }
-    a:hover { color: var(--ninety-heavy); text-decoration: underline; }
+<meta charset="utf-8" />
+<title>V/TO™ Builder — Ninety Professional Services</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Draft your EOS Vision/Traction Organizer at your own pace. Built by Ninety." />
 
-    .topbar {
-      background: var(--white);
-      border-bottom: 1px solid var(--stone);
-      padding: 16px 24px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .topbar-inner {
-      max-width: 880px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .brand {
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      line-height: 1.15;
-    }
-    .brand-org {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--gray);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    .brand-product {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--black);
-    }
-    @media (max-width: 600px) {
-      .brand-product { font-size: 16px; }
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    .progress {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--gray);
-    }
-    .progress-bar {
-      width: 140px;
-      height: 6px;
-      background: var(--stone);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--ninety);
-      transition: width 0.3s ease;
-    }
+<style>
+  /* ============================================================
+     Design tokens — Ninety marketing palette, clean variant
+     ============================================================ */
+  :root {
+    --color-brand-black: #262626;
+    --color-brand-blue:  #2F8BAA;
+    --color-brand-blue-heavy: #267894;
+    --color-brand-grey:  #58595B;
+    --color-brand-slate: #BFC4CE;
+    --color-brand-stone: #DDDFE7;
+    --color-brand-mist:  #F3F3F4;
+    --color-brand-ice:   #F7F8FB;
+    --color-white:       #FFFFFF;
+    --color-brand-blue-15: rgba(47, 139, 170, 0.15);
+    --color-brand-blue-08: rgba(47, 139, 170, 0.08);
+    --color-brand-blue-04: rgba(47, 139, 170, 0.04);
+    --color-text-muted:  #6A6A6A;
+    --color-error:       #B23A3A;
 
-    main {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 32px 24px 96px;
-    }
+    --fg-1: var(--color-brand-black);
+    --fg-2: var(--color-brand-grey);
+    --fg-3: var(--color-text-muted);
+    --fg-on-dark: var(--color-white);
+    --fg-link: var(--color-brand-blue);
 
-    .card {
-      background: var(--white);
-      border: 1px solid var(--stone);
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      box-shadow: var(--shadow-sm);
-    }
-    @media (max-width: 600px) {
-      .card { padding: 24px 20px; }
-      h1 { font-size: 26px; }
-    }
+    --bg-page: var(--color-brand-ice);
+    --bg-alt:  var(--color-white);
+    --bg-card: var(--color-white);
+    --bg-dark: var(--color-brand-black);
 
-    .section-meta {
-      display: inline-block;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--ninety);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-    }
-    .section-definition {
-      color: var(--gray);
-      margin-bottom: 24px;
-      font-size: 15px;
-    }
-    .section-block {
-      background: var(--ninety-shader-light);
-      border-left: 3px solid var(--ninety);
-      padding: 16px 20px;
-      border-radius: 0 var(--radius) var(--radius) 0;
-      margin: 20px 0 24px;
-      font-size: 14px;
-    }
-    .section-block strong { color: var(--ninety-heaviest); }
-    .section-block-label {
-      font-family: 'Poppins', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--ninety-heaviest);
-      margin-bottom: 6px;
-    }
-    .section-tip {
-      font-size: 13px;
-      color: var(--gray);
-      font-style: italic;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--stone);
-    }
+    --border-subtle: var(--color-brand-stone);
+    --border-strong: var(--color-brand-slate);
 
-    label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
-    label .optional { color: var(--slate); font-weight: 400; font-size: 12px; margin-left: 6px; }
-    .field { margin-bottom: 20px; }
-    .field-help { font-size: 13px; color: var(--gray); margin-bottom: 8px; }
+    --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, "Helvetica Neue", sans-serif;
 
-    input[type="text"], input[type="url"], input[type="number"], textarea {
-      width: 100%;
-      padding: 10px 12px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--black);
-      background: var(--white);
-      border: 1px solid var(--stone);
-      border-radius: var(--radius);
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: var(--ninety);
-      box-shadow: 0 0 0 3px var(--ninety-shader);
-    }
-    textarea { min-height: 90px; resize: vertical; line-height: 1.5; }
+    --fs-display: 44px;
+    --fs-h1: 34px;
+    --fs-h2: 26px;
+    --fs-h3: 20px;
+    --fs-h4: 16px;
+    --fs-body-lg: 17px;
+    --fs-body: 15px;
+    --fs-body-sm: 13.5px;
+    --fs-meta: 12px;
+    --fs-eyebrow: 11.5px;
 
-    .list-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
-    .list-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: start;
-    }
-    .list-item-row { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .list-item-num {
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0;
-      background: var(--ninety-shader);
-      color: var(--ninety-heaviest);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      margin-top: 8px;
-    }
-    .list-item-fields {
-      display: grid;
+    --tracking-eyebrow: 0.14em;
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-pill: 50px;
+
+    --shadow-xs: 0 1px 2px rgba(38,38,38,0.05);
+    --shadow-sm: 0 2px 6px rgba(38,38,38,0.06);
+    --shadow-card: 0 4px 14px rgba(38,38,38,0.07);
+    --shadow-md: 0 10px 20px rgba(38,38,38,0.10);
+    --shadow-lg: 0 20px 40px rgba(38,38,38,0.12);
+
+    --t-fast: 150ms;
+    --t-base: 220ms;
+    --t-slow: 360ms;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+    --container-max: 1320px;
+    --gutter: 28px;
+    --rail-w: 280px;
+    --coach-w: 340px;
+    --header-h: 68px;
+  }
+
+  /* ============================================================
+     Base
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    font-size: var(--fs-body);
+    line-height: 1.55;
+    color: var(--fg-1);
+    background: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  img { max-width: 100%; display: block; }
+  button { font-family: inherit; }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-body);
+    color: var(--fg-1);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 0.4em;
+    letter-spacing: -0.01em;
+  }
+  h1 { font-size: var(--fs-h1); font-weight: 700; letter-spacing: -0.02em; }
+  h2 { font-size: var(--fs-h2); }
+  h3 { font-size: var(--fs-h3); }
+  h4 { font-size: var(--fs-h4); }
+
+  p { margin: 0 0 1em; }
+  p:last-child { margin-bottom: 0; }
+  a { color: var(--fg-link); text-decoration: none; }
+  a:hover { color: var(--color-brand-blue-heavy); }
+
+  .eyebrow {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    font-size: var(--fs-eyebrow);
+    font-weight: 700;
+    color: var(--color-brand-blue);
+  }
+  .eyebrow--muted { color: var(--fg-2); }
+
+  /* ============================================================
+     Buttons — HubSpot CTA, Pill, Ghost, Subtle
+     ============================================================ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    background: var(--color-brand-blue);
+    color: var(--color-white);
+    font-weight: 500;
+    font-size: 15px;
+    border: 1.5px solid var(--color-brand-blue);
+    cursor: pointer;
+    transition: all var(--t-fast) ease;
+    text-decoration: none;
+    line-height: 1.2;
+  }
+  .btn:hover { background: var(--color-brand-blue-heavy); border-color: var(--color-brand-blue-heavy); color: var(--color-white); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn--sm { padding: 8px 14px; font-size: 13.5px; }
+  .btn--lg { padding: 12px 24px; font-size: 16px; }
+  .btn--ghost {
+    background: transparent;
+    color: var(--color-brand-blue);
+    border-color: var(--color-brand-blue);
+  }
+  .btn--ghost:hover {
+    background: var(--color-brand-blue);
+    color: var(--color-white);
+  }
+  .btn--neutral {
+    background: var(--color-white);
+    color: var(--fg-1);
+    border-color: var(--border-subtle);
+  }
+  .btn--neutral:hover {
+    background: var(--color-brand-mist);
+    color: var(--fg-1);
+    border-color: var(--border-strong);
+  }
+  .btn--text {
+    background: transparent;
+    color: var(--fg-2);
+    border-color: transparent;
+    padding: 8px 12px;
+  }
+  .btn--text:hover {
+    color: var(--fg-1);
+    background: var(--color-brand-mist);
+  }
+
+  /* ============================================================
+     App shell — sticky brand strip + body grid
+     ============================================================ */
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brandstrip {
+    background: var(--color-white);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    height: var(--header-h);
+  }
+  .brandstrip__inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .brand-mark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.1;
+    text-decoration: none;
+    color: var(--fg-1);
+  }
+  .brand-mark__kicker {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--color-brand-black);
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+  }
+  .brand-mark__row {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .brand-mark__by {
+    font-weight: 500;
+    color: var(--fg-2);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  .brand-mark__logo {
+    height: 20px;
+    width: auto;
+    display: block;
+  }
+
+  .brandstrip__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brandstrip__status {
+    font-size: 12.5px;
+    color: var(--fg-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .brandstrip__status::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--color-brand-blue);
+  }
+  @media (max-width: 720px) {
+    .brandstrip__status { display: none; }
+    .brand-mark__kicker { font-size: 15px; }
+  }
+
+  /* ============================================================
+     Page body — rail + stage [+ optional coach]
+     ============================================================ */
+  .page-body {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 32px var(--gutter) 96px;
+    flex: 1;
+    width: 100%;
+  }
+  .page-grid {
+    display: grid;
+    grid-template-columns: var(--rail-w) 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+  body[data-coach-open="true"][data-coach-placement="docked"] .page-grid {
+    grid-template-columns: var(--rail-w) 1fr var(--coach-w);
+  }
+  body[data-nav-style="topbar"] .page-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  body[data-nav-style="topbar"][data-coach-open="true"][data-coach-placement="docked"] .page-grid {
+    grid-template-columns: 1fr var(--coach-w);
+  }
+  body[data-state="welcome"] .page-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  @media (max-width: 1080px) {
+    .page-grid,
+    body[data-coach-open="true"] .page-grid,
+    body[data-nav-style="topbar"][data-coach-open="true"] .page-grid {
       grid-template-columns: 1fr;
-      gap: 6px;
-      flex: 1;
     }
-    .list-item-fields.two-col { grid-template-columns: minmax(180px, 1fr) 2fr; }
-    .list-item-fields.cols-name-wide { grid-template-columns: 2.5fr minmax(130px, 1fr); }
-    .list-item-fields textarea { min-height: 60px; resize: vertical; }
-    @media (max-width: 600px) {
-      .list-item-fields.two-col,
-      .list-item-fields.cols-name-wide { grid-template-columns: 1fr; }
-    }
-    .list-row { display: flex; gap: 8px; align-items: center; }
-    .list-row .list-item-num { margin-top: 0; }
-    .list-row input { flex: 1; }
+  }
 
-    .btn-icon {
-      background: transparent;
-      border: 1px solid var(--stone);
-      color: var(--gray);
-      width: 36px;
-      height: 36px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-      margin-top: 4px;
-    }
-    .btn-icon:hover { background: var(--mist); color: var(--black); }
-    .btn-icon[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .stage {
+    min-width: 0;
+  }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 20px;
-      font-size: 15px;
-      font-weight: 600;
-      font-family: inherit;
-      border-radius: var(--radius);
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.15s;
-      text-decoration: none;
-    }
-    .btn-primary {
-      background: var(--ninety);
-      color: var(--white);
-    }
-    .btn-primary:hover { background: var(--ninety-heavy); }
-    .btn-primary:active { background: var(--ninety-heaviest); }
-    .btn-primary[disabled] { background: var(--slate); cursor: not-allowed; }
-    .btn-secondary {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--stone);
-    }
-    .btn-secondary:hover { background: var(--mist); border-color: var(--slate); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--gray);
-      border-color: transparent;
-      padding: 10px 12px;
-    }
-    .btn-ghost:hover { color: var(--black); background: var(--mist); }
-    .btn-add {
-      background: var(--white);
-      color: var(--ninety);
-      border: 1px dashed var(--ninety);
-      padding: 8px 14px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: var(--radius);
-      cursor: pointer;
-    }
-    .btn-add:hover { background: var(--ninety-shader-light); }
-    .btn-add[disabled] { opacity: 0.4; cursor: not-allowed; border-style: solid; }
+  /* Card surface used throughout */
+  .surface {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+  }
 
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--stone);
-    }
-    .nav-left, .nav-right { display: flex; gap: 12px; }
+  /* ============================================================
+     Toast
+     ============================================================ */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-brand-black);
+    color: var(--color-white);
+    padding: 11px 20px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 
-    .suggest-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      background: linear-gradient(180deg, var(--ninety-shader-light), transparent);
-      border: 1px solid var(--ninety-shader);
-      border-radius: var(--radius);
-      margin-bottom: 24px;
-    }
-    .suggest-bar-text { flex: 1; min-width: 200px; font-size: 13px; color: var(--gray); }
-    .btn-suggest {
-      background: var(--white);
-      color: var(--ninety-heaviest);
-      border: 1px solid var(--ninety);
-      padding: 8px 14px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: var(--radius);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-suggest:hover { background: var(--ninety-shader-light); }
-    .btn-suggest[disabled] { opacity: 0.5; cursor: not-allowed; }
-    .btn-suggest .spin {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid var(--ninety-shader);
-      border-top-color: var(--ninety);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .suggest-error {
-      font-size: 13px;
-      color: var(--error);
-      margin-top: 8px;
-    }
-
-    .context-chip {
-      background: var(--mist);
-      border: 1px solid var(--stone);
-      border-radius: var(--radius);
-      margin-bottom: 24px;
-      overflow: hidden;
-    }
-    .context-chip-toggle {
-      width: 100%;
-      padding: 10px 16px;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: inherit;
-      font-size: 13px;
-      color: var(--gray);
-      font-weight: 600;
-    }
-    .context-chip-toggle:hover { background: var(--stone); }
-    .context-chip-body {
-      padding: 0 16px 14px;
-      font-size: 13px;
-      color: var(--gray);
-      display: none;
-    }
-    .context-chip[open] .context-chip-body { display: block; }
-    .context-chip-row { padding: 6px 0; border-top: 1px dashed var(--stone); }
-    .context-chip-row:first-child { border-top: 0; }
-    .context-chip-label { font-weight: 700; color: var(--black); margin-right: 6px; }
-
-    .vto-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 16px 0 24px;
-    }
-
-    /* ---- Final V/TO display: landscape, two stacked "pages" ---- */
-    body.review main { max-width: 1280px; }
-
-    .vto-display {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      margin: 8px 0 16px;
-    }
-    .vto-doc-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--black);
-      text-align: center;
-      margin: 4px 0 2px;
-    }
-    .vto-doc-meta {
-      text-align: center;
-      color: var(--gray);
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-    .vto-page {
-      background: var(--white);
-      border: 1px solid var(--stone);
-      border-radius: var(--radius-lg);
-      padding: 22px 26px 26px;
-      box-shadow: 0 4px 14px rgba(38, 38, 38, 0.06);
-    }
-    .vto-page-header {
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      color: var(--ninety-heaviest);
-      text-transform: uppercase;
-      padding-bottom: 10px;
-      margin: 0 0 18px;
-      border-bottom: 2px solid var(--ninety);
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-    .vto-page-header-sub {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--gray);
-      letter-spacing: 0.04em;
-      text-transform: none;
-    }
-    .vto-row { display: grid; gap: 18px; }
-    .vto-row.cols-2 { grid-template-columns: 1.6fr 1fr; }
-    .vto-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-    @media (max-width: 980px) {
-      .vto-row.cols-2, .vto-row.cols-3 { grid-template-columns: 1fr; }
-    }
-    .vto-card-stack { display: flex; flex-direction: column; gap: 18px; }
-    .vto-card {
-      background: var(--white);
-      border: 1px solid var(--stone);
-      border-radius: var(--radius);
-      padding: 16px 20px 14px;
-      font-size: 14px;
-      display: flex;
-      flex-direction: column;
-    }
-    .vto-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding-bottom: 8px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid var(--mist);
-    }
-    .vto-card-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      margin: 0;
-      color: var(--black);
-    }
-    .vto-card-count {
-      color: var(--gray);
-      font-size: 13px;
-      font-weight: 500;
-      margin-left: 6px;
-    }
-    .vto-card-step-link {
-      margin-top: auto;
-      padding-top: 12px;
-      font-size: 11px;
-      color: var(--slate);
-      cursor: pointer;
-      text-decoration: none;
-      align-self: flex-end;
-      background: transparent;
-      border: 0;
-      font-family: inherit;
-      letter-spacing: 0.02em;
-    }
-    .vto-card-step-link:hover { color: var(--ninety); text-decoration: underline; }
-
-    /* Inline edit primitive — text and lists rely on it. */
-    .vto-edit {
-      cursor: text;
-      border-radius: 4px;
-      padding: 3px 6px;
-      margin: -3px -6px;
-      min-height: 1.5em;
-      outline: none;
-      white-space: pre-wrap;
-      word-break: break-word;
-      transition: background 0.12s, box-shadow 0.12s;
-      color: var(--gray);
-      line-height: 1.5;
-    }
-    .vto-edit:hover { background: var(--ninety-shader-light); }
-    .vto-edit:focus {
-      background: var(--ninety-shader-light);
-      box-shadow: inset 0 0 0 1px var(--ninety);
-    }
-    .vto-edit.is-empty::before {
-      content: attr(data-placeholder);
-      color: var(--slate);
-      font-style: italic;
-      pointer-events: none;
-    }
-
-    .vto-section-label {
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--black);
-      margin: 14px 0 4px;
-      letter-spacing: 0.02em;
-    }
-    .vto-section-label:first-child { margin-top: 0; }
-
-    /* Two-column key/value rows (Core Values, Three Uniques, Rocks) */
-    .vto-kv-row {
-      display: grid;
-      grid-template-columns: minmax(110px, 0.42fr) 1fr 24px;
-      gap: 12px;
-      padding: 7px 0;
-      border-top: 1px solid var(--mist);
-      align-items: start;
-    }
-    .vto-kv-row:first-child { border-top: 0; }
-    .vto-kv-row .vto-edit:first-child { color: var(--black); font-weight: 500; }
-    .vto-kv-row.is-rocks { grid-template-columns: 1fr 110px 24px; }
-    .vto-kv-row.is-rocks .vto-edit:first-child { font-weight: 400; color: var(--gray); }
-    .vto-kv-row.is-rocks .vto-edit:nth-child(2) { color: var(--ninety-heaviest); font-weight: 600; font-size: 13px; }
-
-    /* Single-column lists (measurables, look-like, goals, issues, proven steps) */
-    .vto-list-row {
-      display: grid;
-      grid-template-columns: 24px 1fr 24px;
-      gap: 8px;
-      padding: 6px 0;
-      border-top: 1px solid var(--mist);
-      align-items: start;
-    }
-    .vto-list-row:first-child { border-top: 0; }
-    .vto-list-marker {
-      color: var(--gray);
-      font-weight: 600;
-      font-size: 13px;
-      padding-top: 4px;
-    }
-    .vto-list-marker.is-checkbox {
-      width: 14px;
-      height: 14px;
-      border: 1px solid var(--slate);
-      border-radius: 3px;
-      margin-top: 7px;
-    }
-    .vto-list-marker.is-bullet { color: var(--slate); padding-top: 2px; }
-
-    /* Add/remove controls — subtle, surface on row hover/focus */
-    .vto-row-remove {
-      background: transparent;
-      border: 0;
-      color: var(--slate);
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 1;
-      padding: 2px 4px;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity 0.15s, color 0.15s, background 0.15s;
-      align-self: start;
-      margin-top: 2px;
-    }
-    .vto-kv-row:hover .vto-row-remove,
-    .vto-kv-row:focus-within .vto-row-remove,
-    .vto-list-row:hover .vto-row-remove,
-    .vto-list-row:focus-within .vto-row-remove { opacity: 1; }
-    .vto-row-remove:hover { color: var(--error); background: var(--mist); }
-    .vto-row-add {
-      align-self: flex-start;
-      background: transparent;
-      border: 1px dashed var(--stone);
-      color: var(--gray);
-      padding: 5px 12px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-size: 12px;
-      font-family: inherit;
-      margin-top: 8px;
-      transition: all 0.15s;
-    }
-    .vto-row-add:hover { color: var(--ninety); border-color: var(--ninety); background: var(--ninety-shader-light); }
-    .vto-row-add[disabled] { opacity: 0.4; cursor: not-allowed; }
-
-    .vto-empty { color: var(--slate); font-style: italic; font-size: 13px; }
-    .vto-meta {
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      gap: 12px;
-      padding: 4px 0 8px;
-      font-size: 14px;
-      border-bottom: 1px solid var(--mist);
-      margin-bottom: 6px;
-      align-items: baseline;
-    }
-    .vto-meta-label { font-weight: 700; color: var(--black); }
-    .vto-meta-val { color: var(--gray); }
-
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--black);
-      color: var(--white);
-      padding: 10px 18px;
-      border-radius: var(--radius);
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: var(--shadow-md);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s, transform 0.2s;
-      z-index: 50;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
-
-    footer {
-      max-width: 760px;
-      margin: 24px auto 48px;
-      padding: 0 24px;
-      text-align: center;
-      color: var(--gray);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    footer a { color: var(--gray); }
-
-    .welcome-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin: 24px 0;
-    }
-    @media (max-width: 600px) { .welcome-grid { grid-template-columns: 1fr; } }
-    .welcome-pill {
-      background: var(--mist);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      font-size: 13px;
-      color: var(--gray);
-    }
-    .welcome-pill strong { color: var(--black); display: block; font-size: 14px; margin-bottom: 2px; }
-
-    .review-summary {
-      background: var(--ninety-shader-light);
-      border: 1px solid var(--ninety-shader);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 16px;
-      font-size: 14px;
-      color: var(--gray);
-    }
-    .review-summary strong { color: var(--black); }
-
-    @media print {
-      @page { size: landscape; margin: 0.4in; }
-      body, body.review main { background: white; max-width: none; padding: 0; }
-      .topbar, .nav, .vto-actions, .suggest-bar, .context-chip, footer,
-      .review-summary, .vto-card-step-link, .vto-row-remove, .vto-row-add { display: none !important; }
-      .card { border: 0; box-shadow: none; padding: 0; }
-      h2, .section-meta, p.review-intro { display: none; }
-      .vto-doc-title { font-size: 22px; margin-bottom: 4px; }
-      .vto-doc-meta { margin-bottom: 12px; }
-      .vto-page {
-        page-break-after: always;
-        box-shadow: none;
-        border: 1px solid #999;
-        padding: 14px 18px;
-        margin: 0 0 8px;
-      }
-      .vto-page:last-of-type { page-break-after: auto; }
-      .vto-page-header { color: #000; border-bottom-color: #000; }
-      .vto-card { break-inside: avoid; page-break-inside: avoid; border-color: #999; }
-      .vto-edit { cursor: default; background: transparent !important; box-shadow: none !important; pointer-events: none; }
-      .vto-edit.is-empty::before { content: '—'; }
-    }
-  </style>
+  /* ============================================================
+     Print — landscape doc only
+     ============================================================ */
+  @media print {
+    @page { size: landscape; margin: 0.4in; }
+    .brandstrip, .liverail, .vto-coach, .vto-section__nav, .tweaks-panel { display: none !important; }
+    body, .page-body { background: white; padding: 0; max-width: none; }
+    .page-grid { grid-template-columns: 1fr !important; gap: 0 !important; }
+    .surface { border: none; box-shadow: none; }
+  }
+</style>
 </head>
-<body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <span class="brand-org">Ninety Professional Services</span>
-        <span class="brand-product">V/TO™ Builder</span>
-      </div>
-      <div class="progress" id="progress" hidden>
-        <span id="progress-label">Step 1 of 9</span>
-        <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div></div>
+<body data-nav-style="siderail" data-content-treatment="split" data-ai-mode="both" data-flow="progressive" data-coach-open="false" data-state="welcome" data-coach-placement="drawer">
+
+<div class="app">
+  <!-- Sticky brand strip -->
+  <header class="brandstrip">
+    <div class="brandstrip__inner">
+      <a class="brand-mark" href="#" aria-label="V/TO Builder, powered by Ninety">
+        <span class="brand-mark__kicker">V/TO™ Builder</span>
+        <span class="brand-mark__row">
+          <span class="brand-mark__by">powered by</span>
+          <img class="brand-mark__logo" src="assets/90-logo-black.png" alt="Ninety" />
+        </span>
+      </a>
+
+      <div class="brandstrip__actions" id="brandstrip-actions">
+        <span class="brandstrip__status">Saved in this browser</span>
       </div>
     </div>
-  </div>
+  </header>
 
-  <main id="app"><div class="card" id="step-container">Loading…</div></main>
+  <main class="page-body">
+    <div class="page-grid" id="stage">
+      <noscript><p>This page needs JavaScript.</p></noscript>
+    </div>
+  </main>
+</div>
 
-  <footer>
-    <p><strong>Not connected to your Ninety.io account.</strong> Your answers are saved in this browser only — we don't store them on our servers.</p>
-    <p>Built by Ninety Professional Services. EOS®, V/TO™, Core Focus™, Three Uniques™, 10-Year Target™, and 3-Year Picture™ are trademarks of EOS Worldwide, LLC. Ninety is the platform for companies running on EOS, built under license from EOS Worldwide.</p>
-  </footer>
+<div class="toast" id="toast"></div>
 
-  <div class="toast" id="toast"></div>
+<!-- Precompiled bundles (built by `npm run build` → esbuild). vendor must load
+     first: it defines the window.React / window.ReactDOM globals app.js uses. -->
+<script src="assets/vendor.js"></script>
+<script src="assets/app.js"></script>
 
-  <script>
-    'use strict';
-
-    // ---------- Section definitions ----------
-    // Each section: { id, title, definition, why, example, tip, render(), collect(), validate() }
-    // Field types are handled per-section to keep markup concise and on-brand.
-    const SECTIONS = [
-      {
-        id: 'welcome',
-        title: 'Welcome',
-        kind: 'welcome',
-      },
-      {
-        id: 'about',
-        title: 'About Your Company',
-        kind: 'form',
-        eosLabel: 'Step 1 — Setup',
-        definition: 'A quick snapshot of your company. We\'ll use this to tailor prompts and draft suggestions throughout the rest of the V/TO™.',
-        why: 'The clearer you are about who you are today, the sharper your V/TO™ will be tomorrow. This step takes 3–5 minutes — and you can come back and refine it any time.',
-        fields: [
-          { type: 'text',     key: 'companyName', label: 'Company name', required: true, placeholder: 'Acme Co.' },
-          { type: 'text',     key: 'website',     label: 'Website',     placeholder: 'https://acme.example' },
-          { type: 'textarea', key: 'about',       label: 'In 1–3 sentences, what do you do and who do you do it for?', placeholder: 'We help mid-sized law firms…' },
-          { type: 'textarea', key: 'strengths',   label: 'Top 2–3 things you do really well today', placeholder: 'Responsiveness, deep industry expertise…' },
-          { type: 'textarea', key: 'workOns',     label: 'Top 2–3 things you most want to work on', placeholder: 'Sales pipeline consistency, hiring…' },
-        ],
-        tip: 'Don\'t overthink this. A few clear sentences work better than a polished mission statement — you\'ll refine your story across the next 8 sections.',
-      },
-      {
-        id: 'core-values',
-        title: 'Core Values',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Vision side',
-        definition: 'A small set of guiding behaviors your ideal team members already live by. Most teams land on 5–7.',
-        why: 'Core Values are how you hire, fire, review, reward, and recognize. They\'re behaviors — not aspirations. The right list makes it easier to keep the right people and harder for the wrong ones to stay.',
-        example: '"Make life better." "Be curious." "Get it done." Each paired with a short descriptor explaining what it looks like in practice.',
-        fields: [
-          { type: 'list', key: 'items', min: 3, max: 7, item: { name: 'value', extra: 'descriptor' }, addLabel: 'Add a Core Value', placeholders: { name: 'e.g. Get smart stuff done', extra: 'What does this look like in your day-to-day?' } },
-        ],
-        tip: 'A useful test: think of your top performers. What do they all have in common that the people who didn\'t work out lacked? Those traits often surface your real Core Values.',
-      },
-      {
-        id: 'core-focus',
-        title: 'Core Focus™',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Vision side',
-        definition: 'Two short statements that anchor everything you do — your Purpose/Cause/Passion and your Niche.',
-        why: 'Core Focus™ keeps you from chasing every shiny opportunity. When something doesn\'t fit, you say no faster.',
-        example: 'Purpose/Cause/Passion: "Make life better." Niche: "We provide IT support to law firms in the Mid-Atlantic."',
-        fields: [
-          { type: 'text', key: 'purpose', label: 'Our Purpose / Cause / Passion', placeholder: 'Make life better.', help: 'Aim for 3–7 words. Big, bold, simple.' },
-          { type: 'text', key: 'niche',   label: 'Our Niche',                     placeholder: 'We provide IT support to law firms in the Mid-Atlantic.', help: 'One clear sentence: who you serve, what you do.' },
-        ],
-        tip: 'Your Purpose should never expire. If it\'s tied to a specific product or moment in time, broaden it.',
-      },
-      {
-        id: 'ten-year-target',
-        title: '10-Year Target™',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Vision side',
-        definition: 'One bold long-term goal — challenging, exciting, measurable, and clearly aligned with your Core Focus™.',
-        why: 'A great 10-Year Target™ rallies the whole company. It should feel a bit out of reach today but believable if you get the next 10 years right.',
-        example: '"$50M in revenue by 2035, serving 500 law firms across North America."',
-        fields: [
-          { type: 'textarea', key: 'target',     label: 'Our 10-Year Target', placeholder: 'A bold, measurable goal that takes ~10 years to reach.' },
-          { type: 'text',     key: 'targetYear', label: 'Target year',         placeholder: 'e.g. 2035' },
-        ],
-        tip: 'If your team can\'t recite the target from memory after a few weeks, it\'s probably too long. Keep it tight enough to remember.',
-      },
-      {
-        id: 'marketing-strategy',
-        title: 'Marketing Strategy',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Vision side',
-        definition: 'Four pieces that, together, define how you win business: Target Market, Three Uniques™, Proven Process, and Guarantee.',
-        why: 'Most teams know what they sell. Far fewer can clearly say who they\'re for, what makes them different, how they deliver, and what they promise. Nailing these four kills bad-fit deals before they consume time.',
-        fields: [
-          { type: 'textarea', key: 'targetMarket', label: 'Target Market / "The List"', placeholder: 'Geographic + demographic + psychographic.', help: 'Where they are, who they are, and what they value. One paragraph is plenty.' },
-          { type: 'list',     key: 'threeUniques', label: 'Three Uniques™', min: 3, max: 3, item: { name: 'name', extra: 'descriptor' }, addLabel: 'Add a unique', placeholders: { name: 'Short label (e.g. "Fast")', extra: 'A specific way you stand apart' }, help: 'Exactly three. Pair a short label with a specific differentiator — e.g. "Fast" + "Guaranteed 2-Hour Arrival Window."' },
-          { type: 'text',     key: 'provenProcessName',  label: 'Proven Process — name', placeholder: 'e.g. The Acme Way' },
-          { type: 'list',     key: 'provenProcessSteps', label: 'Proven Process — steps', min: 3, max: 7, addLabel: 'Add a step', placeholders: { name: 'A named step in your process' } },
-          { type: 'text',     key: 'guarantee', label: 'Guarantee', placeholder: 'A bold promise that takes the risk off the buyer.' },
-        ],
-        tip: 'Your Three Uniques™ should be three things, not a list of features. If you can\'t say each in under 8 words, it\'s probably not unique enough yet.',
-      },
-      {
-        id: 'three-year-picture',
-        title: '3-Year Picture™',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Vision side',
-        definition: 'A snapshot of what your company looks like 3 years from now: revenue, profit, key measurables, and a short list of "what does it look like" bullets.',
-        why: 'Big picture goals are easy to ignore. Specific 3-year goals — with numbers — give your team something to plan and hire toward.',
-        fields: [
-          { type: 'text', key: 'targetDate', label: 'Future date', placeholder: 'e.g. December 31, 2028' },
-          { type: 'text', key: 'revenue',    label: 'Revenue',     placeholder: 'e.g. $25M' },
-          { type: 'text', key: 'profit',     label: 'Profit',      placeholder: 'e.g. $4M (16%)' },
-          { type: 'list', key: 'measurables', label: 'Measurables (up to 3 KPIs)', min: 1, max: 3, addLabel: 'Add a measurable', placeholders: { name: 'e.g. 1,200 active client accounts' } },
-          { type: 'list', key: 'lookLike',    label: 'What does it look like?', min: 3, max: 10, addLabel: 'Add a bullet', placeholders: { name: 'e.g. Recognized as the leading IT firm for Mid-Atlantic law firms' }, help: '5–10 short bullets. Concrete and specific — what would visiting your company in 3 years feel like?' },
-        ],
-        tip: 'Get specific about people, products, and recognition — not just financials. "Number of A-players" and "named one of the best places to work" land harder than revenue alone.',
-      },
-      {
-        id: 'one-year-plan',
-        title: '1-Year Plan',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Traction side',
-        definition: 'The 12 months ahead: revenue, profit, measurables, and 3–7 specific company goals.',
-        why: 'Your 1-Year Plan is the step that turns vision into traction. Pick fewer goals than you think you can do — focus beats ambition over 12 months.',
-        fields: [
-          { type: 'text', key: 'targetDate', label: 'Future date', placeholder: 'e.g. December 31, 2026' },
-          { type: 'text', key: 'revenue',    label: 'Revenue',     placeholder: 'e.g. $9.5M' },
-          { type: 'text', key: 'profit',     label: 'Profit',      placeholder: 'e.g. $1.2M (12%)' },
-          { type: 'list', key: 'measurables', label: 'Measurables (up to 3 KPIs)', min: 1, max: 3, addLabel: 'Add a measurable', placeholders: { name: 'e.g. 350 active client accounts' } },
-          { type: 'list', key: 'goals',       label: 'Goals for the year (3–7)',  min: 3, max: 7, addLabel: 'Add a goal', placeholders: { name: 'A specific, achievable goal' } },
-        ],
-        tip: 'Aim for goals you\'d feel proud of hitting — and would notice missing. If a goal could quietly slip without anyone caring, it shouldn\'t be on the list.',
-      },
-      {
-        id: 'rocks',
-        title: 'Rocks (this quarter)',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Traction side',
-        definition: 'The 3–7 most important priorities for the next 90 days, each owned by one person.',
-        why: 'Rocks are how 1-Year goals actually get done — broken into 90-day chunks with a clear owner. Discipline at the quarter level is what builds traction over the year.',
-        example: 'Rock: "Launch new client onboarding process." Owner: "Priya."',
-        fields: [
-          { type: 'list', key: 'items', min: 3, max: 7, item: { name: 'rock', extra: 'owner', nameMultiline: true }, cols: 'name-wide', addLabel: 'Add a Rock', placeholders: { name: 'A 90-day priority — describe what done looks like', extra: 'Owner (one person)' } },
-        ],
-        tip: 'One Rock, one owner — even if a team is involved. Shared ownership is shared accountability, which usually means none.',
-      },
-      {
-        id: 'issues-list',
-        title: 'Issues List',
-        kind: 'form',
-        eosLabel: 'V/TO™ — Traction side',
-        definition: 'A parking lot for big-picture issues, ideas, and obstacles that surface as you work — to address in upcoming quarterly or annual planning sessions.',
-        why: 'Most teams generate more ideas than they can execute. Capturing issues here keeps the V/TO™ focused while making sure nothing important gets lost.',
-        fields: [
-          { type: 'list', key: 'items', min: 0, max: 20, addLabel: 'Add an issue', placeholders: { name: 'A long-term issue, idea, or obstacle' } },
-        ],
-        tip: 'It\'s OK to leave this empty. You can always come back and add to it.',
-      },
-      {
-        id: 'review',
-        title: 'Your V/TO™',
-        kind: 'review',
-      },
-    ];
-
-    // Section indices for navigation. Welcome and review bookend the form steps.
-    const formSections = SECTIONS.filter(s => s.kind === 'form');
-    const totalFormSteps = formSections.length;
-
-    // ---------- State ----------
-    const STATE_KEY = 'vto-builder-v1';
-    const SUGGEST_BUDGET_PER_SECTION = 5;
-    const SUGGEST_BUDGET_TOTAL = 30;
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STATE_KEY);
-        if (!raw) return defaultState();
-        const parsed = JSON.parse(raw);
-        return Object.assign(defaultState(), parsed);
-      } catch (e) {
-        return defaultState();
-      }
-    }
-    function defaultState() {
-      return {
-        currentIndex: 0,
-        answers: {},
-        suggestUsage: { total: 0, perSection: {} },
-        startedAt: null,
-      };
-    }
-    function saveState() {
-      try {
-        localStorage.setItem(STATE_KEY, JSON.stringify(state));
-      } catch (e) { /* ignore quota */ }
-    }
-    function resetState() {
-      localStorage.removeItem(STATE_KEY);
-      state = defaultState();
-      render();
-    }
-
-    let state = loadState();
-
-    // ---------- Helpers ----------
-    function get(sectionId, key) {
-      const s = state.answers[sectionId] || {};
-      return s[key];
-    }
-    function set(sectionId, key, value) {
-      if (!state.answers[sectionId]) state.answers[sectionId] = {};
-      state.answers[sectionId][key] = value;
-      saveState();
-    }
-    function escapeHtml(s) {
-      return String(s == null ? '' : s)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-    }
-    function toast(msg) {
-      const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.classList.add('show');
-      clearTimeout(toast._t);
-      toast._t = setTimeout(() => el.classList.remove('show'), 2200);
-    }
-    function trim(s) { return (s || '').trim(); }
-
-    // ---------- Rendering ----------
-    function render() {
-      const section = SECTIONS[state.currentIndex];
-      const container = document.getElementById('step-container');
-      // Wide-layout body class — the review screen needs a landscape canvas;
-      // welcome and form steps stay narrow.
-      document.body.classList.toggle('review', section.kind === 'review');
-      updateProgress();
-      if (section.kind === 'welcome') return renderWelcome(container);
-      if (section.kind === 'review')  return renderReview(container);
-      return renderForm(container, section);
-    }
-
-    function updateProgress() {
-      const section = SECTIONS[state.currentIndex];
-      const progress = document.getElementById('progress');
-      const fill = document.getElementById('progress-fill');
-      const label = document.getElementById('progress-label');
-      if (section.kind === 'welcome') { progress.hidden = true; return; }
-      progress.hidden = false;
-      const formIndex = formSections.findIndex(s => s.id === section.id);
-      if (section.kind === 'review') {
-        label.textContent = 'Review';
-        fill.style.width = '100%';
-      } else {
-        label.textContent = `Step ${formIndex + 1} of ${totalFormSteps}`;
-        fill.style.width = ((formIndex + 1) / (totalFormSteps + 1)) * 100 + '%';
-      }
-    }
-
-    function renderWelcome(container) {
-      const hasProgress = Object.keys(state.answers).length > 0;
-      container.innerHTML = `
-        <div class="section-meta">EOS V/TO™ Builder</div>
-        <h1>Draft your V/TO at your own pace.</h1>
-        <p style="font-size: 17px; color: var(--gray);">
-          A V/TO™ — Vision/Traction Organizer™ — is the foundational tool every company running on EOS uses
-          to align on where it's going and how it's going to get there. We'll walk you through the 9 sections,
-          one at a time, with examples and tips along the way.
-        </p>
-
-        <div class="welcome-grid">
-          <div class="welcome-pill"><strong>9 sections</strong>Vision side + Traction side</div>
-          <div class="welcome-pill"><strong>Save and resume</strong>Pick up where you left off</div>
-          <div class="welcome-pill"><strong>Saved in your browser</strong>Nothing stored on our servers</div>
-          <div class="welcome-pill"><strong>Optional AI drafts</strong>Get unstuck with one click</div>
-        </div>
-
-        <div class="section-block">
-          <div class="section-block-label">A note on privacy</div>
-          Your answers are saved only in this browser's local storage. When you click <em>✨ Suggest a draft</em>,
-          we send the section's context to Anthropic's Claude API to generate a suggestion, and discard it
-          afterwards. We don't store anything on our side.
-        </div>
-
-        <div class="nav">
-          <div class="nav-left">
-            ${hasProgress ? '<button class="btn btn-ghost" id="btn-reset">Start over</button>' : ''}
-          </div>
-          <div class="nav-right">
-            <button class="btn btn-primary" id="btn-start">${hasProgress ? 'Resume' : 'Start the V/TO Builder'} →</button>
-          </div>
-        </div>
-      `;
-      document.getElementById('btn-start').addEventListener('click', () => {
-        if (!state.startedAt) state.startedAt = new Date().toISOString();
-        // Resume to last incomplete form step, or the first one
-        if (state.currentIndex === 0) state.currentIndex = 1;
-        saveState();
-        render();
-      });
-      const reset = document.getElementById('btn-reset');
-      if (reset) reset.addEventListener('click', () => {
-        if (confirm('Start over? This clears all your answers in this browser.')) resetState();
-      });
-    }
-
-    function renderForm(container, section) {
-      const showContext = section.id !== 'about';
-      const html = `
-        ${showContext ? renderContextChip() : ''}
-        <div class="section-meta">${escapeHtml(section.eosLabel || '')}</div>
-        <h2>${escapeHtml(section.title)}</h2>
-        <p class="section-definition">${escapeHtml(section.definition || '')}</p>
-
-        ${section.why ? `
-          <div class="section-block">
-            <div class="section-block-label">Why this matters</div>
-            ${escapeHtml(section.why)}
-          </div>` : ''}
-
-        ${section.example ? `
-          <div class="section-block" style="background: var(--mist); border-left-color: var(--slate);">
-            <div class="section-block-label" style="color: var(--gray);">Example</div>
-            ${escapeHtml(section.example)}
-          </div>` : ''}
-
-        ${renderSuggestBar(section)}
-
-        <form id="step-form" autocomplete="off" novalidate>
-          ${section.fields.map(f => renderField(section.id, f)).join('')}
-        </form>
-
-        ${section.tip ? `<div class="section-tip">💡 ${escapeHtml(section.tip)}</div>` : ''}
-
-        <div class="nav">
-          <div class="nav-left">
-            <button class="btn btn-ghost" id="btn-back">← Back</button>
-          </div>
-          <div class="nav-right">
-            <button class="btn btn-secondary" id="btn-save">Save & continue later</button>
-            <button class="btn btn-primary" id="btn-next">Next →</button>
-          </div>
-        </div>
-      `;
-      container.innerHTML = html;
-      bindFormHandlers(section);
-    }
-
-    function renderContextChip() {
-      const a = state.answers.about || {};
-      if (!a.companyName && !a.about && !a.strengths && !a.workOns) return '';
-      return `
-        <details class="context-chip" id="context-chip">
-          <summary class="context-chip-toggle">
-            <span>Your context — ${escapeHtml(a.companyName || 'Your company')}</span>
-            <span style="color: var(--slate);">▾</span>
-          </summary>
-          <div class="context-chip-body">
-            ${a.about     ? `<div class="context-chip-row"><span class="context-chip-label">About:</span> ${escapeHtml(a.about)}</div>` : ''}
-            ${a.strengths ? `<div class="context-chip-row"><span class="context-chip-label">Strengths:</span> ${escapeHtml(a.strengths)}</div>` : ''}
-            ${a.workOns   ? `<div class="context-chip-row"><span class="context-chip-label">Working on:</span> ${escapeHtml(a.workOns)}</div>` : ''}
-          </div>
-        </details>
-      `;
-    }
-
-    function renderSuggestBar(section) {
-      // No suggestions on the About step — there's no context to draft from yet.
-      if (section.id === 'about') return '';
-      const used = state.suggestUsage.perSection[section.id] || 0;
-      const remaining = SUGGEST_BUDGET_PER_SECTION - used;
-      const totalLeft = SUGGEST_BUDGET_TOTAL - state.suggestUsage.total;
-      const disabled = remaining <= 0 || totalLeft <= 0;
-      return `
-        <div class="suggest-bar">
-          <div class="suggest-bar-text">
-            Need a starting point? I can draft this section based on what you've shared so far. You can edit, accept, or try again.
-          </div>
-          <button type="button" class="btn-suggest" id="btn-suggest" ${disabled ? 'disabled title="Suggestion budget for this section is used up — keep refining what you have."' : ''}>
-            <span id="suggest-icon">✨</span>
-            <span id="suggest-label">${used > 0 ? 'Try another draft' : 'Suggest a draft'}</span>
-          </button>
-        </div>
-        <div id="suggest-error" class="suggest-error" hidden></div>
-      `;
-    }
-
-    function renderField(sectionId, field) {
-      const value = get(sectionId, field.key);
-      switch (field.type) {
-        case 'text':
-          return `
-            <div class="field">
-              <label>${escapeHtml(field.label)}${field.required ? '' : ' <span class="optional">(optional)</span>'}</label>
-              ${field.help ? `<div class="field-help">${escapeHtml(field.help)}</div>` : ''}
-              <input type="text" data-key="${field.key}" placeholder="${escapeHtml(field.placeholder || '')}" value="${escapeHtml(value || '')}">
-            </div>`;
-        case 'textarea':
-          return `
-            <div class="field">
-              <label>${escapeHtml(field.label)}</label>
-              ${field.help ? `<div class="field-help">${escapeHtml(field.help)}</div>` : ''}
-              <textarea data-key="${field.key}" placeholder="${escapeHtml(field.placeholder || '')}">${escapeHtml(value || '')}</textarea>
-            </div>`;
-        case 'list':
-          return renderListField(sectionId, field, value);
-      }
-      return '';
-    }
-
-    function renderListField(sectionId, field, value) {
-      const items = Array.isArray(value) ? value : [];
-      const isPair = field.item && field.item.extra;
-      // Always show at least one row for a clean starting state.
-      if (items.length === 0) items.push(isPair ? { name: '', extra: '' } : '');
-      const colsClass = field.cols ? ` cols-${field.cols}` : '';
-      const rows = items.map((it, i) => {
-        const num = i + 1;
-        if (isPair) {
-          const nameVal = (typeof it === 'object' && it) ? (it[field.item.name] || '') : '';
-          const extraVal = (typeof it === 'object' && it) ? (it[field.item.extra] || '') : '';
-          const namePh = escapeHtml((field.placeholders || {}).name || '');
-          const extraPh = escapeHtml((field.placeholders || {}).extra || '');
-          const nameField = field.item.nameMultiline
-            ? `<textarea rows="2" data-key="${field.key}" data-sub="${field.item.name}" data-idx="${i}" placeholder="${namePh}">${escapeHtml(nameVal)}</textarea>`
-            : `<input type="text" data-key="${field.key}" data-sub="${field.item.name}" data-idx="${i}" placeholder="${namePh}" value="${escapeHtml(nameVal)}">`;
-          const extraField = field.item.extraMultiline
-            ? `<textarea rows="2" data-key="${field.key}" data-sub="${field.item.extra}" data-idx="${i}" placeholder="${extraPh}">${escapeHtml(extraVal)}</textarea>`
-            : `<input type="text" data-key="${field.key}" data-sub="${field.item.extra}" data-idx="${i}" placeholder="${extraPh}" value="${escapeHtml(extraVal)}">`;
-          return `
-            <div class="list-item" data-idx="${i}">
-              <div class="list-item-row" style="flex-direction: row; align-items: start;">
-                <span class="list-item-num">${num}</span>
-                <div class="list-item-fields two-col${colsClass}" style="margin-left: 8px;">
-                  ${nameField}
-                  ${extraField}
-                </div>
-              </div>
-              <button type="button" class="btn-icon" data-action="remove-list-item" data-key="${field.key}" data-idx="${i}" title="Remove">✕</button>
-            </div>`;
-        }
-        const v = typeof it === 'string' ? it : (it && it.name) || '';
-        return `
-          <div class="list-row" data-idx="${i}">
-            <span class="list-item-num">${num}</span>
-            <input type="text" data-key="${field.key}" data-idx="${i}" placeholder="${escapeHtml((field.placeholders || {}).name || '')}" value="${escapeHtml(v)}">
-            <button type="button" class="btn-icon" data-action="remove-list-item" data-key="${field.key}" data-idx="${i}" title="Remove">✕</button>
-          </div>`;
-      }).join('');
-      const atMax = items.length >= (field.max || 99);
-      return `
-        <div class="field" data-list-key="${field.key}">
-          ${field.label ? `<label>${escapeHtml(field.label)}</label>` : ''}
-          ${field.help ? `<div class="field-help">${escapeHtml(field.help)}</div>` : ''}
-          <div class="list-items">${rows}</div>
-          <button type="button" class="btn-add" data-action="add-list-item" data-key="${field.key}" ${atMax ? 'disabled' : ''}>+ ${escapeHtml(field.addLabel || 'Add')}</button>
-        </div>`;
-    }
-
-    function bindFormHandlers(section) {
-      const form = document.getElementById('step-form');
-      const isPair = (key) => {
-        const f = section.fields.find(x => x.key === key);
-        return f && f.item && f.item.extra;
-      };
-      const fieldByKey = (key) => section.fields.find(f => f.key === key);
-
-      form.addEventListener('input', (e) => {
-        const t = e.target;
-        if (!t.dataset.key) return;
-        const key = t.dataset.key;
-        const idx = t.dataset.idx;
-        const sub = t.dataset.sub;
-        const f = fieldByKey(key);
-        if (f && f.type === 'list') {
-          const arr = (get(section.id, key) || []).slice();
-          while (arr.length <= Number(idx)) arr.push(isPair(key) ? {} : '');
-          if (isPair(key)) {
-            if (typeof arr[idx] !== 'object' || !arr[idx]) arr[idx] = {};
-            arr[idx][sub] = t.value;
-          } else {
-            arr[idx] = t.value;
-          }
-          set(section.id, key, arr);
-        } else {
-          set(section.id, key, t.value);
-        }
-      });
-
-      form.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action]');
-        if (!btn) return;
-        const action = btn.dataset.action;
-        const key = btn.dataset.key;
-        const f = fieldByKey(key);
-        if (action === 'add-list-item') {
-          const arr = (get(section.id, key) || []).slice();
-          if (arr.length >= (f.max || 99)) return;
-          arr.push(isPair(key) ? {} : '');
-          set(section.id, key, arr);
-          render();
-        }
-        if (action === 'remove-list-item') {
-          const idx = Number(btn.dataset.idx);
-          const arr = (get(section.id, key) || []).slice();
-          arr.splice(idx, 1);
-          set(section.id, key, arr);
-          render();
-        }
-      });
-
-      document.getElementById('btn-back').addEventListener('click', () => {
-        state.currentIndex = Math.max(0, state.currentIndex - 1);
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      document.getElementById('btn-next').addEventListener('click', () => {
-        state.currentIndex = Math.min(SECTIONS.length - 1, state.currentIndex + 1);
-        saveState();
-        render();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-      document.getElementById('btn-save').addEventListener('click', () => {
-        saveState();
-        toast('Saved. Come back any time on this device.');
-      });
-
-      const suggest = document.getElementById('btn-suggest');
-      if (suggest) suggest.addEventListener('click', () => onSuggestDraft(section));
-    }
-
-    // ---------- Suggest a draft ----------
-    async function onSuggestDraft(section) {
-      const btn = document.getElementById('btn-suggest');
-      const errEl = document.getElementById('suggest-error');
-      const iconEl = document.getElementById('suggest-icon');
-      const labelEl = document.getElementById('suggest-label');
-      btn.disabled = true;
-      errEl.hidden = true;
-      iconEl.outerHTML = '<span class="spin" id="suggest-icon"></span>';
-      labelEl.textContent = 'Drafting…';
-
-      try {
-        const res = await fetch('/api/draft', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            sectionId: section.id,
-            context: state.answers.about || {},
-            currentAnswers: state.answers[section.id] || {},
-            priorAnswers: summarizePrior(section.id),
-          }),
-        });
-        if (!res.ok) {
-          const txt = await res.text();
-          throw new Error(`HTTP ${res.status}: ${txt.slice(0, 120)}`);
-        }
-        const data = await res.json();
-        if (!data || !data.draft) throw new Error('No draft returned.');
-
-        // Apply draft into state for this section.
-        applyDraft(section, data.draft);
-
-        // Track usage.
-        state.suggestUsage.total += 1;
-        state.suggestUsage.perSection[section.id] = (state.suggestUsage.perSection[section.id] || 0) + 1;
-        saveState();
-
-        render();
-        toast('Draft inserted — edit anything that doesn\'t feel like you.');
-      } catch (e) {
-        const span = document.getElementById('suggest-icon');
-        if (span) span.outerHTML = '<span id="suggest-icon">✨</span>';
-        const lab = document.getElementById('suggest-label');
-        if (lab) lab.textContent = 'Suggest a draft';
-        const b = document.getElementById('btn-suggest');
-        if (b) b.disabled = false;
-        if (errEl) {
-          errEl.hidden = false;
-          errEl.textContent = 'Suggestion unavailable — keep typing, you\'ve got this.';
-        }
-        // eslint-disable-next-line no-console
-        console.error('Draft request failed:', e);
-      }
-    }
-
-    // For continuity, send a 1–2 line summary of relevant prior sections.
-    function summarizePrior(currentId) {
-      const order = ['core-values', 'core-focus', 'ten-year-target', 'marketing-strategy', 'three-year-picture', 'one-year-plan', 'rocks'];
-      const idx = order.indexOf(currentId);
-      if (idx <= 0) return {};
-      const out = {};
-      for (let i = 0; i < idx; i++) {
-        const id = order[i];
-        const a = state.answers[id];
-        if (a) out[id] = a;
-      }
-      return out;
-    }
-
-    // Map LLM JSON back into state.answers[section.id].
-    function applyDraft(section, draft) {
-      for (const f of section.fields) {
-        if (f.type === 'list') {
-          // Drafts return either an array of strings or an array of objects shaped like field.item.
-          if (Array.isArray(draft[f.key])) {
-            set(section.id, f.key, draft[f.key].slice(0, f.max || 99));
-          }
-        } else if (typeof draft[f.key] === 'string') {
-          set(section.id, f.key, draft[f.key]);
-        }
-      }
-    }
-
-    // ---------- Review / Final V/TO ----------
-    // Inline-editable layout that mirrors the EOS V/TO PDF: a centered title
-    // with two stacked "pages" (Vision and Traction). Edit any value directly
-    // by clicking; changes save to localStorage on each keystroke.
-
-    let pendingFocusSelector = null;
-
-    // Configures list editing per section.key — `kind: 'pair'` means each item
-    // is an object with two fields (sub-keys); `string` means each item is a
-    // bare string. `max` enforces an upper bound when adding rows.
-    const REVIEW_LIST_CONFIG = {
-      'core-values':         { items:              { kind: 'pair',   subs: ['value', 'descriptor'], max: 7 } },
-      'marketing-strategy':  {
-        threeUniques:        { kind: 'pair', subs: ['name', 'descriptor'], max: 3 },
-        provenProcessSteps:  { kind: 'string', max: 7 },
-      },
-      'three-year-picture':  { measurables: { kind: 'string', max: 3 }, lookLike: { kind: 'string', max: 12 } },
-      'one-year-plan':       { measurables: { kind: 'string', max: 3 }, goals:    { kind: 'string', max: 7 } },
-      'rocks':               { items: { kind: 'pair', subs: ['rock', 'owner'], max: 7 } },
-      'issues-list':         { items: { kind: 'string', max: 30 } },
-    };
-
-    function renderReview(container) {
-      container.innerHTML = `
-        <div class="section-meta">EOS V/TO™ — Editable draft</div>
-        <h2>Your V/TO is ready to refine.</h2>
-        <p class="review-intro" style="color: var(--gray);">
-          Click anywhere on the page to edit. Add or remove items with the small controls that
-          appear when you hover. When you're happy, print to PDF, copy the V/TO, or paste each
-          card into the matching field in Ninety's Vision tool.
-        </p>
-
-        <div class="vto-actions">
-          <button class="btn btn-primary" id="btn-print">🖨 Print to PDF</button>
-          <button class="btn btn-secondary" id="btn-copy">📋 Copy entire V/TO</button>
-          <button class="btn btn-secondary" id="btn-download-md">⬇ Download .md</button>
-          <button class="btn btn-secondary" id="btn-download-txt">⬇ Download .txt</button>
-        </div>
-
-        ${buildVTOHTML(state.answers)}
-
-        <div class="nav">
-          <div class="nav-left">
-            <button class="btn btn-ghost" id="btn-back">← Back to last step</button>
-          </div>
-          <div class="nav-right">
-            <button class="btn btn-ghost" id="btn-reset">Start over</button>
-          </div>
-        </div>
-      `;
-
-      applyPlaceholders(container);
-
-      // ---- Inline edit: keep state in sync with each keystroke. ----
-      container.addEventListener('input', (e) => {
-        const el = e.target.closest('.vto-edit');
-        if (!el) return;
-        const sectionId = el.dataset.section;
-        const key = el.dataset.key;
-        const text = el.textContent.replace(/ /g, ' ');
-        const idx = el.dataset.listIdx;
-        const sub = el.dataset.listSub;
-
-        if (idx === undefined) {
-          set(sectionId, key, text);
-        } else {
-          const arr = ((state.answers[sectionId] || {})[key] || []).slice();
-          while (arr.length <= Number(idx)) arr.push(sub ? {} : '');
-          if (sub) {
-            if (typeof arr[idx] !== 'object' || !arr[idx]) arr[idx] = {};
-            arr[idx][sub] = text;
-          } else {
-            arr[idx] = text;
-          }
-          set(sectionId, key, arr);
-        }
-        // Toggle empty placeholder on this element only — avoids re-render flicker.
-        el.classList.toggle('is-empty', el.textContent.trim() === '');
-      });
-
-      // ---- Plain-text paste: strip formatting from clipboard. ----
-      container.addEventListener('paste', (e) => {
-        if (!e.target.closest('.vto-edit')) return;
-        e.preventDefault();
-        const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-        document.execCommand('insertText', false, text);
-      });
-
-      // ---- Add / remove rows + open-step links ----
-      container.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-action]');
-        if (!btn) return;
-        const action = btn.dataset.action;
-        const sectionId = btn.dataset.section;
-        const key = btn.dataset.key;
-
-        if (action === 'open-step') {
-          const idx = SECTIONS.findIndex(s => s.id === sectionId);
-          if (idx >= 0) {
-            state.currentIndex = idx;
-            saveState();
-            render();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-          return;
-        }
-
-        const cfg = (REVIEW_LIST_CONFIG[sectionId] || {})[key];
-        if (!cfg) return;
-
-        if (action === 'add-item') {
-          const arr = ((state.answers[sectionId] || {})[key] || []).slice();
-          if (cfg.max && arr.length >= cfg.max) return;
-          if (cfg.kind === 'pair') {
-            const blank = {};
-            cfg.subs.forEach(s => blank[s] = '');
-            arr.push(blank);
-          } else {
-            arr.push('');
-          }
-          set(sectionId, key, arr);
-          const newIdx = arr.length - 1;
-          const sub = cfg.kind === 'pair' ? cfg.subs[0] : '';
-          pendingFocusSelector = `[data-section="${sectionId}"][data-key="${key}"][data-list-idx="${newIdx}"]${sub ? `[data-list-sub="${sub}"]` : ''}`;
-          render();
-        }
-        if (action === 'remove-item') {
-          const idx = Number(btn.dataset.idx);
-          const arr = ((state.answers[sectionId] || {})[key] || []).slice();
-          arr.splice(idx, 1);
-          set(sectionId, key, arr);
-          render();
-        }
-      });
-
-      document.getElementById('btn-back').addEventListener('click', () => {
-        state.currentIndex = SECTIONS.length - 2;
-        saveState(); render();
-      });
-      document.getElementById('btn-copy').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(buildVTO(state.answers));
-          toast('V/TO copied to clipboard.');
-        } catch (e) {
-          toast('Copy failed — select and copy manually.');
-        }
-      });
-      document.getElementById('btn-download-md').addEventListener('click', () => downloadFile(buildVTO(state.answers), fileName('md'), 'text/markdown'));
-      document.getElementById('btn-download-txt').addEventListener('click', () => downloadFile(buildVTO(state.answers), fileName('txt'), 'text/plain'));
-      document.getElementById('btn-print').addEventListener('click', () => window.print());
-      document.getElementById('btn-reset').addEventListener('click', () => {
-        if (confirm('Start over? This clears all your answers in this browser.')) resetState();
-      });
-
-      // Focus newly-added rows from add-item.
-      if (pendingFocusSelector) {
-        const el = container.querySelector(pendingFocusSelector);
-        if (el) {
-          el.focus();
-          const range = document.createRange();
-          range.selectNodeContents(el);
-          range.collapse(false);
-          const sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-        }
-        pendingFocusSelector = null;
-      }
-    }
-
-    // Empty-placeholder visibility — contenteditable :empty is finicky, so we
-    // toggle a class once on render and live in the input handler.
-    function applyPlaceholders(root) {
-      root.querySelectorAll('.vto-edit').forEach(el => {
-        el.classList.toggle('is-empty', el.textContent.trim() === '');
-      });
-    }
-
-    // Inline-edit primitives. `editText` is a single field; `editList*` builds
-    // a row for a list item. The `.vto-edit` class hooks into the edit handler.
-    function editText(sectionId, key, value, placeholder) {
-      return `<div class="vto-edit"
-                   contenteditable="true"
-                   spellcheck="true"
-                   data-section="${sectionId}"
-                   data-key="${key}"
-                   data-placeholder="${escapeHtml(placeholder || '')}">${escapeHtml(value || '')}</div>`;
-    }
-    function editListString(sectionId, key, idx, value, placeholder) {
-      return `<div class="vto-edit"
-                   contenteditable="true"
-                   spellcheck="true"
-                   data-section="${sectionId}"
-                   data-key="${key}"
-                   data-list-idx="${idx}"
-                   data-placeholder="${escapeHtml(placeholder || '')}">${escapeHtml(value || '')}</div>`;
-    }
-    function editListPair(sectionId, key, idx, sub, value, placeholder) {
-      return `<div class="vto-edit"
-                   contenteditable="true"
-                   spellcheck="true"
-                   data-section="${sectionId}"
-                   data-key="${key}"
-                   data-list-idx="${idx}"
-                   data-list-sub="${sub}"
-                   data-placeholder="${escapeHtml(placeholder || '')}">${escapeHtml(value || '')}</div>`;
-    }
-    function removeBtn(sectionId, key, idx) {
-      return `<button class="vto-row-remove" data-action="remove-item" data-section="${sectionId}" data-key="${key}" data-idx="${idx}" title="Remove" aria-label="Remove row">×</button>`;
-    }
-    function addBtn(sectionId, key, label, atMax) {
-      return `<button class="vto-row-add" data-action="add-item" data-section="${sectionId}" data-key="${key}" ${atMax ? 'disabled' : ''}>+ ${escapeHtml(label)}</button>`;
-    }
-
-    // ---------- Card-based, two-page V/TO renderer ----------
-    function buildVTOHTML(a) {
-      const about  = a.about || {};
-      const cv     = a['core-values'] || {};
-      const cf     = a['core-focus'] || {};
-      const tyt    = a['ten-year-target'] || {};
-      const ms     = a['marketing-strategy'] || {};
-      const tyrp   = a['three-year-picture'] || {};
-      const oyp    = a['one-year-plan'] || {};
-      const rocks  = a['rocks'] || {};
-      const issues = a['issues-list'] || {};
-
-      const company = trim(about.companyName) || 'Your Company';
-      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-      const card = (sectionId, title, body, countBadge = '') => `
-        <div class="vto-card">
-          <div class="vto-card-header">
-            <h3 class="vto-card-title">${escapeHtml(title)}${countBadge}</h3>
-          </div>
-          ${body}
-          <button class="vto-card-step-link" data-action="open-step" data-section="${sectionId}" title="Open this section's step view">↗ Open in step view</button>
-        </div>
-      `;
-
-      // ---- Core Values: pair list ----
-      const cvItems = (cv.items && cv.items.length) ? cv.items : [{ value: '', descriptor: '' }];
-      const cvBody = cvItems.map((it, i) => `
-        <div class="vto-kv-row">
-          ${editListPair('core-values', 'items', i, 'value', it && it.value, 'e.g. Get smart stuff done')}
-          ${editListPair('core-values', 'items', i, 'descriptor', it && it.descriptor, 'What does this look like in practice?')}
-          ${removeBtn('core-values', 'items', i)}
-        </div>
-      `).join('') + addBtn('core-values', 'items', 'Add Core Value', cvItems.length >= 7);
-
-      // ---- Core Focus ----
-      const cfBody = `
-        <div class="vto-section-label">Purpose / Cause / Passion</div>
-        ${editText('core-focus', 'purpose', cf.purpose, '3–7 words: why your company exists')}
-        <div class="vto-section-label">Niche</div>
-        ${editText('core-focus', 'niche', cf.niche, 'One sentence: who you serve and what you do')}
-      `;
-
-      // ---- 10 Year Target ----
-      const tytBody = `
-        ${editText('ten-year-target', 'target', tyt.target, 'A bold, measurable goal ~10 years out')}
-        <div class="vto-section-label" style="margin-top: 10px;">Target Year</div>
-        ${editText('ten-year-target', 'targetYear', tyt.targetYear, 'e.g. 2035')}
-      `;
-
-      // ---- Marketing Strategy ----
-      const uniques = (ms.threeUniques && ms.threeUniques.length) ? ms.threeUniques : [{ name: '', descriptor: '' }];
-      const uniquesNorm = uniques.map(u => typeof u === 'string' ? { name: '', descriptor: u } : (u || {}));
-      const uniquesRows = uniquesNorm.map((u, i) => `
-        <div class="vto-kv-row">
-          ${editListPair('marketing-strategy', 'threeUniques', i, 'name', u.name, 'Short label (e.g. "Fast")')}
-          ${editListPair('marketing-strategy', 'threeUniques', i, 'descriptor', u.descriptor, 'A specific way you stand apart')}
-          ${removeBtn('marketing-strategy', 'threeUniques', i)}
-        </div>
-      `).join('') + addBtn('marketing-strategy', 'threeUniques', 'Add Unique', uniquesNorm.length >= 3);
-
-      const provenSteps = (ms.provenProcessSteps && ms.provenProcessSteps.length) ? ms.provenProcessSteps : [''];
-      const provenStepsRows = provenSteps.map((s, i) => `
-        <div class="vto-list-row">
-          <span class="vto-list-marker">${i + 1}.</span>
-          ${editListString('marketing-strategy', 'provenProcessSteps', i, typeof s === 'string' ? s : (s && s.name), 'Named step in your process')}
-          ${removeBtn('marketing-strategy', 'provenProcessSteps', i)}
-        </div>
-      `).join('') + addBtn('marketing-strategy', 'provenProcessSteps', 'Add Step', provenSteps.length >= 7);
-
-      const marketingBody = `
-        <div class="vto-section-label">Target Market / "The List"</div>
-        ${editText('marketing-strategy', 'targetMarket', ms.targetMarket, 'Geographic + demographic + psychographic')}
-        <div class="vto-section-label">Three Uniques</div>
-        ${uniquesRows}
-        <div class="vto-section-label">Proven Process</div>
-        ${editText('marketing-strategy', 'provenProcessName', ms.provenProcessName, 'Process name (e.g. "The Acme Way")')}
-        ${provenStepsRows}
-        <div class="vto-section-label">Guarantee</div>
-        ${editText('marketing-strategy', 'guarantee', ms.guarantee, 'A bold promise that takes risk off the buyer')}
-      `;
-
-      // ---- 3 Year Picture ----
-      const tyrpM = (tyrp.measurables && tyrp.measurables.length) ? tyrp.measurables : [''];
-      const tyrpL = (tyrp.lookLike && tyrp.lookLike.length) ? tyrp.lookLike : [''];
-      const tyrpMRows = tyrpM.map((m, i) => `
-        <div class="vto-list-row">
-          <span class="vto-list-marker is-bullet">•</span>
-          ${editListString('three-year-picture', 'measurables', i, typeof m === 'string' ? m : (m && m.name), 'KPI + target')}
-          ${removeBtn('three-year-picture', 'measurables', i)}
-        </div>
-      `).join('') + addBtn('three-year-picture', 'measurables', 'Add Measurable', tyrpM.length >= 3);
-      const tyrpLRows = tyrpL.map((b, i) => `
-        <div class="vto-list-row">
-          <span class="vto-list-marker is-checkbox" aria-hidden="true"></span>
-          ${editListString('three-year-picture', 'lookLike', i, typeof b === 'string' ? b : (b && b.name), 'A concrete, specific picture of success')}
-          ${removeBtn('three-year-picture', 'lookLike', i)}
-        </div>
-      `).join('') + addBtn('three-year-picture', 'lookLike', 'Add bullet', tyrpL.length >= 12);
-      const threeYearBody = `
-        <div class="vto-meta">
-          <div class="vto-meta-label">Future Date:</div>
-          ${editText('three-year-picture', 'targetDate', tyrp.targetDate, 'e.g. December 31, 2028')}
-        </div>
-        <div class="vto-section-label">Revenue</div>
-        ${editText('three-year-picture', 'revenue', tyrp.revenue, 'e.g. $25M')}
-        <div class="vto-section-label">Profit</div>
-        ${editText('three-year-picture', 'profit', tyrp.profit, 'e.g. $4M (16%)')}
-        <div class="vto-section-label">Measurables</div>
-        ${tyrpMRows}
-        <div class="vto-section-label">What Does It Look Like?</div>
-        ${tyrpLRows}
-      `;
-
-      // ---- 1 Year Plan ----
-      const oypM = (oyp.measurables && oyp.measurables.length) ? oyp.measurables : [''];
-      const oypGoals = (oyp.goals && oyp.goals.length) ? oyp.goals : [''];
-      const oypMRows = oypM.map((m, i) => `
-        <div class="vto-list-row">
-          <span class="vto-list-marker is-bullet">•</span>
-          ${editListString('one-year-plan', 'measurables', i, typeof m === 'string' ? m : (m && m.name), 'KPI + target')}
-          ${removeBtn('one-year-plan', 'measurables', i)}
-        </div>
-      `).join('') + addBtn('one-year-plan', 'measurables', 'Add Measurable', oypM.length >= 3);
-      const oypGoalsRows = oypGoals.map((g, i) => `
-        <div class="vto-list-row">
-          <span class="vto-list-marker is-checkbox" aria-hidden="true"></span>
-          ${editListString('one-year-plan', 'goals', i, typeof g === 'string' ? g : (g && g.name), 'A specific 1-year goal')}
-          ${removeBtn('one-year-plan', 'goals', i)}
-        </div>
-      `).join('') + addBtn('one-year-plan', 'goals', 'Add Goal', oypGoals.length >= 7);
-      const oneYearBody = `
-        <div class="vto-meta">
-          <div class="vto-meta-label">Future Date:</div>
-          ${editText('one-year-plan', 'targetDate', oyp.targetDate, 'e.g. December 31, 2026')}
-        </div>
-        <div class="vto-section-label">Revenue</div>
-        ${editText('one-year-plan', 'revenue', oyp.revenue, 'e.g. $9.5M')}
-        <div class="vto-section-label">Profit</div>
-        ${editText('one-year-plan', 'profit', oyp.profit, 'e.g. $1.2M (12%)')}
-        <div class="vto-section-label">Measurables</div>
-        ${oypMRows}
-        <div class="vto-section-label">Goals for the Year</div>
-        ${oypGoalsRows}
-      `;
-
-      // ---- 90 Days (Rocks) ----
-      const rs = (rocks.items && rocks.items.length) ? rocks.items : [{ rock: '', owner: '' }];
-      const rocksRows = rs.map((r, i) => `
-        <div class="vto-kv-row is-rocks">
-          ${editListPair('rocks', 'items', i, 'rock', r && r.rock, 'A 90-day priority')}
-          ${editListPair('rocks', 'items', i, 'owner', r && r.owner, 'Owner')}
-          ${removeBtn('rocks', 'items', i)}
-        </div>
-      `).join('') + addBtn('rocks', 'items', 'Add Rock', rs.length >= 7);
-      const rocksBody = `<div class="vto-section-label">Company Rocks</div>${rocksRows}`;
-
-      // ---- Long-Term Issues ----
-      const il = (issues.items && issues.items.length) ? issues.items : [''];
-      const ilRows = il.map((it, i) => `
-        <div class="vto-list-row">
-          <span class="vto-list-marker">${i + 1}.</span>
-          ${editListString('issues-list', 'items', i, typeof it === 'string' ? it : (it && it.name), 'A long-term issue, idea, or obstacle')}
-          ${removeBtn('issues-list', 'items', i)}
-        </div>
-      `).join('') + addBtn('issues-list', 'items', 'Add Issue', il.length >= 30);
-      const issuesCount = (issues.items || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name)).length;
-      const issuesCountBadge = issuesCount ? ` <span class="vto-card-count">${issuesCount}</span>` : '';
-
-      return `
-        <div class="vto-display">
-          <div class="vto-doc-title">VISION/TRACTION ORGANIZER™</div>
-          <div class="vto-doc-meta">${escapeHtml(company)} · Drafted ${escapeHtml(date)}</div>
-
-          <div class="vto-page">
-            <div class="vto-page-header">VISION <span class="vto-page-header-sub">— Where the company is going</span></div>
-            <div class="vto-row cols-2">
-              <div class="vto-card-stack">
-                ${card('core-values',         'Core Values',         cvBody)}
-                ${card('core-focus',          'Core Focus™',         cfBody)}
-                ${card('ten-year-target',     '10 Year Target™',     tytBody)}
-                ${card('marketing-strategy',  'Marketing Strategy',  marketingBody)}
-              </div>
-              <div class="vto-card-stack">
-                ${card('three-year-picture',  '3 Year Picture™',     threeYearBody)}
-              </div>
-            </div>
-          </div>
-
-          <div class="vto-page">
-            <div class="vto-page-header">TRACTION <span class="vto-page-header-sub">— How the company gets there</span></div>
-            <div class="vto-row cols-3">
-              ${card('one-year-plan', '1 Year Plan',       oneYearBody)}
-              ${card('rocks',         '90 Days',           rocksBody)}
-              ${card('issues-list',   'Long-Term Issues',  ilRows, issuesCountBadge)}
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function fileName(ext) {
-      const c = (state.answers.about && state.answers.about.companyName) || 'company';
-      const safe = c.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
-      const date = new Date().toISOString().slice(0, 10);
-      return `${safe || 'company'}-vto-${date}.${ext}`;
-    }
-
-    function downloadFile(text, name, mime) {
-      const blob = new Blob([text], { type: mime + ';charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = name;
-      document.body.appendChild(a); a.click(); a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    // ---------- Final V/TO assembly ----------
-    function buildVTO(a) {
-      const about = a.about || {};
-      const cv    = a['core-values'] || {};
-      const cf    = a['core-focus'] || {};
-      const tyt   = a['ten-year-target'] || {};
-      const ms    = a['marketing-strategy'] || {};
-      const tyrp  = a['three-year-picture'] || {};
-      const oyp   = a['one-year-plan'] || {};
-      const rocks = a['rocks'] || {};
-      const issues = a['issues-list'] || {};
-      const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      const company = about.companyName || '[Company name]';
-
-      const lines = [];
-      const div = '═'.repeat(60);
-      lines.push(div);
-      lines.push(`VISION/TRACTION ORGANIZER — ${company}`);
-      lines.push(`Drafted ${date}`);
-      lines.push(div);
-      lines.push('');
-
-      lines.push('VISION');
-      lines.push('');
-      lines.push('CORE VALUES');
-      const cvItems = (cv.items || []).filter(x => x && (x.value || x.descriptor));
-      if (cvItems.length === 0) lines.push('  (not yet drafted)');
-      cvItems.forEach((it, i) => {
-        const v = trim(it.value);
-        const d = trim(it.descriptor);
-        lines.push(`  ${i + 1}. ${v}${d ? ' — ' + d : ''}`);
-      });
-      lines.push('');
-
-      lines.push('CORE FOCUS');
-      lines.push(`  Purpose / Cause / Passion: ${trim(cf.purpose) || '(not yet drafted)'}`);
-      lines.push(`  Our Niche:                 ${trim(cf.niche)   || '(not yet drafted)'}`);
-      lines.push('');
-
-      lines.push('10-YEAR TARGET');
-      const tyt_target = trim(tyt.target);
-      const tyt_year = trim(tyt.targetYear);
-      if (tyt_target || tyt_year) {
-        lines.push(`  ${tyt_target}${tyt_year ? '  (by ' + tyt_year + ')' : ''}`);
-      } else {
-        lines.push('  (not yet drafted)');
-      }
-      lines.push('');
-
-      lines.push('MARKETING STRATEGY');
-      lines.push('  Target Market / "The List":');
-      lines.push(`    ${trim(ms.targetMarket) || '(not yet drafted)'}`);
-      lines.push('  Three Uniques:');
-      const uniques = (ms.threeUniques || []).filter(x => x && (typeof x === 'string' ? x.trim() : (x.name || x.descriptor)));
-      if (uniques.length === 0) lines.push('    (not yet drafted)');
-      uniques.forEach((u, i) => {
-        if (typeof u === 'string') {
-          lines.push(`    ${i + 1}. ${trim(u)}`);
-        } else {
-          const n = trim(u.name);
-          const d = trim(u.descriptor);
-          lines.push(`    ${i + 1}. ${n}${d ? ' — ' + d : ''}`);
-        }
-      });
-      lines.push(`  Proven Process: ${trim(ms.provenProcessName) || '(unnamed)'}`);
-      const steps = (ms.provenProcessSteps || []).filter(Boolean);
-      if (steps.length) {
-        steps.forEach((s, i) => lines.push(`    ${i + 1}. ${trim(typeof s === 'string' ? s : s.name)}`));
-      } else {
-        lines.push('    (steps not yet drafted)');
-      }
-      lines.push(`  Guarantee: ${trim(ms.guarantee) || '(not yet drafted)'}`);
-      lines.push('');
-
-      lines.push(`3-YEAR PICTURE${trim(tyrp.targetDate) ? '  (by ' + trim(tyrp.targetDate) + ')' : ''}`);
-      lines.push(`  Revenue:     ${trim(tyrp.revenue) || '—'}`);
-      lines.push(`  Profit:      ${trim(tyrp.profit) || '—'}`);
-      lines.push('  Measurables:');
-      const tyrpM = (tyrp.measurables || []).filter(Boolean);
-      if (tyrpM.length === 0) lines.push('    —');
-      tyrpM.forEach((m, i) => lines.push(`    ${i + 1}. ${trim(typeof m === 'string' ? m : m.name)}`));
-      lines.push('  What does it look like?');
-      const tyrpL = (tyrp.lookLike || []).filter(Boolean);
-      if (tyrpL.length === 0) lines.push('    (not yet drafted)');
-      tyrpL.forEach(b => lines.push(`    • ${trim(typeof b === 'string' ? b : b.name)}`));
-      lines.push('');
-
-      lines.push(div);
-      lines.push('');
-      lines.push('TRACTION');
-      lines.push('');
-      lines.push(`1-YEAR PLAN${trim(oyp.targetDate) ? '  (by ' + trim(oyp.targetDate) + ')' : ''}`);
-      lines.push(`  Revenue:     ${trim(oyp.revenue) || '—'}`);
-      lines.push(`  Profit:      ${trim(oyp.profit) || '—'}`);
-      lines.push('  Measurables:');
-      const oypM = (oyp.measurables || []).filter(Boolean);
-      if (oypM.length === 0) lines.push('    —');
-      oypM.forEach((m, i) => lines.push(`    ${i + 1}. ${trim(typeof m === 'string' ? m : m.name)}`));
-      lines.push('  Goals for the year:');
-      const goals = (oyp.goals || []).filter(Boolean);
-      if (goals.length === 0) lines.push('    (not yet drafted)');
-      goals.forEach((g, i) => lines.push(`    ${i + 1}. ${trim(typeof g === 'string' ? g : g.name)}`));
-      lines.push('');
-
-      lines.push('ROCKS (this quarter)');
-      const rs = (rocks.items || []).filter(x => x && (x.rock || x.owner));
-      if (rs.length === 0) lines.push('  (not yet drafted)');
-      rs.forEach((r, i) => {
-        lines.push(`  ${i + 1}. ${trim(r.rock) || '(rock)'}${r.owner ? ' — Owner: ' + trim(r.owner) : ''}`);
-      });
-      lines.push('');
-
-      lines.push('ISSUES LIST');
-      const il = (issues.items || []).filter(x => x && (typeof x === 'string' ? x.trim() : x.name));
-      if (il.length === 0) lines.push('  (none captured)');
-      il.forEach(i => lines.push(`  • ${trim(typeof i === 'string' ? i : i.name)}`));
-      lines.push('');
-
-      lines.push(div);
-      lines.push('Drafted with the Ninety V/TO Builder. EOS®, V/TO™, Core Focus™, Three Uniques™, 10-Year Target™, and 3-Year Picture™ are trademarks of EOS Worldwide, LLC. Ninety is the platform for companies running on EOS, built under license from EOS Worldwide.');
-      lines.push(div);
-      return lines.join('\n');
-    }
-
-    // ---------- Boot ----------
-    document.addEventListener('DOMContentLoaded', render);
-  </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 [build]
+  command = "npm run build"
   publish = "."
   functions = "netlify/functions"
 
@@ -8,6 +9,11 @@
 [[redirects]]
   from = "/api/draft"
   to = "/.netlify/functions/draft"
+  status = 200
+
+[[redirects]]
+  from = "/api/coach"
+  to = "/.netlify/functions/coach"
   status = 200
 
 [[headers]]
