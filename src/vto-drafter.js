@@ -118,7 +118,8 @@
         { name: "Launch Q1 onboarding redesign across all customer cohorts." },
         { name: "Stand up the Champion Network — first 10 trained Champions live." },
         { name: "Ship the Rollout Tracker to general availability." },
-        { name: "Hit 100 active accounts." }
+        { name: "Hit 100 active accounts." },
+        { name: "Lift annual retention to 85%." }
       ];
     }
     if (section.id === "rocks") {

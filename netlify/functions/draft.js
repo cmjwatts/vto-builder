@@ -70,12 +70,12 @@ const SECTION_SCHEMAS = {
 // Lightweight per-section instructions appended to the user message (uncached).
 // The bulk of the EOS reference lives in the cached system prompt below.
 const SECTION_INSTRUCTIONS = {
-  'core-values': 'Draft 5 to 7 Core Values. Each item: a short 1–4 word "value" plus a 1-sentence "descriptor" describing the behavior in practice. Use the client\'s words and stories where you can.',
+  'core-values': 'Draft exactly 5 Core Values. Each item: a short 1–4 word "value" plus a 1-sentence "descriptor" describing the behavior in practice. Use the client\'s words and stories where you can.',
   'core-focus': 'Draft a 3-7 word Purpose/Cause/Passion (timeless, big, simple) and a one-sentence Niche (who you serve + what you do).',
   'ten-year-target': 'Draft one bold, measurable 10-Year Target™ that connects to the Core Focus™. Include a target year roughly 10 years from now.',
   'marketing-strategy': 'Draft all four pieces: Target Market / "The List" (one paragraph, geo + demo + psycho), exactly 3 Three Uniques™ (each as a short label like "Fast" or "Familiar" plus a specific descriptor like "Guaranteed 2-Hour Arrival Window"), a Proven Process name plus 3–7 step names, and a one-sentence Guarantee.',
-  'three-year-picture': 'Draft a 3-Year Picture™: a future date ~3 years out, revenue, profit, up to 3 measurables, and 5–10 short "what does it look like?" bullets that are concrete and specific.',
-  'one-year-plan': 'Draft a 1-Year Plan: a future date ~12 months out, revenue, profit, up to 3 measurables, and 3–7 specific company goals.',
+  'three-year-picture': 'Draft a 3-Year Picture™: a future date ~3 years out, revenue, profit, up to 3 measurables, and exactly 5 short "what does it look like?" bullets that are concrete and specific.',
+  'one-year-plan': 'Draft a 1-Year Plan: a future date ~12 months out, revenue, profit, up to 3 measurables, and exactly 5 specific company goals.',
   'rocks': 'Draft 3–7 quarterly Rocks. Each item: a short "rock" (the 90-day priority) plus a placeholder "owner" (use [Owner] if no name is suggested).',
   'issues-list': 'Draft 5–10 long-term issues, ideas, or obstacles a leadership team running on EOS would naturally surface for this company. One short bullet each.',
 };
@@ -100,7 +100,7 @@ The client has already shared a short About-Your-Company context (company name, 
 
 # EOS reference — what each V/TO section actually is
 
-**Core Values** — A small set (5–7) of guiding behaviors your ideal team members already live by. Behaviors, not aspirations. Each is short (often 1–4 words) plus a one-sentence descriptor showing what it looks like in practice. They must be important, relevant to your business, and enduring.
+**Core Values** — A small set of guiding behaviors your ideal team members already live by. Behaviors, not aspirations. Each is short (often 1–4 words) plus a one-sentence descriptor showing what it looks like in practice. They must be important, relevant to your business, and enduring.
 
 **Core Focus™** — Two short statements that anchor the company. (1) Purpose / Cause / Passion: 3–7 words that describe why you exist; timeless, big, simple. (2) Our Niche: one clear sentence — who you serve, what you do.
 
@@ -112,9 +112,9 @@ The client has already shared a short About-Your-Company context (company name, 
 - *Proven Process*: a named, repeatable way you deliver. Includes a memorable name and 3–7 named steps.
 - *Guarantee*: one bold promise that takes risk off the buyer.
 
-**3-Year Picture™** — A snapshot 3 years out. A future date (~3 years), revenue, profit, up to 3 measurables/KPIs, and 5–10 "what does it look like?" bullets. Bullets should be concrete: people, products, recognition, customer count, locations. Not vague aspirations.
+**3-Year Picture™** — A snapshot 3 years out. A future date (~3 years), revenue, profit, up to 3 measurables/KPIs, and a short list of "what does it look like?" bullets. Bullets should be concrete: people, products, recognition, customer count, locations. Not vague aspirations.
 
-**1-Year Plan** — The 12 months ahead. A future date (~1 year), revenue, profit, up to 3 measurables, and 3–7 company goals (not departmental). Goals should be specific enough to verify.
+**1-Year Plan** — The 12 months ahead. A future date (~1 year), revenue, profit, up to 3 measurables, and a focused list of company goals (not departmental). Goals should be specific enough to verify.
 
 **Rocks** — The 3–7 most important priorities for the next 90 days. One owner per Rock (one person, never a team). A Rock is a 90-day priority, not a perpetual responsibility.
 

@@ -19,15 +19,20 @@ function VtoSideRail({ sections, groups, activeId, setActiveId, answers, grouped
 
   const toggleGroup = (gid) => setOpenGroups((o) => Object.assign({}, o, { [gid]: !o[gid] }));
 
+  // Setup ("About your company") is reached via a link in the progress card,
+  // not the section list — so progress tracks the build sections only.
+  const setupSection = sections.find((s) => s.group === "setup");
+  const navSections = sections.filter((s) => s.group !== "setup");
+
   // Overall progress — uses proportional progress per section so the bar reflects partial work.
-  const totalSections = sections.length;
-  const totalFields = sections.reduce((s, sec) => s + (sec.fields ? sec.fields.length : 0), 0);
-  const doneFields = sections.reduce((s, sec) => {
+  const totalSections = navSections.length;
+  const totalFields = navSections.reduce((s, sec) => s + (sec.fields ? sec.fields.length : 0), 0);
+  const doneFields = navSections.reduce((s, sec) => {
     if (!sec.fields) return s;
     const a = answers[sec.id] || {};
     return s + sec.fields.filter((f) => vtoFieldFilled(f, a[f.key])).length;
   }, 0);
-  const overallProgressSum = sections.reduce((s, sec) => s + vtoSectionProgress(sec, answers[sec.id] || {}), 0);
+  const overallProgressSum = navSections.reduce((s, sec) => s + vtoSectionProgress(sec, answers[sec.id] || {}), 0);
   const overallPct = Math.round((overallProgressSum / Math.max(totalSections, 1)) * 100);
 
   function renderSection(sec, idx, group) {
@@ -69,10 +74,9 @@ function VtoSideRail({ sections, groups, activeId, setActiveId, answers, grouped
     );
   }
 
-  // Build numbered ordering across the whole list (so user sees 1..9 not 1..5 + 1..3)
-  const orderedAll = sections;
+  // Number the build sections 1..8 (Setup is excluded from the list).
   const orderIndex = {};
-  orderedAll.forEach((s, i) => { orderIndex[s.id] = i; });
+  navSections.forEach((s, i) => { orderIndex[s.id] = i; });
 
   return (
     <aside className="vrail">
@@ -86,12 +90,24 @@ function VtoSideRail({ sections, groups, activeId, setActiveId, answers, grouped
         <div className="vrail__progress-meta">
           {doneFields} of {totalFields} fields filled
         </div>
+        {setupSection ? (
+          <button
+            type="button"
+            className={"vrail__setup-link " + (activeId === setupSection.id ? "is-active " : "")}
+            onClick={() => setActiveId(setupSection.id)}
+          >
+            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" aria-hidden="true">
+              <path d="M2 12 L2 14 L4 14 L13 5 L11 3 L2 12 Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
+            </svg>
+            <span>{setupSection.title}</span>
+          </button>
+        ) : null}
       </div>
 
       {/* Grouped or flat nav */}
       {grouped ? (
         <nav className="vrail__nav vrail__nav--grouped">
-          {groups.map((g) => {
+          {groups.filter((g) => g.id !== "setup").map((g) => {
             const groupSections = sections.filter((s) => s.group === g.id);
             const groupTotal = groupSections.reduce((acc, s) => acc + (s.fields ? s.fields.length : 0), 0);
             const groupDone = groupSections.reduce((acc, s) => {
@@ -145,7 +161,7 @@ function VtoSideRail({ sections, groups, activeId, setActiveId, answers, grouped
         </nav>
       ) : (
         <nav className="vrail__nav vrail__nav--flat">
-          {sections.map((sec, i) => renderSection(sec, i))}
+          {navSections.map((sec, i) => renderSection(sec, i))}
           <button
             type="button"
             className={"vrail__review " + (activeId === "review" ? "is-active " : "")}
@@ -221,6 +237,28 @@ function VtoSideRail({ sections, groups, activeId, setActiveId, answers, grouped
           font-size: 12.5px;
           color: var(--fg-2);
         }
+        .vrail__setup-link {
+          appearance: none;
+          margin-top: 12px;
+          padding-top: 12px;
+          border: 0;
+          border-top: 1px solid var(--color-brand-mist);
+          background: transparent;
+          width: 100%;
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          cursor: pointer;
+          font-family: inherit;
+          font-size: 12.5px;
+          font-weight: 600;
+          color: var(--fg-2);
+          text-align: left;
+          transition: color var(--t-fast);
+        }
+        .vrail__setup-link:hover { color: var(--color-brand-blue); }
+        .vrail__setup-link.is-active { color: var(--color-brand-blue-heavy); }
+        .vrail__setup-link svg { flex-shrink: 0; color: var(--color-brand-blue); }
 
         /* nav (flat or grouped) */
         .vrail__nav {
