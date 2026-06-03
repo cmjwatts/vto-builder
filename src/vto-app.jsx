@@ -202,12 +202,16 @@ function VtoApp() {
     }
   };
 
-  /* Load demo seed — populates About with sample company so prefill magic shows immediately */
+  /* The first build section after Setup (About now lives on the welcome page). */
+  const firstBuildId = (sections.find((s) => s.group !== "setup") || sections[0]).id;
+
+  /* Load demo seed — populates About with sample company, then jumps into the
+     first build section so the prefill magic shows immediately. */
   const loadDemoSeed = () => {
     const seed = window.vtoDemoSeed();
     setState((s) => Object.assign({}, s, {
       answers: Object.assign({}, s.answers, seed),
-      currentId: "about",
+      currentId: firstBuildId,
       startedAt: s.startedAt || new Date().toISOString()
     }));
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -278,13 +282,20 @@ function VtoApp() {
 
   function renderMainContent() {
     if (isWelcome) {
-      const hasProgress = Object.keys(state.answers).length > 0;
+      // "Progress" means they've started a build section — typing into the
+      // About form that now lives on this page doesn't count as leaving the start.
+      const hasProgress = Object.keys(state.answers).some(
+        (k) => k !== "about" && Object.keys(state.answers[k] || {}).length > 0
+      );
       return (
         <VtoWelcome
           hasProgress={hasProgress}
-          onStart={() => setActiveId(sections[0].id)}
+          onStart={() => setActiveId(firstBuildId)}
           onReset={resetAll}
           onLoadDemo={loadDemoSeed}
+          answers={state.answers}
+          setAnswer={setAnswer}
+          aboutSection={sections.find((s) => s.id === "about")}
         />
       );
     }

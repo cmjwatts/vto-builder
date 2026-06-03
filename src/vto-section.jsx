@@ -681,88 +681,186 @@ function VtoTeachingAccordion({ section }) {
 }
 
 /* ============================================================
-   Welcome screen — lightweight start state
+   Welcome + Setup screen — intro on the left, the "About your company"
+   form on the right. Website is the first field and can autofill the
+   company name + description from the site.
    ============================================================ */
-function VtoWelcome({ hasProgress, onStart, onReset, onLoadDemo }) {
+function VtoWelcome({ hasProgress, onStart, onReset, onLoadDemo, answers, setAnswer, aboutSection }) {
+  const about = (answers && answers.about) || {};
+  const fields = (aboutSection && aboutSection.fields) || [];
+  const websiteField = fields.find((f) => f.key === "website");
+  const restFields = fields.filter((f) => f.key !== "website");
+
+  const [looking, setLooking] = React.useState(false);
+  const [note, setNote] = React.useState(null);
+  const lookedUpRef = React.useRef("");
+
+  const set = (key, val) => setAnswer("about", key, val);
+
+  const websiteLooksValid = (about.website || "").trim().length > 3 && /\.[a-z]{2,}/i.test(about.website || "");
+
+  /* Fill in name / about / strengths from the website. Only fills empty fields
+     so we never clobber what the user has typed. */
+  const runLookup = async (auto) => {
+    const url = (about.website || "").trim();
+    if (!url || looking || !window.vtoEnrichFromWebsite) return;
+    if (auto && lookedUpRef.current === url) return; // don't auto-repeat the same URL
+    lookedUpRef.current = url;
+    setLooking(true);
+    setNote(null);
+    try {
+      const f = await window.vtoEnrichFromWebsite(url);
+      const filled = [];
+      ["companyName", "about", "strengths"].forEach((k) => {
+        const cur = (about[k] || "").trim();
+        if (!cur && f[k] && String(f[k]).trim()) { set(k, String(f[k]).trim()); filled.push(k); }
+      });
+      setNote(filled.length
+        ? { ok: true, text: "Pulled in details from your site — edit anything that's off." }
+        : { ok: false, text: "Couldn't pull much from that site — add your details below." });
+    } catch (e) {
+      setNote({ ok: false, text: "Couldn't reach that site just now — add your details below." });
+    } finally {
+      setLooking(false);
+    }
+  };
+
   return (
-    <article className="vwel surface" style={{ padding: "44px 44px 36px" }}>
-      <span className="eyebrow">EOS V/TO™ Builder</span>
-      <h1 style={{ marginTop: 10, fontSize: "var(--fs-display)" }}>
-        Draft your V/TO,<br />at your own pace.
-      </h1>
-      <p style={{ fontSize: 17, color: "var(--fg-2)", maxWidth: "55ch" }}>
-        A V/TO™ — Vision/Traction Organizer™ — is the foundational tool every company running on
-        EOS uses to align on where it's going and how it's going to get there.
-        We'll walk you through 9 sections, one at a time, with examples and tips along the way.
-      </p>
+    <article className="vsetup surface">
+      <div className="vsetup__grid">
+        {/* Intro / context */}
+        <div className="vsetup__intro">
+          <span className="eyebrow">EOS V/TO™ Builder</span>
+          <h1 className="vsetup__h1">Draft your V/TO,<br />at your own pace.</h1>
+          <p className="vsetup__lead">
+            A V/TO™ — Vision/Traction Organizer™ — is the foundational tool every company
+            running on EOS uses to align on where it's going and how it'll get there.
+            Start with a few details about your company and we'll tailor the next 8 sections to you.
+          </p>
 
-      <div className="vwel__grid">
-        <div className="vwel__pill">
-          <span className="vwel__pill-num">9</span>
-          <div>
-            <strong>Sections</strong>
-            <div>Vision side + Traction side</div>
-          </div>
+          <ul className="vsetup__pills">
+            <li><span className="vsetup__pill-ic">9</span><span><strong>Sections</strong> Vision side + Traction side</span></li>
+            <li><span className="vsetup__pill-ic">↻</span><span><strong>Save &amp; resume</strong> Pick up where you left off</span></li>
+            <li><span className="vsetup__pill-ic">🔒</span><span><strong>Saved in your browser</strong> Nothing on our servers</span></li>
+            <li><span className="vsetup__pill-ic">✦</span><span><strong>AI coach (optional)</strong> Get unstuck with one click</span></li>
+          </ul>
         </div>
-        <div className="vwel__pill">
-          <span className="vwel__pill-num">↻</span>
-          <div>
-            <strong>Save & resume</strong>
-            <div>Pick up where you left off</div>
-          </div>
-        </div>
-        <div className="vwel__pill">
-          <span className="vwel__pill-num">🔒</span>
-          <div>
-            <strong>Saved in your browser</strong>
-            <div>Nothing stored on our servers</div>
-          </div>
-        </div>
-        <div className="vwel__pill">
-          <span className="vwel__pill-num">✦</span>
-          <div>
-            <strong>AI coach (optional)</strong>
-            <div>Get unstuck with one click</div>
-          </div>
-        </div>
-      </div>
 
-      <div className="vwel__nav">
-        {hasProgress ? (
-          <button className="btn btn--text" onClick={onReset}>Start over</button>
-        ) : <span />}
-        <div className="vwel__nav-right">
-          {!hasProgress && onLoadDemo ? (
-            <button className="btn btn--neutral" onClick={onLoadDemo}>
-              See it with sample data
-            </button>
+        {/* About-your-company form */}
+        <div className="vsetup__form">
+          <h2 className="vsetup__form-title">Tell us about your company</h2>
+          <p className="vsetup__form-sub">Start with your website — we'll fill in the rest. Edit anything.</p>
+
+          {websiteField ? (
+            <div className="vfield">
+              <div className="vfield__labelwrap">
+                <label className="vfield__label" htmlFor="f-website">
+                  {websiteField.label}
+                  {websiteField.optional ? <span className="vfield__optional"> (optional)</span> : null}
+                </label>
+                {websiteField.help ? <div className="vfield__help">{websiteField.help}</div> : null}
+              </div>
+              <div className="vsetup__website">
+                <input
+                  id="f-website"
+                  type="text"
+                  className="vfield__input"
+                  placeholder={websiteField.placeholder || ""}
+                  value={about.website || ""}
+                  onChange={(e) => set("website", e.target.value)}
+                  onBlur={() => { if (websiteLooksValid) runLookup(true); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); if (websiteLooksValid) runLookup(false); } }}
+                />
+                <button
+                  type="button"
+                  className="btn btn--neutral btn--sm vsetup__lookup"
+                  onClick={() => runLookup(false)}
+                  disabled={looking || !websiteLooksValid}
+                  title="Autofill from your website"
+                >
+                  {looking ? "Reading…" : "✦ Autofill"}
+                </button>
+              </div>
+              {note ? <div className={"vsetup__note " + (note.ok ? "is-ok" : "is-warn")}>{note.text}</div> : null}
+            </div>
           ) : null}
-          <button className="btn btn--lg" onClick={onStart}>
-            {hasProgress ? "Resume your V/TO →" : "Start the V/TO Builder →"}
-          </button>
+
+          {restFields.map((f) => (
+            <VtoField
+              key={f.key}
+              field={f}
+              value={about[f.key]}
+              onChange={(v) => set(f.key, v)}
+              autoFocus={false}
+            />
+          ))}
+
+          <div className="vsetup__nav">
+            {hasProgress ? (
+              <button className="btn btn--text" onClick={onReset}>Start over</button>
+            ) : <span />}
+            <div className="vsetup__nav-right">
+              {!hasProgress && onLoadDemo ? (
+                <button className="btn btn--neutral" onClick={onLoadDemo}>See it with sample data</button>
+              ) : null}
+              <button className="btn btn--lg" onClick={onStart}>
+                {hasProgress ? "Continue your V/TO →" : "Start the V/TO Builder →"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       <style>{`
-        .vwel__grid {
+        .vsetup { padding: 36px 40px 32px; }
+        @media (max-width: 720px) { .vsetup { padding: 24px 22px 22px; } }
+        .vsetup__grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 12px;
-          margin: 28px 0;
+          grid-template-columns: 0.82fr 1.18fr;
+          gap: 44px;
+          align-items: start;
         }
-        @media (max-width: 640px) { .vwel__grid { grid-template-columns: 1fr; } }
-        .vwel__pill {
+        @media (max-width: 860px) {
+          .vsetup__grid { grid-template-columns: 1fr; gap: 28px; }
+        }
+        .vsetup__h1 {
+          margin: 10px 0 14px;
+          font-size: var(--fs-display);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          line-height: 1.1;
+        }
+        @media (max-width: 720px) { .vsetup__h1 { font-size: 32px; } }
+        .vsetup__lead {
+          font-size: 16px;
+          color: var(--fg-2);
+          line-height: 1.6;
+          margin: 0 0 24px;
+        }
+        .vsetup__pills {
+          list-style: none;
+          margin: 0;
+          padding: 0;
           display: flex;
-          gap: 14px;
-          align-items: flex-start;
-          background: var(--color-brand-ice);
-          border-radius: var(--radius-md);
-          padding: 14px 16px;
-          border: 1px solid var(--border-subtle);
+          flex-direction: column;
+          gap: 10px;
         }
-        .vwel__pill-num {
-          width: 32px;
-          height: 32px;
+        .vsetup__pills li {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          font-size: 13.5px;
+          color: var(--fg-2);
+          line-height: 1.4;
+        }
+        .vsetup__pills strong {
+          display: block;
+          color: var(--fg-1);
+          font-weight: 600;
+          font-size: 13.5px;
+        }
+        .vsetup__pill-ic {
+          width: 30px; height: 30px;
           border-radius: 50%;
           background: var(--color-brand-blue);
           color: var(--color-white);
@@ -770,29 +868,64 @@ function VtoWelcome({ hasProgress, onStart, onReset, onLoadDemo }) {
           display: grid;
           place-items: center;
           flex-shrink: 0;
-          font-size: 14px;
+          font-size: 13px;
         }
-        .vwel__pill strong {
-          display: block;
-          font-size: 14px;
-          color: var(--fg-1);
+
+        .vsetup__form {
+          background: var(--color-brand-ice);
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius-lg);
+          padding: 24px 24px 22px;
+        }
+        @media (max-width: 720px) { .vsetup__form { padding: 18px 16px 16px; } }
+        .vsetup__form-title {
+          margin: 0 0 4px;
+          font-size: var(--fs-h3);
           font-weight: 600;
         }
-        .vwel__pill div > div {
-          font-size: 13px;
+        .vsetup__form-sub {
+          margin: 0 0 20px;
+          font-size: 13.5px;
           color: var(--fg-2);
         }
-        .vwel__nav {
+        .vsetup__website {
+          display: flex;
+          gap: 8px;
+          align-items: stretch;
+        }
+        .vsetup__website .vfield__input { flex: 1; }
+        .vsetup__lookup {
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .vsetup__note {
+          margin-top: 8px;
+          font-size: 12.5px;
+          line-height: 1.45;
+          padding: 7px 11px;
+          border-radius: var(--radius-sm);
+        }
+        .vsetup__note.is-ok {
+          color: var(--color-brand-blue-heavy);
+          background: var(--color-brand-blue-08);
+          border-left: 3px solid var(--color-brand-blue);
+        }
+        .vsetup__note.is-warn {
+          color: var(--fg-2);
+          background: var(--color-brand-mist);
+          border-left: 3px solid var(--color-brand-slate);
+        }
+        .vsetup__nav {
           display: flex;
           justify-content: space-between;
           align-items: center;
           gap: 16px;
-          margin-top: 28px;
-          padding-top: 20px;
+          margin-top: 24px;
+          padding-top: 18px;
           border-top: 1px solid var(--border-subtle);
           flex-wrap: wrap;
         }
-        .vwel__nav-right {
+        .vsetup__nav-right {
           display: flex;
           gap: 10px;
           align-items: center;

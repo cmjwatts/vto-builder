@@ -286,12 +286,32 @@
     };
   }
 
+  /* Autofill the Setup step from a company website. Server fetches the page and
+     extracts { companyName, about, strengths }. Returns {} on any failure so the
+     caller can fall back to manual entry. */
+  async function enrichFromWebsite(url) {
+    if (!url || !String(url).trim()) return {};
+    try {
+      const res = await fetch("/api/enrich", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: String(url).trim() }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      return (data && data.fields) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
   Object.assign(window, {
     vtoDraftSection: draftSection,
     vtoApplyDraft: applyDraft,
     vtoSmartDefaults: smartDefaults,
     vtoQuickPicks: quickPicks,
     vtoDemoSeed: demoSeed,
-    vtoBuildContext: buildContext
+    vtoBuildContext: buildContext,
+    vtoEnrichFromWebsite: enrichFromWebsite
   });
 })();

@@ -16,6 +16,11 @@
   to = "/.netlify/functions/coach"
   status = 200
 
+[[redirects]]
+  from = "/api/enrich"
+  to = "/.netlify/functions/enrich"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]

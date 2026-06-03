@@ -30,8 +30,8 @@ window.VTO_SECTIONS = [
     definition: "A quick snapshot of your company. We'll use this to tailor prompts and draft suggestions throughout the rest of the V/TO.",
     why: "The clearer you are about who you are today, the sharper your V/TO will be tomorrow. A few clear sentences work better than a polished mission statement — you'll refine your story across the next 8 sections.",
     fields: [
+      { type: "text",     key: "website",     label: "Website", optional: true, placeholder: "acme.com", help: "Add your site and we'll pull in your company name and what you do — edit anything that's off." },
       { type: "text",     key: "companyName", label: "Company name", required: true, placeholder: "Acme Co." },
-      { type: "text",     key: "website",     label: "Website", optional: true, placeholder: "https://acme.example" },
       { type: "textarea", key: "about",       label: "In 1–3 sentences, what do you do and who do you do it for?", placeholder: "We help mid-sized law firms…" },
       { type: "textarea", key: "strengths",   label: "Top 2–3 things you do really well today", placeholder: "Responsiveness, deep industry expertise…" },
       { type: "textarea", key: "workOns",     label: "Top 2–3 things you most want to work on", placeholder: "Sales pipeline consistency, hiring…" }
