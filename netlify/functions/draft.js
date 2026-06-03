@@ -60,6 +60,10 @@ const SECTION_SCHEMAS = {
     goals: arr(STRING),
   }),
   'rocks': obj({
+    targetDate: STRING,
+    revenue: STRING,
+    profit: STRING,
+    measurables: arr(STRING),
     items: arr(obj({ rock: STRING, owner: STRING })),
   }),
   'issues-list': obj({
@@ -76,7 +80,7 @@ const SECTION_INSTRUCTIONS = {
   'marketing-strategy': 'Draft all four pieces: Target Market / "The List" (one paragraph, geo + demo + psycho), exactly 3 Three Uniques™ (each as a short label like "Fast" or "Familiar" plus a specific descriptor like "Guaranteed 2-Hour Arrival Window"), a Proven Process name plus 3–7 step names, and a one-sentence Guarantee.',
   'three-year-picture': 'Draft a 3-Year Picture™: a future date ~3 years out, revenue, profit, up to 3 measurables, and exactly 5 short "what does it look like?" bullets that are concrete and specific.',
   'one-year-plan': 'Draft a 1-Year Plan: a future date ~12 months out, revenue, profit, up to 3 measurables, and exactly 5 specific company goals.',
-  'rocks': 'Draft 3–7 quarterly Rocks. Each item: a short "rock" (the 90-day priority) plus a placeholder "owner" (use [Owner] if no name is suggested).',
+  'rocks': 'Draft a 90-Day Plan: a future date ~3 months out, revenue, profit, up to 3 measurables, and 3–7 Company Rocks. Each Rock: a short "rock" (the 90-day priority) plus a placeholder "owner" (use [Owner] if no name is suggested). The 90-day numbers should ladder toward the 1-Year Plan.',
   'issues-list': 'Draft 5–10 long-term issues, ideas, or obstacles a leadership team running on EOS would naturally surface for this company. One short bullet each.',
 };
 
@@ -116,7 +120,7 @@ The client has already shared a short About-Your-Company context (company name, 
 
 **1-Year Plan** — The 12 months ahead. A future date (~1 year), revenue, profit, up to 3 measurables, and a focused list of company goals (not departmental). Goals should be specific enough to verify.
 
-**Rocks** — The 3–7 most important priorities for the next 90 days. One owner per Rock (one person, never a team). A Rock is a 90-day priority, not a perpetual responsibility.
+**90-Day Plan** — The quarter ahead: a future date (~90 days out), revenue, profit, up to 3 measurables, and the 3–7 most important Company Rocks. One owner per Rock (one person, never a team). A Rock is a 90-day priority, not a perpetual responsibility. The numbers should ladder up toward the 1-Year Plan.
 
 **Issues List** — A parking lot for long-term issues, ideas, and obstacles surfaced for upcoming quarterly or annual planning. Short bullets.
 

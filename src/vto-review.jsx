@@ -1,7 +1,69 @@
 /* V/TO Builder — Review screen.
    1) A "ready to use" summary card at the top (mirrors how Rollout Journey shows the Rock).
-   2) The full V/TO doc — two landscape "pages" (Vision side, Traction side) with inline editable text.
+   2) The full V/TO doc — two landscape "pages" (Vision side, Traction side). Every value is
+      editable in place: click any text to edit it, use + to add list items, hover to remove.
    3) Export actions — Copy V/TO text / Print / save as PDF. */
+
+/* Click-to-edit text. Renders as plain text; clicking (or focusing) turns it into an input
+   that commits on blur or Enter and cancels on Escape. */
+function VtoEditable({ value, onCommit, placeholder, multiline }) {
+  const cur = value == null ? "" : String(value);
+  const [editing, setEditing] = React.useState(false);
+  const [draft, setDraft] = React.useState(cur);
+  React.useEffect(() => { setDraft(cur); }, [cur]);
+
+  const commit = () => { setEditing(false); if (draft.trim() !== cur) onCommit(draft.trim()); };
+  const cancel = () => { setDraft(cur); setEditing(false); };
+
+  if (editing) {
+    const props = {
+      autoFocus: true,
+      className: "vrev-edit__input",
+      value: draft,
+      onChange: (e) => setDraft(e.target.value),
+      onBlur: commit,
+    };
+    return multiline
+      ? <textarea {...props} rows={2} onKeyDown={(e) => { if (e.key === "Escape") cancel(); }} />
+      : <input type="text" {...props} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); commit(); } else if (e.key === "Escape") cancel(); }} />;
+  }
+  return (
+    <span
+      className={"vrev-edit" + (cur ? "" : " is-empty")}
+      tabIndex={0}
+      role="textbox"
+      onClick={() => setEditing(true)}
+      onFocus={() => setEditing(true)}
+    >
+      {cur || placeholder || "Click to add…"}
+    </span>
+  );
+}
+
+/* A list of single-value items (measurables, goals, issues, look-like bullets, process steps)
+   with inline-editable rows, hover-to-remove, and a + Add button. */
+function VtoSingleList({ items, onChange, ulClass, placeholder, addLabel }) {
+  const arr = Array.isArray(items) ? items : [];
+  const text = (it) => (typeof it === "string" ? it : (it && it.name) || "");
+  const setAt = (i, v) => { const a = arr.slice(); a[i] = v; onChange(a); };
+  const removeAt = (i) => { const a = arr.slice(); a.splice(i, 1); onChange(a); };
+  const add = () => { onChange(arr.concat([""])); };
+  return (
+    <React.Fragment>
+      {arr.length > 0 ? (
+        <ul className={ulClass}>
+          {arr.map((it, i) => (
+            <li key={i} className="vrev-li">
+              <VtoEditable value={text(it)} placeholder={placeholder} onCommit={(v) => setAt(i, v)} />
+              <button type="button" className="vrev-rm" onClick={() => removeAt(i)} aria-label="Remove">×</button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <button type="button" className="vrev-add" onClick={add}>+ {addLabel}</button>
+    </React.Fragment>
+  );
+}
 
 function VtoReview({ answers, setAnswer, sections, goToSection }) {
   const about = answers.about || {};
@@ -21,6 +83,21 @@ function VtoReview({ answers, setAnswer, sections, goToSection }) {
   const list = (sectionId, key) => {
     const v = (answers[sectionId] || {})[key];
     return Array.isArray(v) ? v : [];
+  };
+
+  /* Inline-edit mutators — write straight back through setAnswer. */
+  const setVal = (sectionId, key) => (v) => setAnswer(sectionId, key, v);
+  const setListVal = (sectionId, key) => (arr) => setAnswer(sectionId, key, arr);
+  const setPair = (sectionId, key, i, sub, v) => {
+    const a = list(sectionId, key).slice();
+    a[i] = Object.assign({}, a[i] || {}, { [sub]: v });
+    setAnswer(sectionId, key, a);
+  };
+  const addPair = (sectionId, key, blank) => setAnswer(sectionId, key, list(sectionId, key).concat([blank]));
+  const rmAt = (sectionId, key, i) => {
+    const a = list(sectionId, key).slice();
+    a.splice(i, 1);
+    setAnswer(sectionId, key, a);
   };
 
   return (
@@ -67,120 +144,101 @@ function VtoReview({ answers, setAnswer, sections, goToSection }) {
           </header>
 
           <div className="vrev__page-grid vrev__page-grid--vision">
-            {/* Left column — Core Values + Core Focus */}
+            {/* Left 2/3 — Core Values, Core Focus, 10-Year Target, Marketing Strategy stacked */}
             <div className="vrev__col">
-              <VtoBlock title="Core Values" count={list("core-values", "items").length} onEdit={() => goToSection("core-values")}>
-                {list("core-values", "items").length === 0 ? <span className="vrev__empty">No Core Values yet — click to add.</span> :
-
+              <VtoBlock title="Core Values" count={list("core-values", "items").length}>
                 <ul className="vrev__list vrev__list--kv">
-                    {list("core-values", "items").map((it, i) =>
-                  <li key={i}>
-                        <span className="vrev__list-name">{it.value || <em>—</em>}</span>
-                        <span className="vrev__list-extra">{it.descriptor || ""}</span>
-                      </li>
-                  )}
-                  </ul>
-                }
+                  {list("core-values", "items").map((it, i) => (
+                    <li key={i} className="vrev-li">
+                      <span className="vrev__list-name">
+                        <VtoEditable value={it.value} placeholder="Value" onCommit={(v) => setPair("core-values", "items", i, "value", v)} />
+                      </span>
+                      <span className="vrev__list-extra">
+                        <VtoEditable value={it.descriptor} placeholder="What it looks like in practice" multiline onCommit={(v) => setPair("core-values", "items", i, "descriptor", v)} />
+                      </span>
+                      <button type="button" className="vrev-rm" onClick={() => rmAt("core-values", "items", i)} aria-label="Remove">×</button>
+                    </li>
+                  ))}
+                </ul>
+                <button type="button" className="vrev-add" onClick={() => addPair("core-values", "items", { value: "", descriptor: "" })}>+ Add a Core Value</button>
               </VtoBlock>
 
-              <VtoBlock title="Core Focus™" onEdit={() => goToSection("core-focus")}>
+              <VtoBlock title="Core Focus™">
                 <div className="vrev__kv">
                   <div className="vrev__kv-label">Purpose / Cause / Passion</div>
-                  <div className="vrev__kv-val">{review["core-focus"].purpose || <em>Not set</em>}</div>
+                  <div className="vrev__kv-val"><VtoEditable value={review["core-focus"].purpose} placeholder="Make life better." onCommit={setVal("core-focus", "purpose")} /></div>
                 </div>
                 <div className="vrev__kv">
                   <div className="vrev__kv-label">Niche</div>
-                  <div className="vrev__kv-val">{review["core-focus"].niche || <em>Not set</em>}</div>
+                  <div className="vrev__kv-val"><VtoEditable value={review["core-focus"].niche} placeholder="Who you serve + what you do" multiline onCommit={setVal("core-focus", "niche")} /></div>
                 </div>
               </VtoBlock>
-            </div>
 
-            {/* Right column — 10-Year Target on top, then Marketing Strategy (2/3) + 3-Year Picture (1/3) */}
-            <div className="vrev__col">
-              <VtoBlock title="10-Year Target™" onEdit={() => goToSection("ten-year-target")}>
-                <p className="vrev__paragraph">{review["ten-year-target"].target || <em className="vrev__empty">Bold long-term goal goes here.</em>}</p>
-                {review["ten-year-target"].targetYear ?
-                <div className="vrev__chip">By {review["ten-year-target"].targetYear}</div> :
-                null}
+              <VtoBlock title="10-Year Target™">
+                <p className="vrev__paragraph"><VtoEditable value={review["ten-year-target"].target} placeholder="A bold, measurable long-term goal." multiline onCommit={setVal("ten-year-target", "target")} /></p>
+                <div className="vrev__chip">By <VtoEditable value={review["ten-year-target"].targetYear} placeholder="year" onCommit={setVal("ten-year-target", "targetYear")} /></div>
               </VtoBlock>
 
-              <div className="vrev__subgrid">
-                <VtoBlock title="Marketing Strategy" onEdit={() => goToSection("marketing-strategy")}>
+              <VtoBlock title="Marketing Strategy">
                 <div className="vrev__kv">
                   <div className="vrev__kv-label">Target Market</div>
-                  <div className="vrev__kv-val">{review["marketing-strategy"].targetMarket || <em>Not set</em>}</div>
+                  <div className="vrev__kv-val"><VtoEditable value={review["marketing-strategy"].targetMarket} placeholder="Geography + demographics + psychographics" multiline onCommit={setVal("marketing-strategy", "targetMarket")} /></div>
                 </div>
                 <div className="vrev__kv">
                   <div className="vrev__kv-label">Three Uniques™</div>
                   <div className="vrev__kv-val">
-                    {list("marketing-strategy", "threeUniques").length === 0 ? <em>Not set</em> :
                     <ol className="vrev__inline-list">
-                        {list("marketing-strategy", "threeUniques").map((u, i) =>
-                      <li key={i}><strong>{u.name || "—"}.</strong> {u.descriptor || ""}</li>
-                      )}
-                      </ol>
-                    }
+                      {list("marketing-strategy", "threeUniques").map((u, i) => (
+                        <li key={i} className="vrev-li">
+                          <strong><VtoEditable value={u.name} placeholder="Unique" onCommit={(v) => setPair("marketing-strategy", "threeUniques", i, "name", v)} />.</strong>{" "}
+                          <VtoEditable value={u.descriptor} placeholder="How you stand apart" onCommit={(v) => setPair("marketing-strategy", "threeUniques", i, "descriptor", v)} />
+                          <button type="button" className="vrev-rm" onClick={() => rmAt("marketing-strategy", "threeUniques", i)} aria-label="Remove">×</button>
+                        </li>
+                      ))}
+                    </ol>
+                    <button type="button" className="vrev-add" onClick={() => addPair("marketing-strategy", "threeUniques", { name: "", descriptor: "" })}>+ Add a unique</button>
                   </div>
                 </div>
                 <div className="vrev__kv">
                   <div className="vrev__kv-label">Proven Process</div>
                   <div className="vrev__kv-val">
-                    {review["marketing-strategy"].provenProcessName ?
-                    <span><strong>{review["marketing-strategy"].provenProcessName}</strong> · </span> :
-                    null}
-                    {list("marketing-strategy", "provenProcessSteps").length > 0 ?
-                    list("marketing-strategy", "provenProcessSteps").map((s, i) => {
-                      const v = typeof s === "string" ? s : s && s.name;
-                      return <span key={i} className="vrev__step">{v}{i < list("marketing-strategy", "provenProcessSteps").length - 1 ? " → " : ""}</span>;
-                    }) :
-                    <em>Not set</em>}
+                    <div className="vrev__pp-name"><strong><VtoEditable value={review["marketing-strategy"].provenProcessName} placeholder="Process name (e.g. The Acme Way)" onCommit={setVal("marketing-strategy", "provenProcessName")} /></strong></div>
+                    <VtoSingleList items={list("marketing-strategy", "provenProcessSteps")} onChange={setListVal("marketing-strategy", "provenProcessSteps")} ulClass="vrev__list vrev__list--simple" placeholder="A named step" addLabel="Add a step" />
                   </div>
                 </div>
                 <div className="vrev__kv">
                   <div className="vrev__kv-label">Guarantee</div>
-                  <div className="vrev__kv-val">{review["marketing-strategy"].guarantee || <em>Not set</em>}</div>
+                  <div className="vrev__kv-val"><VtoEditable value={review["marketing-strategy"].guarantee} placeholder="A bold promise that takes the risk off the buyer" multiline onCommit={setVal("marketing-strategy", "guarantee")} /></div>
                 </div>
               </VtoBlock>
+            </div>
 
-                <VtoBlock title="3-Year Picture™" onEdit={() => goToSection("three-year-picture")}>
-                <div className="vrev__metric-row">
+            {/* Right 1/3 — 3-Year Picture */}
+            <div className="vrev__col">
+              <VtoBlock title="3-Year Picture™">
+                <div className="vrev__metric-stack">
                   <div className="vrev__metric">
                     <span className="vrev__metric-label">Date</span>
-                    <span className="vrev__metric-val">{review["three-year-picture"].targetDate || "—"}</span>
+                    <span className="vrev__metric-val"><VtoEditable value={review["three-year-picture"].targetDate} placeholder="—" onCommit={setVal("three-year-picture", "targetDate")} /></span>
                   </div>
                   <div className="vrev__metric">
                     <span className="vrev__metric-label">Revenue</span>
-                    <span className="vrev__metric-val">{review["three-year-picture"].revenue || "—"}</span>
+                    <span className="vrev__metric-val"><VtoEditable value={review["three-year-picture"].revenue} placeholder="—" onCommit={setVal("three-year-picture", "revenue")} /></span>
                   </div>
                   <div className="vrev__metric">
                     <span className="vrev__metric-label">Profit</span>
-                    <span className="vrev__metric-val">{review["three-year-picture"].profit || "—"}</span>
+                    <span className="vrev__metric-val"><VtoEditable value={review["three-year-picture"].profit} placeholder="—" onCommit={setVal("three-year-picture", "profit")} /></span>
                   </div>
                 </div>
-                {list("three-year-picture", "measurables").length > 0 ?
                 <div className="vrev__sublist">
-                    <span className="vrev__sublist-label">Measurables</span>
-                    <ul className="vrev__list vrev__list--simple">
-                      {list("three-year-picture", "measurables").map((m, i) => {
-                      const v = typeof m === "string" ? m : m && m.name;
-                      return v ? <li key={i}>{v}</li> : null;
-                    })}
-                    </ul>
-                  </div> :
-                null}
-                {list("three-year-picture", "lookLike").length > 0 ?
+                  <span className="vrev__sublist-label">Measurables</span>
+                  <VtoSingleList items={list("three-year-picture", "measurables")} onChange={setListVal("three-year-picture", "measurables")} ulClass="vrev__list vrev__list--simple" placeholder="A KPI" addLabel="Add a measurable" />
+                </div>
                 <div className="vrev__sublist">
-                    <span className="vrev__sublist-label">What does it look like?</span>
-                    <ul className="vrev__list vrev__list--check">
-                      {list("three-year-picture", "lookLike").map((m, i) => {
-                      const v = typeof m === "string" ? m : m && m.name;
-                      return v ? <li key={i}>{v}</li> : null;
-                    })}
-                    </ul>
-                  </div> :
-                null}
-                </VtoBlock>
-              </div>
+                  <span className="vrev__sublist-label">What does it look like?</span>
+                  <VtoSingleList items={list("three-year-picture", "lookLike")} onChange={setListVal("three-year-picture", "lookLike")} ulClass="vrev__list vrev__list--check" placeholder="A concrete, specific bullet" addLabel="Add a bullet" />
+                </div>
+              </VtoBlock>
             </div>
           </div>
         </section>
@@ -193,71 +251,69 @@ function VtoReview({ answers, setAnswer, sections, goToSection }) {
           </header>
 
           <div className="vrev__page-grid vrev__page-grid--traction">
-            <VtoBlock title="1-Year Plan" onEdit={() => goToSection("one-year-plan")}>
+            <VtoBlock title="1-Year Plan">
               <div className="vrev__metric-row">
                 <div className="vrev__metric">
                   <span className="vrev__metric-label">Date</span>
-                  <span className="vrev__metric-val">{review["one-year-plan"].targetDate || "—"}</span>
+                  <span className="vrev__metric-val"><VtoEditable value={review["one-year-plan"].targetDate} placeholder="—" onCommit={setVal("one-year-plan", "targetDate")} /></span>
                 </div>
                 <div className="vrev__metric">
                   <span className="vrev__metric-label">Revenue</span>
-                  <span className="vrev__metric-val">{review["one-year-plan"].revenue || "—"}</span>
+                  <span className="vrev__metric-val"><VtoEditable value={review["one-year-plan"].revenue} placeholder="—" onCommit={setVal("one-year-plan", "revenue")} /></span>
                 </div>
                 <div className="vrev__metric">
                   <span className="vrev__metric-label">Profit</span>
-                  <span className="vrev__metric-val">{review["one-year-plan"].profit || "—"}</span>
+                  <span className="vrev__metric-val"><VtoEditable value={review["one-year-plan"].profit} placeholder="—" onCommit={setVal("one-year-plan", "profit")} /></span>
                 </div>
               </div>
-              {list("one-year-plan", "measurables").length > 0 ?
               <div className="vrev__sublist">
-                  <span className="vrev__sublist-label">Measurables</span>
-                  <ul className="vrev__list vrev__list--simple">
-                    {list("one-year-plan", "measurables").map((m, i) => {
-                    const v = typeof m === "string" ? m : m && m.name;
-                    return v ? <li key={i}>{v}</li> : null;
-                  })}
-                  </ul>
-                </div> :
-              null}
-              {list("one-year-plan", "goals").length > 0 ?
+                <span className="vrev__sublist-label">Measurables</span>
+                <VtoSingleList items={list("one-year-plan", "measurables")} onChange={setListVal("one-year-plan", "measurables")} ulClass="vrev__list vrev__list--simple" placeholder="A KPI" addLabel="Add a measurable" />
+              </div>
               <div className="vrev__sublist">
-                  <span className="vrev__sublist-label">Goals for the year</span>
-                  <ul className="vrev__list vrev__list--num">
-                    {list("one-year-plan", "goals").map((m, i) => {
-                    const v = typeof m === "string" ? m : m && m.name;
-                    return v ? <li key={i}>{v}</li> : null;
-                  })}
-                  </ul>
-                </div> :
-              null}
+                <span className="vrev__sublist-label">Goals for the year</span>
+                <VtoSingleList items={list("one-year-plan", "goals")} onChange={setListVal("one-year-plan", "goals")} ulClass="vrev__list vrev__list--num" placeholder="A specific goal" addLabel="Add a goal" />
+              </div>
             </VtoBlock>
 
-            <VtoBlock title="Rocks" subtitle="Next 90 days" count={list("rocks", "items").length} onEdit={() => goToSection("rocks")}>
-              {list("rocks", "items").length === 0 ?
-              <span className="vrev__empty">No Rocks yet.</span> :
-
-              <ol className="vrev__rocks">
-                  {list("rocks", "items").map((r, i) =>
-                <li key={i}>
-                      <span className="vrev__rock-body">{r.rock || <em>—</em>}</span>
-                      {r.owner ? <span className="vrev__rock-owner">{r.owner}</span> : null}
+            <VtoBlock title="90-Day Plan" subtitle="This quarter">
+              <div className="vrev__metric-row">
+                <div className="vrev__metric">
+                  <span className="vrev__metric-label">Date</span>
+                  <span className="vrev__metric-val"><VtoEditable value={review["rocks"].targetDate} placeholder="—" onCommit={setVal("rocks", "targetDate")} /></span>
+                </div>
+                <div className="vrev__metric">
+                  <span className="vrev__metric-label">Revenue</span>
+                  <span className="vrev__metric-val"><VtoEditable value={review["rocks"].revenue} placeholder="—" onCommit={setVal("rocks", "revenue")} /></span>
+                </div>
+                <div className="vrev__metric">
+                  <span className="vrev__metric-label">Profit</span>
+                  <span className="vrev__metric-val"><VtoEditable value={review["rocks"].profit} placeholder="—" onCommit={setVal("rocks", "profit")} /></span>
+                </div>
+              </div>
+              <div className="vrev__sublist">
+                <span className="vrev__sublist-label">Measurables</span>
+                <VtoSingleList items={list("rocks", "measurables")} onChange={setListVal("rocks", "measurables")} ulClass="vrev__list vrev__list--simple" placeholder="A KPI" addLabel="Add a measurable" />
+              </div>
+              <div className="vrev__sublist">
+                <span className="vrev__sublist-label">
+                  Company Rocks{list("rocks", "items").length ? " · " + list("rocks", "items").length : ""}
+                </span>
+                <ol className="vrev__rocks">
+                  {list("rocks", "items").map((r, i) => (
+                    <li key={i} className="vrev-li">
+                      <span className="vrev__rock-body"><VtoEditable value={r.rock} placeholder="A 90-day priority" multiline onCommit={(v) => setPair("rocks", "items", i, "rock", v)} /></span>
+                      <span className="vrev__rock-owner"><VtoEditable value={r.owner} placeholder="Owner" onCommit={(v) => setPair("rocks", "items", i, "owner", v)} /></span>
+                      <button type="button" className="vrev-rm" onClick={() => rmAt("rocks", "items", i)} aria-label="Remove">×</button>
                     </li>
-                )}
+                  ))}
                 </ol>
-              }
+                <button type="button" className="vrev-add" onClick={() => addPair("rocks", "items", { rock: "", owner: "" })}>+ Add a Rock</button>
+              </div>
             </VtoBlock>
 
-            <VtoBlock title="Issues List" subtitle="Parking lot" count={list("issues-list", "items").length} onEdit={() => goToSection("issues-list")}>
-              {list("issues-list", "items").length === 0 ?
-              <span className="vrev__empty">No issues captured. That's OK.</span> :
-
-              <ul className="vrev__list vrev__list--check">
-                  {list("issues-list", "items").map((m, i) => {
-                  const v = typeof m === "string" ? m : m && m.name;
-                  return v ? <li key={i}>{v}</li> : null;
-                })}
-                </ul>
-              }
+            <VtoBlock title="Issues List" subtitle="Parking lot" count={list("issues-list", "items").length}>
+              <VtoSingleList items={list("issues-list", "items")} onChange={setListVal("issues-list", "items")} ulClass="vrev__list vrev__list--check" placeholder="A long-term issue, idea, or obstacle" addLabel="Add an issue" />
             </VtoBlock>
           </div>
         </section>
@@ -268,6 +324,80 @@ function VtoReview({ answers, setAnswer, sections, goToSection }) {
           display: flex;
           flex-direction: column;
           gap: 28px;
+        }
+
+        /* Inline editing */
+        .vrev-edit {
+          cursor: text;
+          border-radius: 4px;
+          padding: 0 3px;
+          margin: 0 -3px;
+          outline: none;
+          transition: background var(--t-fast), box-shadow var(--t-fast);
+          white-space: pre-wrap;
+        }
+        .vrev-edit:hover { background: var(--color-brand-blue-04); box-shadow: inset 0 0 0 1px var(--color-brand-blue-15); }
+        .vrev-edit:focus { background: var(--color-brand-blue-08); }
+        .vrev-edit.is-empty { color: var(--color-brand-slate); font-style: italic; }
+        .vrev-edit__input {
+          font: inherit;
+          color: var(--fg-1);
+          width: 100%;
+          min-width: 60px;
+          border: 1px solid var(--color-brand-blue);
+          border-radius: var(--radius-sm);
+          padding: 4px 8px;
+          background: var(--color-white);
+          outline: none;
+          box-shadow: 0 0 0 3px var(--color-brand-blue-15);
+        }
+        textarea.vrev-edit__input { resize: vertical; line-height: 1.55; min-height: 54px; }
+
+        .vrev-li { position: relative; padding-right: 18px; }
+        .vrev-rm {
+          position: absolute;
+          top: 2px;
+          right: -6px;
+          appearance: none;
+          background: var(--color-white);
+          border: 1px solid var(--border-subtle);
+          color: var(--color-brand-slate);
+          width: 18px; height: 18px;
+          border-radius: 50%;
+          font-size: 13px;
+          line-height: 1;
+          cursor: pointer;
+          padding: 0;
+          display: grid;
+          place-items: center;
+          opacity: 0;
+          transition: all var(--t-fast);
+        }
+        .vrev-li:hover .vrev-rm, .vrev-rm:focus { opacity: 1; }
+        .vrev-rm:hover { color: var(--color-error); border-color: var(--color-error); }
+        .vrev-add {
+          appearance: none;
+          background: transparent;
+          border: 1px dashed var(--color-brand-blue);
+          color: var(--color-brand-blue);
+          border-radius: var(--radius-sm);
+          padding: 4px 10px;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          margin-top: 8px;
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          transition: background var(--t-fast);
+        }
+        .vrev-add:hover { background: var(--color-brand-blue-08); }
+        .vrev__pp-name { margin-bottom: 4px; }
+
+        @media print {
+          .vrev-add, .vrev-rm { display: none !important; }
+          .vrev-edit { background: none !important; box-shadow: none !important; padding: 0; margin: 0; }
+          .vrev-edit.is-empty { visibility: hidden; }
         }
 
         /* Document */
@@ -339,16 +469,22 @@ function VtoReview({ answers, setAnswer, sections, goToSection }) {
           gap: 16px;
         }
         .vrev__page-grid--vision {
-          grid-template-columns: 0.85fr 1.6fr;
-        }
-        .vrev__subgrid {
-          display: grid;
           grid-template-columns: 2fr 1fr;
-          gap: 16px;
-          align-items: start;
         }
-        @media (max-width: 900px) {
-          .vrev__subgrid { grid-template-columns: 1fr; }
+        .vrev__metric-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding: 2px 0 12px;
+          border-bottom: 1px solid var(--color-brand-mist);
+          margin-bottom: 8px;
+        }
+        .vrev__metric-stack .vrev__metric {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: baseline;
+          gap: 12px;
+          padding: 4px 0;
         }
         .vrev__page-grid--traction {
           grid-template-columns: 1.2fr 1fr 1fr;
@@ -592,9 +728,9 @@ function VtoReview({ answers, setAnswer, sections, goToSection }) {
 }
 
 /* ============================================================
-   A reusable block — title + edit affordance + body
+   A reusable block — title + body (values are edited inline)
    ============================================================ */
-function VtoBlock({ title, subtitle, count, onEdit, children }) {
+function VtoBlock({ title, subtitle, count, children }) {
   return (
     <div className="vrev__block">
       <header className="vrev__block-head">
@@ -605,12 +741,6 @@ function VtoBlock({ title, subtitle, count, onEdit, children }) {
           </h3>
           {subtitle ? <span className="vrev__block-sub">{subtitle}</span> : null}
         </div>
-        <button type="button" className="vrev__block-edit" onClick={onEdit} aria-label={"Edit " + title}>
-          <svg viewBox="0 0 16 16" width="12" height="12" fill="none">
-            <path d="M2 12 L2 14 L4 14 L13 5 L11 3 L2 12 Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
-          </svg>
-          Edit
-        </button>
       </header>
       <div className="vrev__block-body">{children}</div>
 
@@ -989,12 +1119,26 @@ function buildVtoText(answers, sections) {
     lines.push("");
   }
 
-  const rocks = a.rocks && a.rocks.items || [];
-  if (rocks.length) {
-    lines.push("ROCKS (next 90 days)");
-    rocks.forEach((r, i) => {
-      if (r && r.rock) lines.push("  " + (i + 1) + ". " + r.rock + (r.owner ? " — Owner: " + r.owner : ""));
-    });
+  const ninety = a.rocks || {};
+  const rocks = ninety.items || [];
+  if (ninety.targetDate || ninety.revenue || ninety.profit || (ninety.measurables && ninety.measurables.length) || rocks.length) {
+    lines.push("90-DAY PLAN");
+    if (ninety.targetDate) lines.push("  Date:    " + ninety.targetDate);
+    if (ninety.revenue) lines.push("  Revenue: " + ninety.revenue);
+    if (ninety.profit) lines.push("  Profit:  " + ninety.profit);
+    if (ninety.measurables && ninety.measurables.length) {
+      lines.push("  Measurables:");
+      ninety.measurables.forEach((m) => {
+        const v = typeof m === "string" ? m : m && m.name;
+        if (v) lines.push("    - " + v);
+      });
+    }
+    if (rocks.length) {
+      lines.push("  Company Rocks:");
+      rocks.forEach((r, i) => {
+        if (r && r.rock) lines.push("    " + (i + 1) + ". " + r.rock + (r.owner ? " — Owner: " + r.owner : ""));
+      });
+    }
     lines.push("");
   }
 

@@ -123,6 +123,10 @@
       ];
     }
     if (section.id === "rocks") {
+      out.targetDate = "March 31, " + (year + 1);
+      out.revenue = "$750K";
+      out.profit = "$75K (10%)";
+      out.measurables = [{ name: "25 active accounts" }, { name: "85% retention" }];
       out.items = [
         { rock: "Define and document our Proven Process, end to end.", owner: "TBD" },
         { rock: "Land our first 3 Champion-led EOS rollouts.", owner: "TBD" },
@@ -248,6 +252,11 @@
     }
     if (section.id === "ten-year-target") {
       out.targetYear = String(year + 10);
+    }
+    if (section.id === "rocks") {
+      const d = new Date();
+      d.setDate(d.getDate() + 90);
+      out.targetDate = d.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
     }
     return out;
   }
